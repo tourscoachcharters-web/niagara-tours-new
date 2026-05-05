@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Phone, 
   Mail, 
@@ -63,6 +63,55 @@ const YoutubeIcon = (props) => (
     <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
   </svg>
 );
+
+// --- Sub-component: Functional Calendar Dropdown ---
+const CalendarDropdown = ({ onSelectDate, onClose }) => {
+  const [viewDate, setViewDate] = useState(new Date());
+  const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+  const firstDayOfMonth = new Date(viewDate.getFullYear(), viewDate.getMonth(), 1).getDay();
+  const daysInMonth = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 0).getDate();
+
+  const handlePrevMonth = (e) => {
+    e.stopPropagation();
+    setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1));
+  };
+
+  const handleNextMonth = (e) => {
+    e.stopPropagation();
+    setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1));
+  };
+
+  return (
+    <div className="absolute top-full left-0 right-0 mt-3 bg-white rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 z-[100] p-6 animate-in zoom-in-95 duration-200 origin-top">
+      <div className="flex justify-between items-center mb-6">
+        <button onClick={handlePrevMonth} className="p-2 hover:bg-slate-50 rounded-full text-slate-400 hover:text-[#0C3136] transition-all"><ChevronLeft size={18} /></button>
+        <div className="font-black text-[#0C3136] text-[11px] uppercase tracking-[0.2em]">{months[viewDate.getMonth()]} {viewDate.getFullYear()}</div>
+        <button onClick={handleNextMonth} className="p-2 hover:bg-slate-50 rounded-full text-slate-400 hover:text-[#0C3136] transition-all"><ChevronRight size={18} /></button>
+      </div>
+      <div className="grid grid-cols-7 gap-1 mb-2 text-center">
+        {days.map(day => <div key={day} className="text-[10px] font-black text-slate-300 uppercase">{day}</div>)}
+      </div>
+      <div className="grid grid-cols-7 gap-1">
+        {[...Array(firstDayOfMonth)].map((_, i) => <div key={`empty-${i}`} />)}
+        {[...Array(daysInMonth)].map((_, i) => {
+          const day = i + 1;
+          const isToday = new Date().toDateString() === new Date(viewDate.getFullYear(), viewDate.getMonth(), day).toDateString();
+          return (
+            <button 
+              key={day} 
+              onClick={(e) => { e.stopPropagation(); onSelectDate(new Date(viewDate.getFullYear(), viewDate.getMonth(), day)); }}
+              className={`h-9 w-full rounded-xl text-xs font-bold transition-all ${isToday ? 'bg-[#F8A41E] text-[#0C3136]' : 'text-slate-600 hover:bg-slate-50'}`}
+            >
+              {day}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
 
 // --- Global Sub-components ---
 
@@ -222,7 +271,7 @@ const HomePage = ({ navigateTo }) => {
   );
 };
 
-// --- PAGE: ITINERARY (Ref: image_d9fa5d.jpg / image_d91c7f.png) ---
+// --- PAGE: ITINERARY ---
 
 const ItineraryStep = ({ time, title, duration, img, desc, icon: Icon, isLast }) => (
   <div className="flex gap-6 group">
@@ -249,6 +298,27 @@ const ItineraryStep = ({ time, title, duration, img, desc, icon: Icon, isLast })
 );
 
 const ItineraryPage = ({ navigateTo }) => {
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const calendarRef = useRef(null);
+
+  // Handle clicking outside to close calendar
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (calendarRef.current && !calendarRef.current.contains(event.target)) {
+        setShowCalendar(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleDateSelect = (date) => {
+    const formatted = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    setSelectedDate(formatted);
+    setShowCalendar(false);
+  };
+
   return (
     <div className="animate-in fade-in duration-700 bg-white">
       {/* Hero Section */}
@@ -354,7 +424,7 @@ const ItineraryPage = ({ navigateTo }) => {
            </div>
         </div>
 
-        {/* --- REFINED SIDEBAR (Matching image_d91c7f.png) --- */}
+        {/* --- REFINED SIDEBAR WITH WORKING CALENDAR --- */}
         <div className="lg:col-span-4">
            <div className="sticky top-28 space-y-10">
               {/* Refined Booking Widget */}
@@ -372,17 +442,25 @@ const ItineraryPage = ({ navigateTo }) => {
                        <span className="text-xs font-black">4.8 <span className="font-medium text-slate-400 ml-1 tracking-tight">(2,125 Reviews)</span></span>
                     </div>
                  </div>
-                 <div className="p-10 space-y-8 bg-white">
-                    {/* Date Picker Style Refinement */}
-                    <div>
+                 <div className="p-10 space-y-8 bg-white relative">
+                    {/* Date Picker WITH Working Dropdown */}
+                    <div ref={calendarRef}>
                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3.5 block">Select Date</label>
-                       <div className="flex items-center justify-between border border-slate-200 p-4.5 rounded-2xl bg-white group hover:border-[#F8A41E] cursor-pointer transition-all shadow-sm">
+                       <div 
+                        onClick={() => setShowCalendar(!showCalendar)}
+                        className="flex items-center justify-between border border-slate-200 p-4.5 rounded-2xl bg-white group hover:border-[#F8A41E] cursor-pointer transition-all shadow-sm relative"
+                       >
                           <div className="flex items-center gap-3.5 font-bold text-slate-600 text-sm">
-                            <Calendar className="w-5 h-5 text-[#F8A41E]" /> Select Date
+                            <Calendar className={`w-5 h-5 ${selectedDate ? 'text-[#0C3136]' : 'text-[#F8A41E]'}`} /> 
+                            {selectedDate || "Select Date"}
                           </div>
-                          <ChevronRight className="w-4 h-4 rotate-90 text-slate-300" />
+                          <ChevronRight className={`w-4 h-4 rotate-90 text-slate-300 transition-transform ${showCalendar ? 'rotate-[-90deg]' : ''}`} />
                        </div>
+                       
+                       {/* Dropdown UI */}
+                       {showCalendar && <CalendarDropdown onSelectDate={handleDateSelect} onClose={() => setShowCalendar(false)} />}
                     </div>
+
                     {/* Guests Picker Style Refinement */}
                     <div>
                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3.5 block">Guests</label>
@@ -475,7 +553,7 @@ const ItineraryPage = ({ navigateTo }) => {
   );
 };
 
-// --- PAGE: CONTACT ---
+// --- PAGE: CONTACT (Ref: image_d9ef3a.png) ---
 
 const ContactPage = () => {
   return (
