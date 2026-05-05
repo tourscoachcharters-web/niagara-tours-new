@@ -32,10 +32,6 @@ import {
   CheckCircle2,
   Ticket,
   LifeBuoy,
-  Facebook,
-  Instagram,
-  Twitter,
-  Youtube,
   CloudRain,
   Accessibility
 } from 'lucide-react';
