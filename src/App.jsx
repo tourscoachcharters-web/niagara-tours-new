@@ -222,12 +222,12 @@ const HomePage = ({ navigateTo }) => {
   );
 };
 
-// --- PAGE: ITINERARY (Ref: image_d9fa5d.jpg) ---
+// --- PAGE: ITINERARY (Updated per ChatGPT Image May 6, 2026, 12_15_44 AM.png) ---
 
 const ItineraryStep = ({ time, title, duration, img, desc, icon: Icon, isLast }) => (
   <div className="flex gap-6 group">
     <div className="flex flex-col items-center">
-      <div className="text-[10px] font-black text-[#F8A41E] mb-1.5 whitespace-nowrap uppercase tracking-tighter">{time}</div>
+      <div className="text-[10px] font-black text-[#125D66] mb-1.5 whitespace-nowrap uppercase tracking-tighter">{time}</div>
       <div className="w-10 h-10 rounded-full bg-[#0C3136] text-[#F8A41E] flex items-center justify-center shadow-lg relative z-10 ring-4 ring-white group-hover:scale-110 transition-all">
         <Icon className="w-5 h-5" />
       </div>
@@ -240,7 +240,7 @@ const ItineraryStep = ({ time, title, duration, img, desc, icon: Icon, isLast })
       <div className="flex-1">
         <div className="flex justify-between items-start mb-2">
           <h3 className="text-xl font-black text-[#0C3136] tracking-tight">{title}</h3>
-          <span className="flex items-center gap-2 text-[10px] font-black text-[#125D66] bg-cyan-50 px-3 py-1.5 rounded-full uppercase tracking-tighter shadow-sm"><Clock className="w-3.5 h-3.5" /> {duration}</span>
+          <span className="flex items-center gap-2 text-[10px] font-black text-slate-400 bg-slate-50 px-3 py-1.5 rounded-full uppercase tracking-tighter shadow-sm whitespace-nowrap"><Clock className="w-3.5 h-3.5" /> {duration}</span>
         </div>
         <p className="text-slate-500 text-sm leading-relaxed font-medium">{desc}</p>
       </div>
@@ -251,18 +251,20 @@ const ItineraryStep = ({ time, title, duration, img, desc, icon: Icon, isLast })
 const ItineraryPage = ({ navigateTo }) => {
   return (
     <div className="animate-in fade-in duration-700 bg-white">
-      {/* Hero */}
-      <section className="relative h-[400px] flex items-end pb-16 text-white overflow-hidden">
+      {/* Hero Section - Matching image precisely */}
+      <section className="relative h-[450px] flex items-center text-white overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img src="https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0C3136] via-[#0C3136]/50 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0C3136]/90 via-[#0C3136]/50 to-transparent"></div>
         </div>
         <div className="container mx-auto px-4 z-10">
-           <div className="flex items-center gap-2 text-[10px] font-black text-slate-300 uppercase tracking-widest mb-6">Home / Tours / Niagara Day Tour / Itinerary</div>
-           <span className="bg-[#125D66] text-white text-[10px] font-black px-4 py-2 rounded-lg uppercase tracking-[0.2em] mb-6 inline-block shadow-lg shadow-cyan-900/50">FEATURED TOUR</span>
-           <h1 className="text-4xl lg:text-7xl font-black leading-tight tracking-tighter">Niagara Day Tour <br /><span className="text-[#F8A41E]">Itinerary</span></h1>
-           <div className="flex flex-wrap gap-8 mt-10 p-6 bg-white/5 backdrop-blur-xl rounded-[2rem] border border-white/10 w-fit">
-              <div className="flex items-center gap-3"><Star className="w-5 h-5 text-[#F8A41E] fill-current" /><span className="text-sm font-black">4.8 <span className="font-medium opacity-60 text-xs ml-1">(1,215 Reviews)</span></span></div>
+           <div className="flex items-center gap-2 text-[10px] font-black text-slate-300 uppercase tracking-widest mb-6">Home / Tours / Niagara City Tour / Itinerary</div>
+           <span className="bg-cyan-600 text-white text-[10px] font-black px-4 py-2 rounded-lg uppercase tracking-[0.2em] mb-6 inline-block shadow-lg shadow-cyan-900/30">FEATURED TOUR</span>
+           <h1 className="text-4xl lg:text-7xl font-black leading-tight tracking-tighter mb-4">Niagara Day Tour <br /><span className="text-[#F8A41E]">Itinerary</span></h1>
+           <p className="text-slate-200 text-lg max-w-xl font-medium opacity-90 mb-10">A full-day guided experience of Niagara Falls, Ontario's top attractions, scenic views and local gems.</p>
+           
+           <div className="flex flex-wrap gap-8 p-6 bg-white/5 backdrop-blur-2xl rounded-[2.5rem] border border-white/10 w-fit">
+              <div className="flex items-center gap-3"><Star className="w-5 h-5 text-[#F8A41E] fill-current" /><span className="text-sm font-black">4.8 <span className="font-medium opacity-60 text-xs ml-1">(2,125 Reviews)</span></span></div>
               <div className="flex items-center gap-3"><Clock className="w-5 h-5 text-[#F8A41E]" /><span className="text-sm font-black">6 - 7 Hours</span></div>
               <div className="flex items-center gap-3"><Users className="w-5 h-5 text-[#F8A41E]" /><span className="text-sm font-black">2 - 50 Guests</span></div>
               <div className="flex items-center gap-3 text-[#F8A41E] uppercase text-[10px] font-black tracking-widest"><Calendar className="w-5 h-5" /> DAILY DEPARTURES</div>
@@ -271,102 +273,192 @@ const ItineraryPage = ({ navigateTo }) => {
       </section>
 
       <main className="container mx-auto px-4 py-20 grid grid-cols-1 lg:grid-cols-12 gap-16">
-        {/* Left Timeline */}
+        {/* Left Column: Timeline and Content */}
         <div className="lg:col-span-8">
-           <h2 className="text-3xl font-black text-[#0C3136] mb-12 tracking-tight">Your Full-Day Adventure, Step by Step</h2>
-           <div className="space-y-4">
-              <ItineraryStep time="8:30 AM" title="Luxury Hotel Pickup" duration="30 min" icon={Bus} img="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=500" desc="Sit back and relax as our professional guide picks you up in a modern, climate-controlled vehicle." />
-              <ItineraryStep time="9:00 AM" title="Scenic Niagara Parkway" duration="30 min" icon={Navigation} img="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=500" desc="Enjoy one of the world's most scenic drives, passing the Floral Clock and Whirlpool Rapids." />
-              <ItineraryStep time="10:00 AM" title="Niagara City Boat Cruise" duration="1 Hour" icon={Wind} img="https://images.unsplash.com/photo-1527267207156-348162c94a10?auto=format&fit=crop&w=500" desc="The legendary boat tour takes you directly into the mist of the Horseshoe Falls." />
-              <ItineraryStep time="11:15 AM" title="Journey Behind the Falls" duration="1 Hour" icon={MapIcon} img="https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?auto=format&fit=crop&w=500" desc="Descend through bedrock to see the falls from the tunnels directly behind the cascade." />
-              <ItineraryStep time="12:30 PM" title="Fallsview Lunch Break" duration="1.5 Hours" icon={Utensils} img="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=500" desc="Enjoy a relaxed lunch with panoramic views of the entire falls area." />
-              <ItineraryStep time="2:45 PM" title="VQA Winery Tasting" duration="1 Hour" icon={Grape} img="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=500" desc="Visit an award-winning winery for a guided tasting of world-famous Niagara Icewine." isLast />
+           <h2 className="text-3xl font-black text-[#0C3136] mb-4 tracking-tight">Your Full-Day Adventure, Step by Step</h2>
+           <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-12">All times are approximate and may vary.</p>
+           
+           <div className="space-y-2">
+              <ItineraryStep time="8:30 AM" title="Hotel Pickup" duration="30 min" icon={Bus} img="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=500" desc="We'll pick you up from your hotel in Niagara Falls or Niagara-on-the-Lake and start your adventure." />
+              <ItineraryStep time="9:00 AM" title="Scenic Drive to Niagara Falls" duration="30 min" icon={Navigation} img="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=500" desc="Enjoy a relaxing drive along the Niagara Parkway with beautiful views of the Niagara River." />
+              <ItineraryStep time="9:30 AM" title="Niagara Parkway & Scenic Stops" duration="30 min" icon={MapIcon} img="https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?auto=format&fit=crop&w=500" desc="Photo stops at Whirlpool Rapids, Floral Clock (seasonal) and other scenic viewpoints." />
+              <ItineraryStep time="10:00 AM" title="Niagara City Cruises" duration="1 Hour" icon={Wind} img="https://images.unsplash.com/photo-1527267207156-348162c94a10?auto=format&fit=crop&w=500" desc="Feel the mist and excitement on a thrilling boat cruise to the base of the Falls." />
+              <ItineraryStep time="11:15 AM" title="Journey Behind the Falls" duration="1 Hour" icon={MapIcon} img="https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?auto=format&fit=crop&w=500" desc="Explore tunnels behind the Falls and stand on the observation deck for an unforgettable view." />
+              <ItineraryStep time="12:30 PM" title="Lunch Break" duration="1 Hour" icon={Utensils} img="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=500" desc="Enjoy a delicious lunch at a local restaurant with views of the Falls. (Lunch not included)" />
+              <ItineraryStep time="1:30 PM" title="Clifton Hill Free Time" duration="1 Hour" icon={Zap} img="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=500" desc="Explore Clifton Hill, visit attractions, shops or enjoy some fun on your own." />
+              <ItineraryStep time="2:45 PM" title="Winery Stop" duration="45 min" icon={Grape} img="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=500" desc="Visit a local Niagara winery for a guided tasting of award-winning VQA wines." />
+              <ItineraryStep time="4:00 PM" title="Drop-off at Your Hotel" duration="30 min" icon={Bus} img="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=500" desc="We'll take you back to your hotel with wonderful memories of your Niagara adventure." isLast />
+           </div>
+
+           <div className="mt-8 p-5 bg-blue-50/50 border border-blue-100 rounded-2xl flex items-center gap-4 text-xs font-bold text-[#125D66]">
+              <Info className="w-5 h-5 text-blue-500 shrink-0" />
+              Itinerary is subject to change due to weather, traffic, or operational conditions.
            </div>
 
            {/* Why Travelers Love This */}
-           <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6">
-              {[
-                { i: Camera, t: 'Views' },
-                { i: Users, t: 'Guides' },
-                { i: Bus, t: 'Comfort' },
-                { i: ShieldCheck, t: 'Safety' }
-              ].map((item, idx) => (
-                <div key={idx} className="bg-slate-50 p-8 rounded-[2rem] border border-slate-100 flex flex-col items-center text-center group hover:bg-white hover:shadow-xl transition-all">
-                   <div className="bg-[#0C3136] text-[#F8A41E] p-4 rounded-2xl mb-6 shadow-lg"><item.i className="w-7 h-7" /></div>
-                   <h4 className="font-black text-[10px] text-[#0C3136] uppercase tracking-widest">{item.t}</h4>
-                </div>
-              ))}
+           <div className="mt-20">
+              <h3 className="text-2xl font-black text-[#0C3136] mb-10 tracking-tight">Why Travelers Love This Tour</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                  { i: Camera, t: 'Breathtaking Views', d: 'See the natural wonder of Niagara Falls up close.' },
+                  { i: Users, t: 'Expert Local Guide', d: 'Learn the history and stories from our friendly guides.' },
+                  { i: Bus, t: 'Comfortable Transport', d: 'Travel in clean, modern vehicles with A/C.' },
+                  { i: ShieldCheck, t: 'Free Cancellation', d: 'Cancel up to 24 hours in advance for a full refund.' }
+                ].map((item, idx) => (
+                  <div key={idx} className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center text-center group hover:shadow-xl transition-all">
+                    <div className="bg-[#0C3136]/5 text-[#125D66] p-4 rounded-2xl mb-6 shadow-sm group-hover:bg-[#F8A41E] group-hover:text-[#0C3136] transition-all"><item.i className="w-7 h-7" /></div>
+                    <h4 className="font-black text-[11px] text-[#0C3136] uppercase tracking-widest mb-2">{item.t}</h4>
+                    <p className="text-[10px] text-slate-500 font-medium leading-relaxed">{item.d}</p>
+                  </div>
+                ))}
+              </div>
            </div>
 
-           {/* Detailed Information Grid */}
+           {/* Included / Not Included */}
            <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl overflow-hidden">
-                 <div className="bg-[#125D66] text-white px-8 py-5 font-black text-xs uppercase tracking-widest flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-[#F8A41E]" /> What's Included</div>
-                 <div className="p-10 space-y-5">
-                    {['Round-trip transport', 'Licensed local guide', 'All attraction entrance fees', 'Icewine tasting session', 'Bottled water'].map((t, i) => (
-                      <div key={i} className="flex gap-4 text-sm text-slate-600 font-bold"><span className="text-[#F8A41E] mt-0.5">✓</span> {t}</div>
+                 <div className="bg-[#125D66] text-white px-8 py-5 font-black text-xs uppercase tracking-widest">What's Included</div>
+                 <div className="p-10 space-y-4">
+                    {[
+                      'Hotel pickup and drop-off',
+                      'Niagara City Cruises boat ride (seasonal)',
+                      'Journey Behind the Falls admission',
+                      'Local English-speaking guide',
+                      'Air-conditioned transportation',
+                      'Winery tour with wine tasting',
+                      'All taxes and fees'
+                    ].map((t, i) => (
+                      <div key={i} className="flex gap-4 text-xs text-slate-600 font-bold items-start"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" /> {t}</div>
                     ))}
                  </div>
               </div>
-              <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl overflow-hidden">
-                 <div className="bg-[#0C3136] text-white px-8 py-5 font-black text-xs uppercase tracking-widest flex items-center gap-3"><MapIcon className="w-5 h-5 text-[#F8A41E]" /> Route Overview</div>
-                 <div className="p-6">
-                    <div className="bg-slate-50 rounded-[1.5rem] h-56 flex flex-col items-center justify-center border-2 border-dashed border-slate-200">
-                       <Navigation className="w-10 h-10 text-slate-300 mb-4" />
-                       <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Live Map View</span>
+              <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl overflow-hidden flex flex-col">
+                 <div className="bg-[#D91E1E] text-white px-8 py-5 font-black text-xs uppercase tracking-widest">Not Included</div>
+                 <div className="p-10 space-y-4 flex-1">
+                    {[
+                      'Lunch (available for purchase)',
+                      'Gratuities (optional)',
+                      'Personal expenses',
+                      'Attraction tickets not listed'
+                    ].map((t, i) => (
+                      <div key={i} className="flex gap-4 text-xs text-slate-600 font-bold items-start"><X className="w-4 h-4 text-red-500 shrink-0 mt-0.5" /> {t}</div>
+                    ))}
+                 </div>
+                 <div className="p-6 bg-slate-50 border-t border-slate-100">
+                    <div className="bg-white rounded-xl h-44 flex flex-col items-center justify-center border-2 border-dashed border-slate-200">
+                       <MapIcon className="w-8 h-8 text-slate-300 mb-3" />
+                       <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Route Map Placeholder</span>
                     </div>
                  </div>
               </div>
            </div>
 
-           {/* Tips Section */}
+           {/* Highlights Grid */}
            <div className="mt-20">
-              <h3 className="text-2xl font-black text-[#0C3136] mb-10">Important Information</h3>
+              <h3 className="text-2xl font-black text-[#0C3136] mb-10 tracking-tight">Tour Highlights & Attraction Stops</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {[
+                  { t: 'Niagara City Cruises', d: 'Get up close to the power and mist of the Falls.', img: 'https://images.unsplash.com/photo-1527267207156-348162c94a10?auto=format&fit=crop&w=400' },
+                  { t: 'Journey Behind the Falls', d: 'Explore tunnels and feel the thunder from behind.', img: 'https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?auto=format&fit=crop&w=400' },
+                  { t: 'Clifton Hill', d: 'Fun, food and attractions for everyone to enjoy.', img: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=400' },
+                  { t: 'Niagara Wineries', d: 'Savor award-winning wines in the beautiful Niagara region.', img: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=400' }
+                ].map((item, idx) => (
+                  <div key={idx} className="group cursor-pointer">
+                    <div className="h-32 rounded-2xl overflow-hidden mb-4 shadow-md ring-1 ring-slate-100">
+                       <img src={item.img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                    </div>
+                    <h4 className="font-black text-[#0C3136] text-[11px] uppercase tracking-tighter mb-1">{item.t}</h4>
+                    <p className="text-[10px] text-slate-500 leading-relaxed font-medium">{item.d}</p>
+                  </div>
+                ))}
+              </div>
+           </div>
+
+           {/* Important Tips Grid */}
+           <div className="mt-20">
+              <h3 className="text-2xl font-black text-[#0C3136] mb-10 tracking-tight">Important Tips & Information</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                  {[
-                   { i: Info, t: 'What to Wear', d: 'Comfortable walking shoes and a light jacket are recommended.' },
-                   { i: Accessibility, t: 'Accessibility', d: 'The tour is fully wheelchair accessible with prior notice.' },
-                   { i: MapPin, t: 'Meeting Point', d: 'Complimentary hotel pickup from all major Niagara area hotels.' },
-                   { i: CloudRain, t: 'Weather Note', d: 'Tours operate rain or shine. Ponchos provided for boat ride.' }
+                   { i: Info, t: 'What to Wear', d: 'Wear comfortable shoes and dress for the weather. A rain poncho is recommended for the boat ride.' },
+                   { i: Accessibility, t: 'Accessibility', d: 'Local attractions are wheelchair accessible. Please inform us in advance if assistance is needed.' },
+                   { i: MapPin, t: 'Meeting Point', d: 'We provide hotel pickup from Niagara Falls and Niagara-on-the-Lake areas.' },
+                   { i: CloudRain, t: 'Weather Note', d: 'Tours operate rain or shine. In case of severe weather, itinerary may be adjusted for safety.' }
                  ].map((tip, i) => (
-                   <div key={i} className="flex gap-5 p-4 group">
-                      <div className="bg-cyan-50 text-[#125D66] p-3 rounded-2xl h-fit group-hover:bg-[#F8A41E] group-hover:text-[#0C3136] transition-all"><tip.i className="w-6 h-6" /></div>
+                   <div key={i} className="flex gap-5 p-6 rounded-[2rem] hover:bg-slate-50 transition-colors group">
+                      <div className="bg-[#0C3136] text-[#F8A41E] p-4 rounded-2xl h-fit shadow-lg group-hover:scale-110 transition-transform"><tip.i className="w-6 h-6" /></div>
                       <div><h4 className="font-black text-[#0C3136] uppercase text-xs tracking-wider mb-2">{tip.t}</h4><p className="text-slate-500 text-sm font-medium leading-relaxed">{tip.d}</p></div>
                    </div>
                  ))}
               </div>
            </div>
+
+           {/* FAQs */}
+           <div className="mt-20">
+              <h3 className="text-2xl font-black text-[#0C3136] mb-10 tracking-tight">Frequently Asked Questions</h3>
+              <div className="bg-white rounded-[2.5rem] p-10 border border-slate-100 shadow-sm space-y-2">
+                 <FaqItem question="What time does the Niagara Day Tour start?" answer="The tour typically begins with pickups between 8:00 AM and 8:30 AM, depending on your location." />
+                 <FaqItem question="Is the boat cruise included in the tour?" answer="Yes! Admission to the Niagara City Cruises boat ride is included in your package." />
+                 <FaqItem question="What should I bring with me?" answer="We recommend a camera, comfortable walking shoes, and a light jacket as it can get cool near the water." />
+                 <FaqItem question="Can I cancel or reschedule my booking?" answer="Yes, we offer a full refund if canceled at least 24 hours before the tour start time." />
+                 <FaqItem question="Are meals included in the tour?" answer="Meals are not included, but we provide a dedicated lunch break at a scenic Fallsview location." />
+              </div>
+           </div>
         </div>
 
-        {/* Right Sticky Sidebar */}
+        {/* Right Sticky Sidebar: Exactly like the image */}
         <div className="lg:col-span-4">
            <div className="sticky top-28 space-y-10">
-              <div className="bg-white rounded-[2.5rem] shadow-[0_40px_70px_-15px_rgba(0,0,0,0.25)] border border-slate-100 overflow-hidden">
+              <div className="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.2)] border border-slate-100 overflow-hidden">
                  <div className="bg-[#0C3136] p-10 text-white">
-                    <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-2">BOOKING PRICE</p>
-                    <h3 className="text-5xl font-black text-[#F8A41E] mb-2 tracking-tighter">CAD $129 <span className="text-xs font-medium text-slate-400">/ PER PERSON</span></h3>
-                    <div className="flex items-center gap-2 mt-4 text-yellow-500 font-black text-xs"><Star className="w-4 h-4 fill-current" /> 4.8 <span className="text-white opacity-60 ml-1 font-medium">(1,215 REVIEWS)</span></div>
+                    <h3 className="text-lg font-black uppercase tracking-widest mb-8">Book Your Niagara Day Tour</h3>
+                    <div className="space-y-1">
+                       <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">From</p>
+                       <h4 className="text-5xl font-black text-[#F8A41E] tracking-tighter">CAD $129 <span className="text-xs font-normal text-slate-400">/ person</span></h4>
+                    </div>
+                    <div className="flex items-center gap-2 mt-4 text-yellow-500 font-black text-xs">
+                       <Star className="w-4 h-4 fill-current" /> 4.8 <span className="text-white opacity-60 ml-1 font-medium">(2,125 Reviews)</span>
+                    </div>
                  </div>
                  <div className="p-10 space-y-8">
-                    <div><label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Travel Date</label><div className="flex items-center justify-between border-2 border-slate-100 p-4 rounded-2xl bg-slate-50 group hover:border-[#F8A41E] cursor-pointer transition-all"><div className="flex items-center gap-3 font-bold text-slate-700 text-sm"><Calendar className="w-5 h-5 text-[#F8A41E]" /> Select Date</div><ChevronRight className="w-4 h-4 rotate-90 text-slate-300" /></div></div>
-                    <button className="w-full bg-[#D91E1E] hover:bg-[#b01818] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-red-900/20 transition-all">RESERVE YOUR SPOT</button>
+                    <div>
+                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Select Date</label>
+                       <div className="flex items-center justify-between border-2 border-slate-100 p-4 rounded-2xl bg-slate-50 group hover:border-[#F8A41E] cursor-pointer transition-all">
+                          <div className="flex items-center gap-3 font-bold text-slate-700 text-sm"><Calendar className="w-5 h-5 text-[#F8A41E]" /> Select Date</div>
+                          <ChevronRight className="w-4 h-4 rotate-90 text-slate-300" />
+                       </div>
+                    </div>
+                    <div>
+                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Guests</label>
+                       <select className="w-full border-2 border-slate-100 p-4 rounded-2xl bg-slate-50 font-bold text-slate-700 text-sm focus:outline-none focus:border-[#F8A41E] appearance-none cursor-pointer">
+                          <option>2 Adults</option>
+                          <option>1 Adult</option>
+                          <option>Family (2A + 2C)</option>
+                       </select>
+                    </div>
+                    <button className="w-full bg-[#D91E1E] hover:bg-[#b01818] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-red-900/20 transition-all">RESERVE NOW</button>
                     <button className="w-full border-2 border-slate-200 text-[#0C3136] py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-50 transition-all">CHECK AVAILABILITY</button>
-                    <div className="flex items-center justify-center gap-2 text-[9px] font-black text-slate-400 uppercase tracking-widest pt-4"><ShieldCheck className="w-4 h-4 text-emerald-500" /> Secure Payment Gateway</div>
+                    <div className="flex items-center justify-between px-2">
+                       <div className="flex items-center gap-1.5 text-emerald-600 text-[9px] font-black tracking-widest uppercase"><ShieldCheck className="w-4 h-4" /> Free Cancellation</div>
+                       <div className="flex items-center gap-1.5 text-cyan-700 text-[9px] font-black tracking-widest uppercase"><Zap className="w-4 h-4" /> Best Price</div>
+                    </div>
                  </div>
               </div>
 
               <div className="bg-white rounded-[2rem] shadow-xl border border-slate-100 overflow-hidden">
                  <div className="px-8 py-5 border-b border-slate-100 text-[10px] font-black text-[#0C3136] uppercase tracking-[0.2em]">Tour Quick Facts</div>
-                 <div className="p-8 space-y-6">
+                 <div className="p-8 space-y-5">
                     {[
-                      { l: 'Duration', v: '6-7 Hours', i: Clock },
+                      { l: 'Duration', v: '6 - 7 Hours', i: Clock },
                       { l: 'Tour Type', v: 'Guided Day Tour', i: Bus },
-                      { l: 'Guests', v: '2-50 People', i: Users },
-                      { l: 'Languages', v: 'EN / FR / ES', i: Globe }
+                      { l: 'Group Size', v: '2 - 50 Guests', i: Users },
+                      { l: 'Languages', v: 'EN / FR', i: Globe },
+                      { l: 'Departs', v: 'Daily at 8:30 AM', i: Calendar },
+                      { l: 'Pickup', v: 'Hotel Pickup Included', i: MapPin },
+                      { l: 'Cancellation', v: 'Free up to 24 hrs', i: LifeBuoy }
                     ].map((f, i) => (
                       <div key={i} className="flex justify-between items-center">
                         <div className="flex items-center gap-3 text-[10px] font-black text-slate-400 uppercase tracking-widest"><f.i className="w-4 h-4 text-[#F8A41E]" /> {f.l}</div>
-                        <div className="font-black text-[#0C3136] text-sm">{f.v}</div>
+                        <div className="font-black text-[#0C3136] text-[11px]">{f.v}</div>
                       </div>
                     ))}
                  </div>
@@ -374,30 +466,36 @@ const ItineraryPage = ({ navigateTo }) => {
 
               <div className="bg-[#0C3136] p-10 rounded-[2.5rem] text-white relative overflow-hidden group shadow-2xl">
                  <div className="relative z-10">
-                    <h4 className="font-black text-lg uppercase tracking-widest mb-3">Need Assistance?</h4>
-                    <p className="text-xs text-slate-400 font-medium mb-8 leading-relaxed max-w-[180px]">Our tour specialists are available 24/7 to help plan your adventure.</p>
+                    <h4 className="font-black text-lg uppercase tracking-widest mb-3">Need Help?</h4>
+                    <p className="text-[11px] text-slate-400 font-medium mb-8 leading-relaxed max-w-[200px]">Our local experts are here to help you plan your trip.</p>
                     <div className="space-y-4">
-                       <div className="text-[9px] font-black text-[#F8A41E] uppercase tracking-widest opacity-80">Call US DIRECTLY</div>
-                       <div className="text-2xl font-black tracking-tight">+1 (905) 123-4567</div>
+                       <div className="flex items-center gap-3 text-lg font-black tracking-tight"><Phone className="w-5 h-5 text-[#F8A41E]" /> +1 (905) 123-4567</div>
+                       <div className="flex items-center gap-3 text-[11px] font-bold text-slate-300"><Mail className="w-4 h-4 text-[#F8A41E]" /> info@niagaravistatours.com</div>
+                       <div className="flex items-center gap-3 text-[11px] font-bold text-slate-400 mt-4"><Clock className="w-4 h-4" /> Open Daily: 8:00 AM - 8:00 PM</div>
                     </div>
                  </div>
-                 <img src="https://randomuser.me/api/portraits/women/68.jpg" className="absolute -bottom-8 -right-8 w-44 h-44 rounded-full grayscale opacity-20 border-4 border-white/10 group-hover:scale-110 transition-transform duration-700" />
+                 <img src="https://randomuser.me/api/portraits/women/68.jpg" className="absolute -bottom-10 -right-10 w-56 h-56 rounded-full grayscale opacity-25 border-8 border-white/5 group-hover:scale-110 transition-transform duration-700" />
               </div>
            </div>
         </div>
       </main>
 
-      {/* FAQ Section */}
-      <section className="py-24 border-t border-slate-100 bg-[#F8FAFC]">
-         <div className="container mx-auto px-4 max-w-4xl">
-            <h2 className="text-3xl font-black text-[#0C3136] mb-12 text-center tracking-tight">Frequently Asked Questions</h2>
-            <div className="bg-white rounded-[2rem] p-10 shadow-sm border border-slate-100 space-y-2">
-               <FaqItem question="What time does the Niagara Day Tour start?" answer="The tour typically starts at 8:30 AM with hotel pickups beginning 30 minutes prior." />
-               <FaqItem question="Is the boat cruise included in the tour price?" answer="Yes, admission to the Niagara City Cruises (seasonal) is fully included." />
-               <FaqItem question="What happens if it rains during our tour?" answer="Tours operate in all weather conditions. Niagara is beautiful even in the rain!" />
-               <FaqItem question="Can I cancel my booking for a refund?" answer="Yes, we offer a full refund for cancellations made at least 24 hours in advance." />
-            </div>
-         </div>
+      {/* Bottom CTA Banner */}
+      <section className="bg-[#0C3136] py-20 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 grayscale">
+          <img src="https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover" />
+        </div>
+        <div className="container mx-auto px-4 relative z-10 flex flex-col lg:flex-row justify-between items-center gap-12 text-center lg:text-left">
+           <div>
+              <p className="text-[#F8A41E] font-black text-xs uppercase tracking-[0.4em] mb-4">Don't Miss Out</p>
+              <h2 className="text-4xl lg:text-5xl font-black text-white mb-4">Book Your Niagara Day Tour Today!</h2>
+              <p className="text-slate-300 text-lg font-medium">Experience the best of Niagara Falls in one unforgettable day.</p>
+           </div>
+           <div className="flex flex-col items-center gap-6">
+              <button className="bg-[#D91E1E] hover:bg-white hover:text-[#D91E1E] text-white px-12 py-5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-2xl flex items-center gap-3">RESERVE YOUR SPOT NOW <ChevronRight className="w-5 h-5" /></button>
+              <p className="text-white text-xs font-black tracking-widest uppercase opacity-70">Use code: <span className="text-[#F8A41E]">NIAGARADAY15</span> for 15% off</p>
+           </div>
+        </div>
       </section>
     </div>
   );
