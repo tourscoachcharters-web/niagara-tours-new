@@ -65,7 +65,7 @@ const YoutubeIcon = (props) => (
 );
 
 // --- Sub-component: Functional Calendar Dropdown ---
-const CalendarDropdown = ({ onSelectDate, onClose }) => {
+const CalendarDropdown = ({ onSelectDate }) => {
   const [viewDate, setViewDate] = useState(new Date());
   const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
   const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -101,7 +101,11 @@ const CalendarDropdown = ({ onSelectDate, onClose }) => {
           return (
             <button 
               key={day} 
-              onClick={(e) => { e.stopPropagation(); onSelectDate(new Date(viewDate.getFullYear(), viewDate.getMonth(), day)); }}
+              type="button"
+              onClick={(e) => { 
+                e.stopPropagation(); 
+                onSelectDate(new Date(viewDate.getFullYear(), viewDate.getMonth(), day)); 
+              }}
               className={`h-9 w-full rounded-xl text-xs font-bold transition-all ${isToday ? 'bg-[#F8A41E] text-[#0C3136]' : 'text-slate-600 hover:bg-slate-50'}`}
             >
               {day}
@@ -302,7 +306,7 @@ const ItineraryPage = ({ navigateTo }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const calendarRef = useRef(null);
 
-  // Handle clicking outside to close calendar
+  // Close calendar when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (calendarRef.current && !calendarRef.current.contains(event.target)) {
@@ -424,10 +428,9 @@ const ItineraryPage = ({ navigateTo }) => {
            </div>
         </div>
 
-        {/* --- REFINED SIDEBAR WITH WORKING CALENDAR --- */}
+        {/* Sidebar with FIXED Calendar */}
         <div className="lg:col-span-4">
            <div className="sticky top-28 space-y-10">
-              {/* Refined Booking Widget */}
               <div className="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.2)] border border-slate-100 overflow-hidden">
                  <div className="bg-[#0C3136] px-10 py-10 text-white">
                     <h3 className="text-sm font-black uppercase tracking-[0.2em] mb-8 leading-tight">Book Your Niagara Day Tour</h3>
@@ -443,25 +446,28 @@ const ItineraryPage = ({ navigateTo }) => {
                     </div>
                  </div>
                  <div className="p-10 space-y-8 bg-white relative">
-                    {/* Date Picker WITH Working Dropdown */}
-                    <div ref={calendarRef}>
+                    {/* Fixed Wrapper for the Calendar Interaction */}
+                    <div ref={calendarRef} className="relative">
                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3.5 block">Select Date</label>
-                       <div 
-                        onClick={() => setShowCalendar(!showCalendar)}
-                        className="flex items-center justify-between border border-slate-200 p-4.5 rounded-2xl bg-white group hover:border-[#F8A41E] cursor-pointer transition-all shadow-sm relative"
+                       <button 
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowCalendar(!showCalendar);
+                        }}
+                        className="w-full flex items-center justify-between border border-slate-200 p-4.5 rounded-2xl bg-white group hover:border-[#F8A41E] cursor-pointer transition-all shadow-sm relative z-10"
                        >
                           <div className="flex items-center gap-3.5 font-bold text-slate-600 text-sm">
                             <Calendar className={`w-5 h-5 ${selectedDate ? 'text-[#0C3136]' : 'text-[#F8A41E]'}`} /> 
                             {selectedDate || "Select Date"}
                           </div>
                           <ChevronRight className={`w-4 h-4 rotate-90 text-slate-300 transition-transform ${showCalendar ? 'rotate-[-90deg]' : ''}`} />
-                       </div>
+                       </button>
                        
                        {/* Dropdown UI */}
-                       {showCalendar && <CalendarDropdown onSelectDate={handleDateSelect} onClose={() => setShowCalendar(false)} />}
+                       {showCalendar && <CalendarDropdown onSelectDate={handleDateSelect} />}
                     </div>
 
-                    {/* Guests Picker Style Refinement */}
                     <div>
                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3.5 block">Guests</label>
                        <div className="relative">
@@ -474,28 +480,16 @@ const ItineraryPage = ({ navigateTo }) => {
                        </div>
                     </div>
                     
-                    <button className="w-full bg-[#D91E1E] hover:bg-[#b01818] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl shadow-red-900/20 transition-all">
-                       RESERVE NOW
-                    </button>
+                    <button className="w-full bg-[#D91E1E] hover:bg-[#b01818] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl shadow-red-900/20 transition-all">RESERVE NOW</button>
+                    <button className="w-full border border-[#125D66] text-[#125D66] py-5 rounded-2xl font-black text-xs uppercase tracking-[0.3em] hover:bg-slate-50 transition-all">CHECK AVAILABILITY</button>
                     
-                    <button className="w-full border border-[#125D66] text-[#125D66] py-5 rounded-2xl font-black text-xs uppercase tracking-[0.3em] hover:bg-slate-50 transition-all">
-                       CHECK AVAILABILITY
-                    </button>
-
                     <div className="flex items-center justify-between px-2 pt-2">
-                       <div className="flex items-center gap-2 text-emerald-600 text-[9px] font-black tracking-widest uppercase">
-                          <div className="w-5 h-5 rounded-full border border-emerald-100 flex items-center justify-center bg-emerald-50"><CheckCircle2 className="w-3 h-3" /></div>
-                          Free Cancellation
-                       </div>
-                       <div className="flex items-center gap-2 text-cyan-700 text-[9px] font-black tracking-widest uppercase">
-                          <div className="w-5 h-5 rounded-full border border-cyan-100 flex items-center justify-center bg-cyan-50"><Zap className="w-3 h-3 fill-current" /></div>
-                          Best Price
-                       </div>
+                       <div className="flex items-center gap-2 text-emerald-600 text-[9px] font-black tracking-widest uppercase"><CheckCircle2 className="w-3.5 h-3.5" /> Free Cancellation</div>
+                       <div className="flex items-center gap-2 text-cyan-700 text-[9px] font-black tracking-widest uppercase"><Zap className="w-3.5 h-3.5 fill-current" /> Best Price</div>
                     </div>
                  </div>
               </div>
 
-              {/* Quick Facts Section */}
               <div className="bg-white rounded-[2rem] shadow-xl border border-slate-100 overflow-hidden">
                  <div className="px-8 py-5 border-b border-slate-100 text-[10px] font-black text-[#0C3136] uppercase tracking-[0.2em]">Tour Quick Facts</div>
                  <div className="p-8 space-y-5">
@@ -516,7 +510,6 @@ const ItineraryPage = ({ navigateTo }) => {
                  </div>
               </div>
 
-              {/* Need Help? Sidebar */}
               <div className="bg-[#0C3136] p-10 rounded-[2.5rem] text-white relative overflow-hidden group shadow-2xl">
                  <div className="relative z-10">
                     <h4 className="font-black text-lg uppercase tracking-widest mb-3">Need Help?</h4>
@@ -532,8 +525,8 @@ const ItineraryPage = ({ navigateTo }) => {
         </div>
       </main>
 
-      {/* Bottom Banner */}
-      <section className="bg-[#0C3136] py-20 relative overflow-hidden">
+      {/* Footer Banner */}
+      <footer className="bg-[#0C3136] py-20 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 grayscale">
           <img src="https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover" />
         </div>
@@ -548,7 +541,7 @@ const ItineraryPage = ({ navigateTo }) => {
               <p className="text-white text-xs font-black tracking-widest uppercase opacity-70">Use code: <span className="text-[#F8A41E]">NIAGARADAY15</span> for 15% off</p>
            </div>
         </div>
-      </section>
+      </footer>
     </div>
   );
 };
@@ -687,7 +680,7 @@ export default function App() {
         {page === 'contact' && <ContactPage />}
       </main>
 
-      {/* Footer */}
+      {/* Footer (Ref: image_da0218.jpg) */}
       <footer className="bg-[#0C3136] text-white pt-24 pb-10 px-4 mt-20 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -mr-20 -mt-20 blur-3xl"></div>
         <div className="container mx-auto relative z-10">
@@ -705,10 +698,14 @@ export default function App() {
                 <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center hover:bg-[#F8A41E] hover:text-[#0C3136] transition-all cursor-pointer"><YoutubeIcon className="w-4.5 h-4.5" /></div>
               </div>
             </div>
+
             <div><h4 className="font-black text-xs uppercase tracking-[0.3em] text-[#F8A41E] mb-8">Quick Links</h4><ul className="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest"><li onClick={() => navigateTo('home')} className="hover:text-white cursor-pointer">Home</li><li onClick={() => navigateTo('itinerary')} className="hover:text-white cursor-pointer">Tours</li><li className="hover:text-white cursor-pointer">Packages</li><li className="hover:text-white cursor-pointer">About Us</li><li onClick={() => navigateTo('contact')} className="hover:text-white cursor-pointer">Contact</li></ul></div>
+            
             <div><h4 className="font-black text-xs uppercase tracking-[0.3em] text-[#F8A41E] mb-8">Top Tours</h4><ul className="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest"><li>Niagara Day Tour</li><li>Falls & Winery Escape</li><li>Family Adventure</li><li>Boat Cruise</li><li>Private Tours</li></ul></div>
+
             <div><h4 className="font-black text-xs uppercase tracking-[0.3em] text-[#F8A41E] mb-8">Newsletter</h4><p className="text-xs text-slate-400 font-medium mb-6">Subscribe for exclusive travel tips and stay updated with latest offers.</p><div className="flex gap-2"><input type="email" placeholder="Enter your email" className="bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-xs w-full focus:ring-1 focus:ring-[#F8A41E] outline-none transition-all" /><button className="bg-[#D91E1E] text-white px-5 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-white hover:text-[#D91E1E] transition-all">Join</button></div></div>
           </div>
+          
           <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase">
             <div>© 2025 Niagara Vista Tours. All Rights Reserved.</div>
             <div className="flex gap-10"><a href="#" className="hover:text-[#F8A41E]">Privacy Policy</a><a href="#" className="hover:text-[#F8A41E]">Terms & Conditions</a></div>
