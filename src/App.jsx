@@ -86,7 +86,7 @@ const NavItem = ({ label, hasDropdown, active, onClick }) => (
   </div>
 );
 
-// --- PAGE: HOME (Ref: image_da0218.jpg) ---
+// --- PAGE: HOME ---
 
 const HomePage = ({ navigateTo }) => {
   return (
@@ -222,7 +222,7 @@ const HomePage = ({ navigateTo }) => {
   );
 };
 
-// --- PAGE: ITINERARY (Updated per ChatGPT Image May 6, 2026, 12_15_44 AM.png) ---
+// --- PAGE: ITINERARY (Ref: image_d9fa5d.jpg / image_d91c7f.png) ---
 
 const ItineraryStep = ({ time, title, duration, img, desc, icon: Icon, isLast }) => (
   <div className="flex gap-6 group">
@@ -251,7 +251,7 @@ const ItineraryStep = ({ time, title, duration, img, desc, icon: Icon, isLast })
 const ItineraryPage = ({ navigateTo }) => {
   return (
     <div className="animate-in fade-in duration-700 bg-white">
-      {/* Hero Section - Matching image precisely */}
+      {/* Hero Section */}
       <section className="relative h-[450px] flex items-center text-white overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img src="https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover" />
@@ -352,98 +352,72 @@ const ItineraryPage = ({ navigateTo }) => {
                  </div>
               </div>
            </div>
-
-           {/* Highlights Grid */}
-           <div className="mt-20">
-              <h3 className="text-2xl font-black text-[#0C3136] mb-10 tracking-tight">Tour Highlights & Attraction Stops</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {[
-                  { t: 'Niagara City Cruises', d: 'Get up close to the power and mist of the Falls.', img: 'https://images.unsplash.com/photo-1527267207156-348162c94a10?auto=format&fit=crop&w=400' },
-                  { t: 'Journey Behind the Falls', d: 'Explore tunnels and feel the thunder from behind.', img: 'https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?auto=format&fit=crop&w=400' },
-                  { t: 'Clifton Hill', d: 'Fun, food and attractions for everyone to enjoy.', img: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=400' },
-                  { t: 'Niagara Wineries', d: 'Savor award-winning wines in the beautiful Niagara region.', img: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=400' }
-                ].map((item, idx) => (
-                  <div key={idx} className="group cursor-pointer">
-                    <div className="h-32 rounded-2xl overflow-hidden mb-4 shadow-md ring-1 ring-slate-100">
-                       <img src={item.img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                    </div>
-                    <h4 className="font-black text-[#0C3136] text-[11px] uppercase tracking-tighter mb-1">{item.t}</h4>
-                    <p className="text-[10px] text-slate-500 leading-relaxed font-medium">{item.d}</p>
-                  </div>
-                ))}
-              </div>
-           </div>
-
-           {/* Important Tips Grid */}
-           <div className="mt-20">
-              <h3 className="text-2xl font-black text-[#0C3136] mb-10 tracking-tight">Important Tips & Information</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                 {[
-                   { i: Info, t: 'What to Wear', d: 'Wear comfortable shoes and dress for the weather. A rain poncho is recommended for the boat ride.' },
-                   { i: Accessibility, t: 'Accessibility', d: 'Local attractions are wheelchair accessible. Please inform us in advance if assistance is needed.' },
-                   { i: MapPin, t: 'Meeting Point', d: 'We provide hotel pickup from Niagara Falls and Niagara-on-the-Lake areas.' },
-                   { i: CloudRain, t: 'Weather Note', d: 'Tours operate rain or shine. In case of severe weather, itinerary may be adjusted for safety.' }
-                 ].map((tip, i) => (
-                   <div key={i} className="flex gap-5 p-6 rounded-[2rem] hover:bg-slate-50 transition-colors group">
-                      <div className="bg-[#0C3136] text-[#F8A41E] p-4 rounded-2xl h-fit shadow-lg group-hover:scale-110 transition-transform"><tip.i className="w-6 h-6" /></div>
-                      <div><h4 className="font-black text-[#0C3136] uppercase text-xs tracking-wider mb-2">{tip.t}</h4><p className="text-slate-500 text-sm font-medium leading-relaxed">{tip.d}</p></div>
-                   </div>
-                 ))}
-              </div>
-           </div>
-
-           {/* FAQs */}
-           <div className="mt-20">
-              <h3 className="text-2xl font-black text-[#0C3136] mb-10 tracking-tight">Frequently Asked Questions</h3>
-              <div className="bg-white rounded-[2.5rem] p-10 border border-slate-100 shadow-sm space-y-2">
-                 <FaqItem question="What time does the Niagara Day Tour start?" answer="The tour typically begins with pickups between 8:00 AM and 8:30 AM, depending on your location." />
-                 <FaqItem question="Is the boat cruise included in the tour?" answer="Yes! Admission to the Niagara City Cruises boat ride is included in your package." />
-                 <FaqItem question="What should I bring with me?" answer="We recommend a camera, comfortable walking shoes, and a light jacket as it can get cool near the water." />
-                 <FaqItem question="Can I cancel or reschedule my booking?" answer="Yes, we offer a full refund if canceled at least 24 hours before the tour start time." />
-                 <FaqItem question="Are meals included in the tour?" answer="Meals are not included, but we provide a dedicated lunch break at a scenic Fallsview location." />
-              </div>
-           </div>
         </div>
 
-        {/* Right Sticky Sidebar: Exactly like the image */}
+        {/* --- REFINED SIDEBAR (Matching image_d91c7f.png) --- */}
         <div className="lg:col-span-4">
            <div className="sticky top-28 space-y-10">
+              {/* Refined Booking Widget */}
               <div className="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.2)] border border-slate-100 overflow-hidden">
-                 <div className="bg-[#0C3136] p-10 text-white">
-                    <h3 className="text-lg font-black uppercase tracking-widest mb-8">Book Your Niagara Day Tour</h3>
-                    <div className="space-y-1">
-                       <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">From</p>
-                       <h4 className="text-5xl font-black text-[#F8A41E] tracking-tighter">CAD $129 <span className="text-xs font-normal text-slate-400">/ person</span></h4>
+                 <div className="bg-[#0C3136] px-10 py-10 text-white">
+                    <h3 className="text-sm font-black uppercase tracking-[0.2em] mb-8 leading-tight">Book Your Niagara Day Tour</h3>
+                    <div className="space-y-0.5">
+                       <p className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">From</p>
+                       <h4 className="text-[44px] font-black text-[#F8A41E] tracking-tighter leading-none flex items-baseline gap-2">
+                          CAD $129 <span className="text-[11px] font-medium text-slate-400 tracking-normal italic">/ person</span>
+                       </h4>
                     </div>
-                    <div className="flex items-center gap-2 mt-4 text-yellow-500 font-black text-xs">
-                       <Star className="w-4 h-4 fill-current" /> 4.8 <span className="text-white opacity-60 ml-1 font-medium">(2,125 Reviews)</span>
+                    <div className="flex items-center gap-2 mt-5">
+                       <Star className="w-3.5 h-3.5 text-[#F8A41E] fill-current" />
+                       <span className="text-xs font-black">4.8 <span className="font-medium text-slate-400 ml-1 tracking-tight">(2,125 Reviews)</span></span>
                     </div>
                  </div>
-                 <div className="p-10 space-y-8">
+                 <div className="p-10 space-y-8 bg-white">
+                    {/* Date Picker Style Refinement */}
                     <div>
-                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Select Date</label>
-                       <div className="flex items-center justify-between border-2 border-slate-100 p-4 rounded-2xl bg-slate-50 group hover:border-[#F8A41E] cursor-pointer transition-all">
-                          <div className="flex items-center gap-3 font-bold text-slate-700 text-sm"><Calendar className="w-5 h-5 text-[#F8A41E]" /> Select Date</div>
+                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3.5 block">Select Date</label>
+                       <div className="flex items-center justify-between border border-slate-200 p-4.5 rounded-2xl bg-white group hover:border-[#F8A41E] cursor-pointer transition-all shadow-sm">
+                          <div className="flex items-center gap-3.5 font-bold text-slate-600 text-sm">
+                            <Calendar className="w-5 h-5 text-[#F8A41E]" /> Select Date
+                          </div>
                           <ChevronRight className="w-4 h-4 rotate-90 text-slate-300" />
                        </div>
                     </div>
+                    {/* Guests Picker Style Refinement */}
                     <div>
-                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Guests</label>
-                       <select className="w-full border-2 border-slate-100 p-4 rounded-2xl bg-slate-50 font-bold text-slate-700 text-sm focus:outline-none focus:border-[#F8A41E] appearance-none cursor-pointer">
-                          <option>2 Adults</option>
-                          <option>1 Adult</option>
-                          <option>Family (2A + 2C)</option>
-                       </select>
+                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3.5 block">Guests</label>
+                       <div className="relative">
+                          <select className="w-full border border-slate-200 p-4.5 rounded-2xl bg-white font-bold text-slate-700 text-sm focus:outline-none focus:border-[#F8A41E] appearance-none cursor-pointer shadow-sm">
+                             <option>2 Adults</option>
+                             <option>1 Adult</option>
+                             <option>Family (2A + 2C)</option>
+                          </select>
+                          <ChevronRight className="w-4 h-4 rotate-90 absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                       </div>
                     </div>
-                    <button className="w-full bg-[#D91E1E] hover:bg-[#b01818] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-red-900/20 transition-all">RESERVE NOW</button>
-                    <button className="w-full border-2 border-slate-200 text-[#0C3136] py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-50 transition-all">CHECK AVAILABILITY</button>
-                    <div className="flex items-center justify-between px-2">
-                       <div className="flex items-center gap-1.5 text-emerald-600 text-[9px] font-black tracking-widest uppercase"><ShieldCheck className="w-4 h-4" /> Free Cancellation</div>
-                       <div className="flex items-center gap-1.5 text-cyan-700 text-[9px] font-black tracking-widest uppercase"><Zap className="w-4 h-4" /> Best Price</div>
+                    
+                    <button className="w-full bg-[#D91E1E] hover:bg-[#b01818] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl shadow-red-900/20 transition-all">
+                       RESERVE NOW
+                    </button>
+                    
+                    <button className="w-full border border-[#125D66] text-[#125D66] py-5 rounded-2xl font-black text-xs uppercase tracking-[0.3em] hover:bg-slate-50 transition-all">
+                       CHECK AVAILABILITY
+                    </button>
+
+                    <div className="flex items-center justify-between px-2 pt-2">
+                       <div className="flex items-center gap-2 text-emerald-600 text-[9px] font-black tracking-widest uppercase">
+                          <div className="w-5 h-5 rounded-full border border-emerald-100 flex items-center justify-center bg-emerald-50"><CheckCircle2 className="w-3 h-3" /></div>
+                          Free Cancellation
+                       </div>
+                       <div className="flex items-center gap-2 text-cyan-700 text-[9px] font-black tracking-widest uppercase">
+                          <div className="w-5 h-5 rounded-full border border-cyan-100 flex items-center justify-center bg-cyan-50"><Zap className="w-3 h-3 fill-current" /></div>
+                          Best Price
+                       </div>
                     </div>
                  </div>
               </div>
 
+              {/* Quick Facts Section */}
               <div className="bg-white rounded-[2rem] shadow-xl border border-slate-100 overflow-hidden">
                  <div className="px-8 py-5 border-b border-slate-100 text-[10px] font-black text-[#0C3136] uppercase tracking-[0.2em]">Tour Quick Facts</div>
                  <div className="p-8 space-y-5">
@@ -464,14 +438,14 @@ const ItineraryPage = ({ navigateTo }) => {
                  </div>
               </div>
 
+              {/* Need Help? Sidebar */}
               <div className="bg-[#0C3136] p-10 rounded-[2.5rem] text-white relative overflow-hidden group shadow-2xl">
                  <div className="relative z-10">
                     <h4 className="font-black text-lg uppercase tracking-widest mb-3">Need Help?</h4>
                     <p className="text-[11px] text-slate-400 font-medium mb-8 leading-relaxed max-w-[200px]">Our local experts are here to help you plan your trip.</p>
                     <div className="space-y-4">
-                       <div className="flex items-center gap-3 text-lg font-black tracking-tight"><Phone className="w-5 h-5 text-[#F8A41E]" /> +1 (905) 123-4567</div>
+                       <div className="flex items-center gap-3 text-lg font-black tracking-tight hover:text-[#F8A41E] cursor-pointer"><Phone className="w-5 h-5 text-[#F8A41E]" /> +1 (905) 123-4567</div>
                        <div className="flex items-center gap-3 text-[11px] font-bold text-slate-300"><Mail className="w-4 h-4 text-[#F8A41E]" /> info@niagaravistatours.com</div>
-                       <div className="flex items-center gap-3 text-[11px] font-bold text-slate-400 mt-4"><Clock className="w-4 h-4" /> Open Daily: 8:00 AM - 8:00 PM</div>
                     </div>
                  </div>
                  <img src="https://randomuser.me/api/portraits/women/68.jpg" className="absolute -bottom-10 -right-10 w-56 h-56 rounded-full grayscale opacity-25 border-8 border-white/5 group-hover:scale-110 transition-transform duration-700" />
@@ -480,7 +454,7 @@ const ItineraryPage = ({ navigateTo }) => {
         </div>
       </main>
 
-      {/* Bottom CTA Banner */}
+      {/* Bottom Banner */}
       <section className="bg-[#0C3136] py-20 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 grayscale">
           <img src="https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover" />
@@ -501,7 +475,7 @@ const ItineraryPage = ({ navigateTo }) => {
   );
 };
 
-// --- PAGE: CONTACT (Ref: image_d9ef3a.png) ---
+// --- PAGE: CONTACT ---
 
 const ContactPage = () => {
   return (
@@ -635,7 +609,7 @@ export default function App() {
         {page === 'contact' && <ContactPage />}
       </main>
 
-      {/* Footer (Ref: image_da0218.jpg) */}
+      {/* Footer */}
       <footer className="bg-[#0C3136] text-white pt-24 pb-10 px-4 mt-20 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -mr-20 -mt-20 blur-3xl"></div>
         <div className="container mx-auto relative z-10">
@@ -653,23 +627,13 @@ export default function App() {
                 <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center hover:bg-[#F8A41E] hover:text-[#0C3136] transition-all cursor-pointer"><YoutubeIcon className="w-4.5 h-4.5" /></div>
               </div>
             </div>
-
             <div><h4 className="font-black text-xs uppercase tracking-[0.3em] text-[#F8A41E] mb-8">Quick Links</h4><ul className="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest"><li onClick={() => navigateTo('home')} className="hover:text-white cursor-pointer">Home</li><li onClick={() => navigateTo('itinerary')} className="hover:text-white cursor-pointer">Tours</li><li className="hover:text-white cursor-pointer">Packages</li><li className="hover:text-white cursor-pointer">About Us</li><li onClick={() => navigateTo('contact')} className="hover:text-white cursor-pointer">Contact</li></ul></div>
-            
             <div><h4 className="font-black text-xs uppercase tracking-[0.3em] text-[#F8A41E] mb-8">Top Tours</h4><ul className="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest"><li>Niagara Day Tour</li><li>Falls & Winery Escape</li><li>Family Adventure</li><li>Boat Cruise</li><li>Private Tours</li></ul></div>
-
             <div><h4 className="font-black text-xs uppercase tracking-[0.3em] text-[#F8A41E] mb-8">Newsletter</h4><p className="text-xs text-slate-400 font-medium mb-6">Subscribe for exclusive travel tips and stay updated with latest offers.</p><div className="flex gap-2"><input type="email" placeholder="Enter your email" className="bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-xs w-full focus:ring-1 focus:ring-[#F8A41E] outline-none transition-all" /><button className="bg-[#D91E1E] text-white px-5 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-white hover:text-[#D91E1E] transition-all">Join</button></div></div>
           </div>
-          
-          <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
-            <div className="flex flex-col items-center md:items-start gap-2">
-               <div className="text-[10px] font-black text-slate-500 tracking-widest uppercase">© 2025 Niagara Vista Tours. All Rights Reserved.</div>
-               <div className="flex items-center gap-2"><img src="https://flagcdn.com/w20/ca.png" className="w-4 h-3 grayscale opacity-30" /><span className="text-[9px] font-bold text-slate-600 uppercase tracking-tighter">Proudly Canadian Local Business</span></div>
-            </div>
-            <div className="flex gap-10 text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase">
-              <a href="#" className="hover:text-[#F8A41E] transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-[#F8A41E] transition-colors">Terms & Conditions</a>
-            </div>
+          <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase">
+            <div>© 2025 Niagara Vista Tours. All Rights Reserved.</div>
+            <div className="flex gap-10"><a href="#" className="hover:text-[#F8A41E]">Privacy Policy</a><a href="#" className="hover:text-[#F8A41E]">Terms & Conditions</a></div>
           </div>
         </div>
       </footer>
