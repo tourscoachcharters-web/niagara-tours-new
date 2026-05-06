@@ -728,7 +728,7 @@ export default function App() {
       <header className={`sticky top-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-md py-2' : 'bg-white py-5'}`}>
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
           <div onClick={() => navigateTo('home')} className="flex items-center gap-3 cursor-pointer">
-            <div className="w-32 h-12 overflow-hidden flex items-center justify-center">
+            <div className="w-56 h-21 overflow-hidden flex items-center justify-center">
               <ImageWithFallback src="https://niagara-tours-new.vercel.app/images/logo.png" size="300 x 100 px" isLogo alt="Niagara Vista Tours" className="max-h-full max-w-full object-contain" />
             </div>
           </div>
@@ -750,7 +750,7 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
             <div className="lg:col-span-1">
               <div className="flex items-center gap-3 mb-6">
-                <ImageWithFallback src="https://niagara-tours-new.vercel.app/images/logo.png" size="300 x 100 px" isLogo alt="Logo" className="w-32 h-12 object-contain" />
+                <ImageWithFallback src="https://niagara-tours-new.vercel.app/images/logo.png" size="300 x 100 px" isLogo alt="Logo" className="w-56 h-20 object-contain" />
               </div>
               <p className="text-slate-400 text-xs leading-relaxed mb-8 font-medium">Your trusted local tour operator in Niagara Falls, Canada. Creating unforgettable experiences since 2010.</p>
               <div className="flex gap-3">
