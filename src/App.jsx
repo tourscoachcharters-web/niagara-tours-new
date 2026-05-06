@@ -356,6 +356,7 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
         <div className="lg:col-span-8">
            <h2 className="text-3xl font-black text-[#0C3136] mb-6 tracking-tight">Overview</h2>
            <p className="text-slate-600 text-lg leading-relaxed mb-12">{tour.overview}</p>
+           
            <h3 className="text-2xl font-black text-[#0C3136] mb-10 tracking-tight">Tour Highlights</h3>
            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
               {tour.highlights.map((h, i) => (
@@ -366,6 +367,28 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
                 </div>
               ))}
            </div>
+
+           {/* Why Travelers Love This Tour (Ref: image_b190f1.png) */}
+           <h3 className="text-2xl font-black text-[#0C3136] mb-8 tracking-tight">Why Travelers Love This Tour</h3>
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+             {[
+               { icon: Camera, t: 'Breathtaking Views', d: 'See the natural wonder of Niagara Falls up close.', color: 'text-teal-600', bg: 'bg-teal-50' },
+               { icon: Users, t: 'Expert Local Guide', d: 'Learn the history and stories from our friendly guides.', color: 'text-blue-600', bg: 'bg-blue-50' },
+               { icon: Bus, t: 'Comfortable Transport', d: 'Travel in clean, modern vehicles with A/C.', color: 'text-orange-600', bg: 'bg-orange-50' },
+               { icon: ShieldCheck, t: 'Free Cancellation', d: 'Cancel up to 24 hours in advance for a full refund.', color: 'text-red-600', bg: 'bg-red-50' }
+             ].map((item, idx) => (
+               <div key={idx} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 group hover:shadow-md transition-all">
+                 <div className={`shrink-0 w-12 h-12 rounded-full ${item.bg} ${item.color} flex items-center justify-center`}>
+                   <item.icon className="w-6 h-6" />
+                 </div>
+                 <div>
+                   <h4 className="font-bold text-[13px] text-[#0C3136] leading-tight mb-1">{item.t}</h4>
+                   <p className="text-[11px] text-slate-500 font-medium leading-tight">{item.d}</p>
+                 </div>
+               </div>
+             ))}
+           </div>
+
            <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl overflow-hidden mb-12">
               <div className="bg-[#125D66] text-white px-8 py-5 font-black text-xs uppercase tracking-widest">Package Inclusions</div>
               <div className="p-10 space-y-4 grid grid-cols-1 md:grid-cols-2">
@@ -447,11 +470,9 @@ export default function App() {
 
       <main className="min-h-screen">{renderPage()}</main>
 
-      {/* --- FOOTER UPDATED (Ref: image_b1eaea.png) --- */}
       <footer className="bg-[#0C3136] text-white pt-20 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
-            {/* Branding & Social */}
             <div className="lg:col-span-1">
               <div className="flex items-center gap-3 mb-6">
                 <Compass className="w-8 h-8 text-[#F8A41E]" />
@@ -468,8 +489,6 @@ export default function App() {
                 <div className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform"><YoutubeIcon className="w-4 h-4 text-white" /></div>
               </div>
             </div>
-
-            {/* Quick Links */}
             <div>
               <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-8 border-b border-white/10 pb-2">Quick Links</h4>
               <ul className="space-y-3 text-xs font-bold text-slate-400 uppercase tracking-widest">
@@ -481,8 +500,6 @@ export default function App() {
                 <li onClick={() => navigateTo('contact')} className="hover:text-[#F8A41E] cursor-pointer transition-colors">Contact Us</li>
               </ul>
             </div>
-
-            {/* Top Tours */}
             <div>
               <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-8 border-b border-white/10 pb-2">Top Tours</h4>
               <ul className="space-y-3 text-xs font-bold text-slate-400 uppercase tracking-widest">
@@ -494,8 +511,6 @@ export default function App() {
                 <li>Custom Packages</li>
               </ul>
             </div>
-
-            {/* Contact Us */}
             <div>
               <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-8 border-b border-white/10 pb-2">Contact Us</h4>
               <ul className="space-y-4 text-xs font-medium text-slate-400">
@@ -517,8 +532,6 @@ export default function App() {
                 </li>
               </ul>
             </div>
-
-            {/* Newsletter */}
             <div>
               <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-8 border-b border-white/10 pb-2">Newsletter</h4>
               <p className="text-xs text-slate-400 font-medium mb-6">Subscribe for exclusive offers, travel tips and the latest updates.</p>
@@ -528,8 +541,6 @@ export default function App() {
               </div>
             </div>
           </div>
-
-          {/* Bottom Bar */}
           <div className="pt-8 pb-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-2 md:order-1">
               © 2026 Niagara Vista Tours. All Rights Reserved.
