@@ -39,7 +39,14 @@ import {
  * PRODUCTION IMAGE GUIDE:
  * To see your images live, upload your files to 'public/images/' in your GitHub repo.
  * * LOGO:
- * - Current Source: https://niagara-tours-new.vercel.app/images/logo.png
+ * - Filename: logo.png
+ * - Recommended Size: 300 x 100 px (Horizontal)
+ * * OTHER IMAGES:
+ * - hero-home.jpg (1920x1080)
+ * - why-choose-us.jpg (1200x900)
+ * - tour-classic.jpg (800x600)
+ * - tour-adventure.jpg (800x600)
+ * - ... and so on for each tour ID
  */
 
 const ImageWithFallback = ({ src, alt, className, size, isLogo }) => {
@@ -48,6 +55,9 @@ const ImageWithFallback = ({ src, alt, className, size, isLogo }) => {
   if (error || !src) {
     return (
       <div className={`${className} bg-slate-100 flex flex-col items-center justify-center text-slate-400 p-2 text-center border border-dashed border-slate-200 rounded-lg`}>
+        <div className="bg-white p-2 rounded-full mb-1">
+          <Camera className="w-4 h-4 text-slate-300" />
+        </div>
         <p className="text-[8px] font-black uppercase tracking-tight text-[#0C3136]">{isLogo ? 'Logo' : 'Image'}</p>
         <p className="text-[7px] font-bold text-slate-400">Filename: {src.split('/').pop()}</p>
         <p className="text-[8px] font-black text-[#F8A41E]">{size}</p>
@@ -139,7 +149,7 @@ const TOURS_DATA = [
     highlights: [
       { t: 'Niagara-on-the-Lake', d: 'A charming town known for its wineries, heritage, and views of Lake Ontario.', i: MapPin },
       { t: 'Wine Tastings', d: 'Sample world-class wines at two of Niagara’s premier wineries.', i: Grape },
-      { t: 'Vineyard Walk', d: 'Stroll through scenic vineyards while soaking in the sights and fresh air.', i: Camera }
+      { t: 'Vineyard Walk', d: 'Stroll through scenic vineyards while soaking in the sights and fresh air.', i: Camera },
     ],
     idealFor: 'Wine enthusiasts, couples, small groups',
     facts: [
@@ -198,7 +208,6 @@ const TOURS_DATA = [
   }
 ];
 
-// --- Custom Components & Icons ---
 const MapleLeafIcon = (props) => (
   <svg {...props} viewBox="0 0 24 24" fill="currentColor">
     <path d="M12,2L12.88,4.12C13,4.41 13.27,4.6 13.58,4.6H15.82L14,5.92C13.74,6.11 13.64,6.44 13.73,6.74L14.41,8.86L12.59,7.54C12.33,7.35 12,7.35 11.74,7.54L9.92,8.86L10.6,6.74C10.69,6.44 10.59,6.11 10.33,5.92L8.51,4.6H10.75C11.06,4.6 11.33,4.41 11.45,4.12L12,2M12,10.33C12.44,10.33 12.8,10.69 12.8,11.13V15.93C14.53,15.13 16,13.6 16.8,11.93C17.07,11.4 17.73,11.2 18.27,11.47C18.8,11.73 19,12.4 18.73,12.93C17.67,15.13 15.8,17 13.6,18.07L14.4,20C14.53,20.4 14.33,20.87 13.93,21C13.8,21.07 13.67,21.07 13.53,21.07H10.47C10,21.07 9.67,20.73 9.67,20.33C9.67,20.2 9.67,20.07 9.73,19.93L10.53,18.13C8.33,17.07 6.47,15.2 5.4,13C5.13,12.47 5.33,11.8 5.87,11.53C6.4,11.27 7.07,11.47 7.33,12C8.13,13.67 9.6,15.13 11.33,15.93V11.27C11.33,10.87 11.6,10.53 12,10.53V10.33Z" />
@@ -272,7 +281,6 @@ const NavItem = ({ label, active, onClick }) => (
   </div>
 );
 
-// --- SHARED COMPONENT: WHY TRAVELERS LOVE THIS TOUR ---
 const WhyTravelersLoveSection = () => (
   <section className="py-20 bg-slate-50/50 border-t border-slate-100">
     <div className="container mx-auto px-4">
@@ -299,11 +307,9 @@ const WhyTravelersLoveSection = () => (
   </section>
 );
 
-// --- PAGE: HOME ---
 const HomePage = ({ navigateTo }) => {
   return (
     <div className="animate-in fade-in duration-700">
-      {/* Hero */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <ImageWithFallback src="/images/hero-home.jpg" size="1920 x 1080 px" alt="Niagara Falls Background" className="w-full h-full object-cover" />
@@ -328,7 +334,6 @@ const HomePage = ({ navigateTo }) => {
         </div>
       </section>
 
-      {/* Trust Factors */}
       <section className="container mx-auto px-4 -mt-10 relative z-20">
         <div className="bg-white rounded-3xl shadow-xl border border-slate-100 p-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
           {[
@@ -345,7 +350,6 @@ const HomePage = ({ navigateTo }) => {
         </div>
       </section>
 
-      {/* Why Choose Us Section */}
       <section className="py-24 bg-gradient-to-b from-white to-[#F0F9FF] overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-12 lg:gap-8">
@@ -385,7 +389,6 @@ const HomePage = ({ navigateTo }) => {
         </div>
       </section>
 
-      {/* Tour Grid */}
       <section className="py-24 bg-white">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-end mb-12">
@@ -419,7 +422,6 @@ const HomePage = ({ navigateTo }) => {
   );
 };
 
-// --- PAGE: CUSTOM ITINERARY ---
 const CustomItineraryPage = ({ navigateTo }) => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -449,7 +451,6 @@ const CustomItineraryPage = ({ navigateTo }) => {
 
   return (
     <div className="animate-in fade-in duration-700 bg-white">
-      {/* Hero */}
       <section className="relative h-[400px] flex items-center text-white overflow-hidden">
         <div className="absolute inset-0 z-0">
           <ImageWithFallback src="/images/hero-custom.jpg" size="1920 x 800 px" alt="Custom Itinerary Background" className="w-full h-full object-cover opacity-60" />
@@ -567,7 +568,6 @@ const CustomItineraryPage = ({ navigateTo }) => {
   );
 };
 
-// --- PAGE: TOUR DETAIL ---
 const TourDetailPage = ({ tourId, navigateTo }) => {
   const tour = TOURS_DATA.find(t => t.id === tourId);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -626,10 +626,8 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
            </div>
         </div>
 
-        {/* --- ENHANCED SIDEBAR --- */}
         <div className="lg:col-span-4">
            <div className="sticky top-28 space-y-10">
-              {/* Main Booking Card */}
               <div className="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.2)] border border-slate-100 group">
                  <div className="bg-gradient-to-br from-[#0C3136] to-[#125D66] px-10 py-12 text-white relative rounded-t-[2.5rem] overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-10 -mt-10 blur-2xl"></div>
@@ -637,7 +635,7 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
                     <div className="space-y-0.5 relative z-10">
                        <p className="text-[10px] font-black uppercase text-slate-300 tracking-[0.2em]">Starting From</p>
                        <h4 className="text-[44px] font-black text-[#F8A41E] tracking-tighter leading-none flex items-baseline gap-2">
-                          CAD ${tour.price} <span className="text-[12px] font-black text-white/90 tracking-normal italic leading-none">/ person</span>
+                          CAD ${tour.price} <span className="text-[12px] font-black text-white tracking-normal italic leading-none">/ person</span>
                        </h4>
                     </div>
                     <div className="flex flex-col gap-2 mt-6 relative z-10">
@@ -689,7 +687,6 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
   );
 };
 
-// --- PAGE: CONTACT ---
 const ContactPage = () => (
   <div className="animate-in fade-in duration-700">
     <section className="relative h-[350px] flex items-center text-white overflow-hidden">
@@ -703,7 +700,6 @@ const ContactPage = () => (
   </div>
 );
 
-// --- MAIN APP ---
 export default function App() {
   const [page, setPage] = useState('home');
   const [isScrolled, setIsScrolled] = useState(false);
@@ -726,18 +722,41 @@ export default function App() {
       </div>
 
       <header className={`sticky top-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-md py-2' : 'bg-white py-5'}`}>
-        <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
+        <div className="max-w-7xl mx-auto px-4 flex justify-between items-center relative">
           <div onClick={() => navigateTo('home')} className="flex items-center gap-3 cursor-pointer">
             <div className="w-56 h-21 overflow-hidden flex items-center justify-center">
               <ImageWithFallback src="https://niagara-tours-new.vercel.app/images/logo.png" size="300 x 100 px" isLogo alt="Niagara Vista Tours" className="max-h-full max-w-full object-contain" />
             </div>
           </div>
+          
           <nav className="hidden lg:flex items-center gap-10">
             <NavItem label="Home" active={page === 'home'} onClick={() => navigateTo('home')} />
             <NavItem label="Custom Itinerary" active={page === 'custom-itinerary'} onClick={() => navigateTo('custom-itinerary')} />
             <NavItem label="Contact" active={page === 'contact'} onClick={() => navigateTo('contact')} />
           </nav>
-          <button className="lg:hidden text-[#0C3136]" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>{mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}</button>
+          
+          <button className="lg:hidden text-[#0C3136] p-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+
+          {mobileMenuOpen && (
+            <div className="lg:hidden absolute top-full left-0 w-full bg-white border-t border-slate-100 shadow-2xl p-6 flex flex-col gap-6 animate-in slide-in-from-top duration-300 z-[100]">
+               {[
+                 { label: 'Home', id: 'home' },
+                 { label: 'Custom Itinerary', id: 'custom-itinerary' },
+                 { label: 'Contact', id: 'contact' }
+               ].map(item => (
+                 <div 
+                   key={item.id} 
+                   onClick={() => navigateTo(item.id)} 
+                   className={`font-black text-sm uppercase tracking-widest py-3 border-b border-slate-50 transition-colors ${page === item.id ? 'text-[#F8A41E]' : 'text-[#0C3136]'}`}
+                 >
+                   {item.label}
+                 </div>
+               ))}
+               <button className="bg-[#D91E1E] text-white py-4 rounded-xl font-black text-xs uppercase tracking-widest shadow-lg">BOOK NOW</button>
+            </div>
+          )}
         </div>
       </header>
 
