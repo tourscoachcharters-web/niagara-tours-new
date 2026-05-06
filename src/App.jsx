@@ -10,36 +10,66 @@ import {
   Star, 
   ChevronRight, 
   ChevronLeft,
-  Navigation,
-  ShieldCheck,
-  Zap,
-  Globe,
-  Menu,
-  X,
-  Compass,
-  Send,
-  MessageSquare,
-  Map as MapIcon,
-  Info,
-  Plus,
-  Minus,
-  Bus,
-  Utensils,
-  Grape,
-  Wind,
-  Camera,
-  CheckCircle2,
-  LifeBuoy
+  Navigation, 
+  ShieldCheck, 
+  Zap, 
+  Globe, 
+  Menu, 
+  X, 
+  Compass, 
+  Send, 
+  MessageSquare, 
+  Map as MapIcon, 
+  Info, 
+  Plus, 
+  Minus, 
+  Bus, 
+  Utensils, 
+  Grape, 
+  Wind, 
+  Camera, 
+  CheckCircle2, 
+  LifeBuoy, 
+  Settings, 
+  Coffee, 
+  Plane 
 } from 'lucide-react';
 
-// --- DATA: Tours ---
+/**
+ * PRODUCTION IMAGE GUIDE:
+ * To see your images live, upload your files to 'public/images/' in your GitHub repo.
+ * The placeholders below show the recommended sizes for best performance and visual quality.
+ */
+
+// Enhanced helper component for placeholder management
+const ImageWithFallback = ({ src, alt, className, size }) => {
+  const [error, setError] = useState(false);
+  
+  // Logic: If image fails to load or hasn't been uploaded yet, show guide
+  if (error || !src) {
+    return (
+      <div className={`${className} bg-slate-100 flex flex-col items-center justify-center text-slate-400 p-6 text-center border-2 border-dashed border-slate-200`}>
+        <div className="bg-white p-3 rounded-full shadow-sm mb-3">
+          <Camera className="w-6 h-6 text-slate-300" />
+        </div>
+        <div className="space-y-1">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#0C3136]">Replace Image</p>
+          <p className="text-[9px] font-bold text-slate-400 bg-slate-200/50 px-2 py-0.5 rounded italic">Filename: {src.split('/').pop()}</p>
+          <p className="text-[11px] font-black text-[#F8A41E] pt-1">{size}</p>
+        </div>
+      </div>
+    );
+  }
+  return <img src={src} alt={alt} className={className} onError={() => setError(true)} />;
+};
+
 const TOURS_DATA = [
   {
     id: 'classic-day-escape',
     title: 'Niagara Classic Day Escape',
     price: '99',
     duration: '9-10 Hours',
-    img: 'https://images.unsplash.com/photo-1501446522555-3c8047b9f42a?auto=format&fit=crop&q=80&w=800',
+    img: '/images/tour-classic.jpg', 
     tag: 'BEST VALUE',
     overview: 'The Niagara Classic Day Escape is perfect for first-time visitors to Niagara Falls. Whether you\'re traveling solo, with friends, or with family, this affordable day tour offers a comprehensive Niagara Falls experience, including the breathtaking boat ride and stunning views of Horseshoe Falls.',
     inclusions: ['Round-trip Transport from Toronto', 'Niagara Falls Sightseeing', 'Niagara City Cruises (Seasonal)', 'Photo Stops at iconic locations', 'Free Time for exploration', 'Maple Syrup Tasting'],
@@ -62,7 +92,7 @@ const TOURS_DATA = [
     title: 'Ultimate Niagara Adventure',
     price: '199',
     duration: '9 Hours',
-    img: 'https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?auto=format&fit=crop&q=80&w=800',
+    img: '/images/tour-adventure.jpg',
     tag: 'MOST POPULAR',
     overview: 'The Ultimate Niagara Adventure is the complete Niagara Falls experience. Perfect for visitors who want to see it all, this tour includes iconic attractions like Journey Behind the Falls, Niagara City Cruises, and Skylon Tower, all in one action-packed day.',
     inclusions: ['Niagara City Cruises Boat Ride', 'Journey Behind the Falls Admission', 'Skylon Tower Observation Deck', 'Scenic Photo Stops', 'Maple Syrup & Chocolate Tasting'],
@@ -85,7 +115,7 @@ const TOURS_DATA = [
     title: 'Niagara Evening Illumination Tour',
     price: '109',
     duration: '10 Hours',
-    img: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&q=80&w=800',
+    img: '/images/tour-evening.jpg',
     tag: 'ROMANTIC',
     overview: 'Experience Niagara Falls in a whole new light on this evening tour. After a day of sightseeing, enjoy the illuminated falls and seasonal fireworks display, making this the perfect evening tour for photographers, couples, and anyone wanting to see the falls sparkle at night.',
     inclusions: ['Niagara Falls Sightseeing', 'Niagara City Cruises (Daytime)', 'Skylon Tower Night Views', 'Optional Dinner Stop', 'Niagara Falls Illumination', 'Seasonal Fireworks Display'],
@@ -108,7 +138,7 @@ const TOURS_DATA = [
     title: 'Niagara Wine Country & Falls Tour',
     price: '199',
     duration: 'Full Day',
-    img: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=800',
+    img: '/images/tour-wine.jpg',
     tag: 'WINE LOVERS',
     overview: 'This tour combines the best of both worlds—Niagara Falls’ natural beauty and the stunning vineyards of Niagara-on-the-Lake. Perfect for wine lovers, this tour offers a relaxing and scenic day with a wine-tasting experience after visiting the falls.',
     inclusions: ['Niagara Falls Sightseeing', 'Scenic Niagara-on-the-Lake Drive', 'Winery Tour & Tasting (2 locations)', 'Vineyard Walk', 'Photo Stops', 'Optional Gourmet Winery Lunch'],
@@ -131,7 +161,7 @@ const TOURS_DATA = [
     title: 'Private Custom Niagara VIP Experience',
     price: '1795',
     duration: 'Flexible',
-    img: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=800',
+    img: '/images/tour-vip.jpg',
     tag: 'PRIVATE / VIP',
     overview: 'For those who want a personalized experience, the Private Custom Niagara VIP Experience offers luxury transportation and a flexible itinerary, ensuring you get the most out of your day in Niagara Falls and the surrounding area. Ideal for groups, families, or corporate outings.',
     inclusions: ['Private Chauffeur & Vehicle', 'Fully Custom Itinerary', 'Niagara City Cruises', 'Skylon Tower VIP Access', 'Wine & Food Tastings', 'Flexible Schedule'],
@@ -154,7 +184,7 @@ const TOURS_DATA = [
     title: 'Toronto, Thousand Islands & Niagara 3-Day Tour',
     price: '329',
     duration: '3 Days',
-    img: 'https://images.unsplash.com/photo-1517935706615-2717063c2225?auto=format&fit=crop&q=80&w=800',
+    img: '/images/tour-3day.jpg',
     tag: 'MULTI-CITY',
     overview: 'Make the most of your trip to Canada with this 3-day guided tour, visiting Toronto, Thousand Islands, Kingston, and Niagara Falls. Ideal for those with more time, this tour gives you a taste of Canada’s natural beauty and urban culture.',
     inclusions: ['Expert Tour Guide', 'Toronto Sightseeing', 'Thousand Islands Cruise', 'Kingston Historic Visit', 'Niagara Falls Full Experience', 'Hotel Accommodations (2 nights)'],
@@ -282,7 +312,7 @@ const HomePage = ({ navigateTo }) => {
       {/* Hero */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img src="https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?auto=format&fit=crop&q=80&w=2070" className="w-full h-full object-cover" />
+          <ImageWithFallback src="/images/hero-home.jpg" size="1920 x 1080 px" alt="Niagara Falls Background" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0C3136]/90 via-[#0C3136]/30 to-transparent"></div>
         </div>
 
@@ -298,7 +328,7 @@ const HomePage = ({ navigateTo }) => {
             <p className="text-lg text-slate-200 mb-10 max-w-xl leading-relaxed font-medium">Unforgettable experiences. Breathtaking views. Memories that last a lifetime.</p>
             <div className="flex flex-wrap gap-4">
               <button onClick={() => navigateTo('classic-day-escape')} className="bg-[#D91E1E] hover:bg-[#b01818] text-white px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-red-900/30 flex items-center gap-3">EXPLORE TOURS <ChevronRight className="w-4 h-4" /></button>
-              <button className="bg-white hover:bg-slate-50 text-[#0C3136] px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-lg flex items-center gap-3"><Calendar className="w-4 h-4 text-[#F8A41E]" /> PLAN YOUR TRIP</button>
+              <button onClick={() => navigateTo('custom-itinerary')} className="bg-white hover:bg-slate-50 text-[#0C3136] px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-lg flex items-center gap-3"><Settings className="w-4 h-4 text-[#F8A41E]" /> CUSTOM PACKAGE</button>
             </div>
           </div>
         </div>
@@ -335,7 +365,7 @@ const HomePage = ({ navigateTo }) => {
             <div className="lg:col-span-5 relative group">
               <div className="absolute -inset-4 bg-[#F8A41E]/10 rounded-[4rem] blur-2xl group-hover:bg-[#F8A41E]/20 transition-all"></div>
               <div className="relative aspect-[4/3] rounded-[3rem] lg:rounded-[4rem] overflow-hidden border-8 border-white shadow-2xl">
-                <img src="https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?auto=format&fit=crop&q=80&w=1200" alt="Niagara Falls Tour Group" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+                <ImageWithFallback src="/images/why-choose-us.jpg" size="1200 x 900 px" alt="Niagara Falls Tour Group" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0C3136]/40 to-transparent"></div>
               </div>
             </div>
@@ -371,7 +401,7 @@ const HomePage = ({ navigateTo }) => {
             {TOURS_DATA.map((tour, i) => (
               <div key={i} className="bg-white rounded-[2.5rem] border border-slate-100 shadow-lg overflow-hidden group flex flex-col h-full">
                  <div className="h-64 relative overflow-hidden">
-                    <img src={tour.img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                    <ImageWithFallback src={tour.img} size="800 x 600 px" alt={tour.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                     <span className="absolute top-4 left-4 bg-[#125D66] text-white text-[9px] font-black px-3 py-1 rounded-md uppercase tracking-widest">{tour.tag}</span>
                  </div>
                  <div className="p-8 flex-1 flex flex-col">
@@ -395,6 +425,154 @@ const HomePage = ({ navigateTo }) => {
   );
 };
 
+// --- PAGE: CUSTOM ITINERARY ---
+const CustomItineraryPage = ({ navigateTo }) => {
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const calendarRef = useRef(null);
+  const [interests, setInterests] = useState([]);
+
+  const attractions = [
+    { id: 'boat', t: 'Boat Cruise', i: Wind, p: 'High' },
+    { id: 'behind', t: 'Behind the Falls', i: MapIcon, p: 'Must-See' },
+    { id: 'heli', t: 'Helicopter View', i: Plane, p: 'Premium' },
+    { id: 'skylon', t: 'Skylon Tower', i: Navigation, p: 'Panoramic' },
+    { id: 'wine', t: 'Winery Tours', i: Grape, p: 'Social' },
+    { id: 'dine', t: 'Gourmet Dining', i: Utensils, p: 'Luxury' },
+    { id: 'parkway', t: 'Scenic Parkway', i: Camera, p: 'Relaxing' },
+    { id: 'clifton', t: 'Clifton Hill', i: Zap, p: 'Family' }
+  ];
+
+  const toggleInterest = (id) => {
+    setInterests(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => { if (calendarRef.current && !calendarRef.current.contains(event.target)) setShowCalendar(false); };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div className="animate-in fade-in duration-700 bg-white">
+      {/* Hero */}
+      <section className="relative h-[400px] flex items-center text-white overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <ImageWithFallback src="/images/hero-custom.jpg" size="1920 x 800 px" alt="Custom Itinerary Background" className="w-full h-full object-cover opacity-60" />
+          <div className="absolute inset-0 bg-[#0C3136]/60"></div>
+        </div>
+        <div className="container mx-auto px-4 z-10">
+          <p className="text-[#F8A41E] font-black text-[10px] uppercase tracking-[0.4em] mb-4">Build Your Experience</p>
+          <h1 className="text-5xl lg:text-7xl font-black leading-tight tracking-tighter">Custom <span className="text-[#F8A41E]">Itinerary</span></h1>
+          <p className="text-slate-300 text-lg max-w-xl font-medium mt-6">Tell us what you love, and our experts will craft a unique Niagara Falls package just for you.</p>
+        </div>
+      </section>
+
+      <main className="container mx-auto px-4 py-20 grid grid-cols-1 lg:grid-cols-12 gap-16">
+        <div className="lg:col-span-8">
+           <div className="space-y-12">
+              <div>
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-10 h-10 rounded-full bg-[#0C3136] text-[#F8A41E] flex items-center justify-center font-black">1</div>
+                  <h2 className="text-2xl font-black text-[#0C3136]">What interests you?</h2>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {attractions.map(attr => (
+                    <div 
+                      key={attr.id}
+                      onClick={() => toggleInterest(attr.id)}
+                      className={`cursor-pointer p-6 rounded-3xl border-2 transition-all group flex flex-col items-center text-center ${interests.includes(attr.id) ? 'bg-[#0C3136] border-[#0C3136] text-white' : 'bg-white border-slate-100 hover:border-[#F8A41E]'}`}
+                    >
+                      <attr.i className={`w-8 h-8 mb-4 transition-colors ${interests.includes(attr.id) ? 'text-[#F8A41E]' : 'text-[#125D66]'}`} />
+                      <h4 className="font-black text-[11px] uppercase tracking-wider mb-1">{attr.t}</h4>
+                      <p className={`text-[9px] font-bold ${interests.includes(attr.id) ? 'text-white/60' : 'text-slate-400'}`}>{attr.p}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-8 border-t border-slate-100">
+                <div>
+                  <div className="flex items-center gap-4 mb-8">
+                    <div className="w-10 h-10 rounded-full bg-[#0C3136] text-[#F8A41E] flex items-center justify-center font-black">2</div>
+                    <h2 className="text-2xl font-black text-[#0C3136]">The Logistics</h2>
+                  </div>
+                  <div className="space-y-6">
+                    <div ref={calendarRef} className="relative">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Travel Date</label>
+                      <button onClick={() => setShowCalendar(!showCalendar)} className="w-full flex items-center justify-between border-2 border-slate-100 p-4 rounded-2xl bg-white font-bold text-slate-600 text-sm">
+                        <div className="flex items-center gap-3"><Calendar className="w-5 h-5 text-[#F8A41E]" /> {selectedDate || "Select Date"}</div>
+                        <ChevronRight className="w-4 h-4 rotate-90" />
+                      </button>
+                      {showCalendar && <CalendarDropdown onSelectDate={(d) => { setSelectedDate(d.toLocaleDateString()); setShowCalendar(false); }} />}
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Number of Guests</label>
+                      <select className="w-full border-2 border-slate-100 p-4 rounded-2xl bg-white font-black text-[#0C3136] text-sm appearance-none outline-none focus:border-[#F8A41E]">
+                        <option>2 Adults</option>
+                        <option>1 Adult</option>
+                        <option>Small Group (4-6)</option>
+                        <option>Large Group (10+)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-center gap-4 mb-8">
+                    <div className="w-10 h-10 rounded-full bg-[#0C3136] text-[#F8A41E] flex items-center justify-center font-black">3</div>
+                    <h2 className="text-2xl font-black text-[#0C3136]">Your Contact</h2>
+                  </div>
+                  <div className="space-y-4">
+                    <input type="text" placeholder="Full Name" className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold text-sm outline-none focus:border-[#F8A41E]" />
+                    <input type="email" placeholder="Email Address" className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold text-sm outline-none focus:border-[#F8A41E]" />
+                    <textarea placeholder="Tell us more about your special requirements..." className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold text-sm outline-none h-32 focus:border-[#F8A41E]" />
+                  </div>
+                </div>
+              </div>
+
+              <button className="w-full bg-[#D91E1E] text-white py-6 rounded-3xl font-black text-xs uppercase tracking-[0.4em] shadow-xl shadow-red-900/20 hover:bg-[#b01818] transition-all transform hover:-translate-y-1">
+                GENERATE CUSTOM PROPOSAL
+              </button>
+           </div>
+        </div>
+
+        <div className="lg:col-span-4">
+           <div className="sticky top-28 space-y-10">
+              <div className="bg-[#0C3136] p-10 rounded-[3rem] text-white shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+                <h3 className="text-xl font-black mb-6">Why Customize?</h3>
+                <ul className="space-y-6">
+                  {[
+                    { t: 'Private Pace', d: 'No rushing. Spend as much time as you want at each spot.' },
+                    { t: 'Hidden Gems', d: 'Visit local spots typical tours miss.' },
+                    { t: 'VIP Access', d: 'Skip the lines with our premium bookings.' },
+                    { t: 'Door-to-Door', d: 'Private pickup from any location in Ontario.' }
+                  ].map((benefit, i) => (
+                    <li key={i} className="flex gap-4">
+                      <CheckCircle2 className="w-5 h-5 text-[#F8A41E] shrink-0" />
+                      <div>
+                        <h4 className="font-black text-xs uppercase tracking-widest">{benefit.t}</h4>
+                        <p className="text-[11px] text-slate-400 mt-1">{benefit.d}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="bg-white p-10 rounded-[3rem] border border-slate-100 shadow-xl">
+                 <h4 className="font-black text-[#0C3136] text-sm uppercase tracking-widest mb-6">Need Immediate Help?</h4>
+                 <div className="space-y-4">
+                   <div className="flex items-center gap-3 text-lg font-black text-[#0C3136] hover:text-[#D91E1E] transition-colors cursor-pointer"><Phone className="w-5 h-5 text-[#F8A41E]" /> +1 (905) 123-4567</div>
+                   <p className="text-xs text-slate-500 font-medium leading-relaxed">Call us and speak directly with a local planning expert today.</p>
+                 </div>
+              </div>
+           </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
 // --- PAGE: TOUR DETAIL ---
 const TourDetailPage = ({ tourId, navigateTo }) => {
   const tour = TOURS_DATA.find(t => t.id === tourId);
@@ -413,7 +591,10 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
   return (
     <div className="animate-in fade-in duration-700 bg-white">
       <section className="relative h-[480px] flex items-center text-white overflow-hidden">
-        <div className="absolute inset-0 z-0"><img src={tour.img} className="w-full h-full object-cover" /><div className="absolute inset-0 bg-gradient-to-r from-[#0C3136]/90 via-[#0C3136]/50 to-transparent"></div></div>
+        <div className="absolute inset-0 z-0">
+          <ImageWithFallback src={tour.img} size="1920 x 800 px" alt={tour.title} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0C3136]/90 via-[#0C3136]/50 to-transparent"></div>
+        </div>
         <div className="container mx-auto px-4 z-10">
            <div className="flex items-center gap-2 text-[10px] font-black text-slate-300 uppercase tracking-widest mb-6 cursor-pointer" onClick={() => navigateTo('home')}>Home / Tours / {tour.title}</div>
            <span className="bg-cyan-600 text-white text-[10px] font-black px-4 py-2 rounded-lg uppercase tracking-[0.2em] mb-6 inline-block shadow-lg">{tour.tag}</span>
@@ -455,7 +636,6 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
         <div className="lg:col-span-4">
            <div className="sticky top-28 space-y-10">
               {/* Main Booking Card */}
-              {/* Removed overflow-hidden to allow calendar to show fully */}
               <div className="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.2)] border border-slate-100 group">
                  <div className="bg-gradient-to-br from-[#0C3136] to-[#125D66] px-10 py-12 text-white relative rounded-t-[2.5rem] overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-10 -mt-10 blur-2xl"></div>
@@ -463,7 +643,7 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
                     <div className="space-y-0.5 relative z-10">
                        <p className="text-[10px] font-black uppercase text-slate-300 tracking-[0.2em]">Starting From</p>
                        <h4 className="text-[44px] font-black text-[#F8A41E] tracking-tighter leading-none flex items-baseline gap-2">
-                          CAD ${tour.price} <span className="text-[12px] font-black text-white/90 tracking-normal italic">/ person</span>
+                          CAD ${tour.price} <span className="text-[12px] font-black text-white/90 tracking-normal italic leading-none">/ person</span>
                        </h4>
                     </div>
                     <div className="flex flex-col gap-2 mt-6 relative z-10">
@@ -487,7 +667,6 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
                     </div>
 
                     <button className="w-full bg-[#D91E1E] hover:bg-[#b01818] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl shadow-red-900/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0">RESERVE NOW</button>
-                    
                     <div className="flex items-center justify-center gap-4 pt-2 border-t border-slate-50">
                        <div className="flex items-center gap-1.5 text-slate-400 text-[9px] font-black uppercase tracking-widest"><ShieldCheck className="w-3 h-3" /> Secure Payment</div>
                        <div className="flex items-center gap-1.5 text-slate-400 text-[9px] font-black uppercase tracking-widest"><Clock className="w-3 h-3" /> Instant Confirmation</div>
@@ -495,7 +674,6 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
                  </div>
               </div>
 
-              {/* Quick Facts Card */}
               {tour.facts && (
                 <div className="bg-white rounded-[2.5rem] shadow-xl border border-slate-100 overflow-hidden">
                    <div className="px-8 py-5 border-b border-slate-100 text-[10px] font-black text-[#0C3136] uppercase tracking-[0.2em] bg-slate-50/50">Tour Quick Facts</div>
@@ -509,24 +687,10 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
                    </div>
                 </div>
               )}
-
-              {/* Need Help Card */}
-              <div className="bg-[#0C3136] p-10 rounded-[2.5rem] text-white relative overflow-hidden group shadow-2xl">
-                 <div className="relative z-10">
-                    <h4 className="font-black text-lg uppercase tracking-widest mb-3">Need Help?</h4>
-                    <p className="text-[11px] text-slate-400 font-medium mb-8 leading-relaxed max-w-[200px]">Our local Niagara experts are here to help you plan your dream trip.</p>
-                    <div className="space-y-4">
-                       <div className="flex items-center gap-3 text-lg font-black tracking-tight hover:text-[#F8A41E] cursor-pointer transition-colors"><Phone className="w-5 h-5 text-[#F8A41E]" /> +1 (905) 123-4567</div>
-                       <div className="flex items-center gap-3 text-[11px] font-bold text-slate-300"><Mail className="w-4 h-4 text-[#F8A41E]" /> info@niagaravistatours.com</div>
-                    </div>
-                 </div>
-                 <div className="absolute -bottom-10 -right-10 w-56 h-56 rounded-full overflow-hidden border-8 border-white/5 opacity-40 group-hover:scale-110 transition-transform duration-1000 grayscale group-hover:grayscale-0">
-                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Local Expert" className="w-full h-full object-cover" />
-                 </div>
-              </div>
            </div>
         </div>
       </main>
+      <WhyTravelersLoveSection />
     </div>
   );
 };
@@ -534,7 +698,11 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
 // --- PAGE: CONTACT ---
 const ContactPage = () => (
   <div className="animate-in fade-in duration-700">
-    <section className="relative h-[350px] flex items-center text-white overflow-hidden"><div className="absolute inset-0 z-0"><img src="https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover" /><div className="absolute inset-0 bg-gradient-to-r from-[#0C3136]/90 to-[#0C3136]/40"></div></div>
+    <section className="relative h-[350px] flex items-center text-white overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <ImageWithFallback src="/images/hero-contact.jpg" size="1920 x 800 px" alt="Contact Us Background" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0C3136]/90 to-[#0C3136]/40"></div>
+      </div>
       <div className="container mx-auto px-4 z-10"><h1 className="text-4xl lg:text-7xl font-black leading-tight tracking-tighter">Contact Us</h1></div>
     </section>
     <main className="container mx-auto px-4 py-20 -mt-20 relative z-20"><div className="bg-white rounded-[2.5rem] shadow-2xl p-12 border border-slate-100"><h2 className="text-2xl font-black mb-8 text-[#0C3136]">Get in Touch</h2><div className="grid grid-cols-1 md:grid-cols-2 gap-12"><div className="space-y-6"><div className="flex gap-4"><Phone className="text-[#F8A41E]" /> +1 (905) 123-4567</div><div className="flex gap-4"><Mail className="text-[#F8A41E]" /> info@niagaravistatours.com</div></div><form className="space-y-4"><input type="text" placeholder="Your Name" className="w-full p-4 bg-slate-50 rounded-xl" /><textarea placeholder="How can we help?" className="w-full p-4 bg-slate-50 rounded-xl h-32" /><button className="bg-[#D91E1E] text-white py-4 px-8 rounded-xl font-black">SEND MESSAGE</button></form></div></div></main>
@@ -548,7 +716,13 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   useEffect(() => { const handleScroll = () => setIsScrolled(window.scrollY > 20); window.addEventListener('scroll', handleScroll); return () => window.removeEventListener('scroll', handleScroll); }, []);
   const navigateTo = (p) => { setPage(p); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); };
-  const renderPage = () => { if (page === 'home') return <HomePage navigateTo={navigateTo} />; if (page === 'contact') return <ContactPage />; return <TourDetailPage tourId={page} navigateTo={navigateTo} />; };
+  
+  const renderPage = () => { 
+    if (page === 'home') return <HomePage navigateTo={navigateTo} />; 
+    if (page === 'contact') return <ContactPage />; 
+    if (page === 'custom-itinerary') return <CustomItineraryPage navigateTo={navigateTo} />;
+    return <TourDetailPage tourId={page} navigateTo={navigateTo} />; 
+  };
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-800">
@@ -565,7 +739,7 @@ export default function App() {
           </div>
           <nav className="hidden lg:flex items-center gap-10">
             <NavItem label="Home" active={page === 'home'} onClick={() => navigateTo('home')} />
-            <NavItem label="Tours" active={TOURS_DATA.some(t => t.id === page)} onClick={() => navigateTo('home')} />
+            <NavItem label="Custom Itinerary" active={page === 'custom-itinerary'} onClick={() => navigateTo('custom-itinerary')} />
             <NavItem label="Contact" active={page === 'contact'} onClick={() => navigateTo('contact')} />
           </nav>
           <button className="lg:hidden text-[#0C3136]" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>{mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}</button>
@@ -574,8 +748,6 @@ export default function App() {
 
       <main className="min-h-screen">
         {renderPage()}
-        {/* Global Component: Why Travelers Love This (Positioned above footer) */}
-        {(page === 'home' || TOURS_DATA.some(t => t.id === page)) && <WhyTravelersLoveSection />}
       </main>
 
       <footer className="bg-[#0C3136] text-white pt-20 relative overflow-hidden">
@@ -599,22 +771,20 @@ export default function App() {
               <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-8 border-b border-white/10 pb-2">Quick Links</h4>
               <ul className="space-y-3 text-xs font-bold text-slate-400 uppercase tracking-widest">
                 <li onClick={() => navigateTo('home')} className="hover:text-[#F8A41E] cursor-pointer transition-colors">Home</li>
-                <li className="hover:text-[#F8A41E] cursor-pointer transition-colors">Tours</li>
-                <li className="hover:text-[#F8A41E] cursor-pointer transition-colors">Packages</li>
+                <li onClick={() => navigateTo('custom-itinerary')} className="hover:text-[#F8A41E] cursor-pointer transition-colors">Custom Itinerary</li>
                 <li className="hover:text-[#F8A41E] cursor-pointer transition-colors">About Us</li>
-                <li className="hover:text-[#F8A41E] cursor-pointer transition-colors">Reviews</li>
                 <li onClick={() => navigateTo('contact')} className="hover:text-[#F8A41E] cursor-pointer transition-colors">Contact Us</li>
               </ul>
             </div>
             <div>
               <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-8 border-b border-white/10 pb-2">Top Tours</h4>
               <ul className="space-y-3 text-xs font-bold text-slate-400 uppercase tracking-widest">
-                <li>Niagara Day Tour</li>
-                <li>Falls & Winery Escape</li>
-                <li>Family Adventure Package</li>
-                <li>Boat Cruise</li>
-                <li>Private Tours</li>
-                <li>Custom Packages</li>
+                <li onClick={() => navigateTo('classic-day-escape')} className="cursor-pointer hover:text-[#F8A41E]">Niagara Day Tour</li>
+                <li onClick={() => navigateTo('wine-country')} className="cursor-pointer hover:text-[#F8A41E]">Falls & Winery Escape</li>
+                <li onClick={() => navigateTo('ultimate-adventure')} className="cursor-pointer hover:text-[#F8A41E]">Family Adventure Package</li>
+                <li className="cursor-pointer hover:text-[#F8A41E]">Boat Cruise</li>
+                <li onClick={() => navigateTo('vip-experience')} className="cursor-pointer hover:text-[#F8A41E]">Private Tours</li>
+                <li onClick={() => navigateTo('custom-itinerary')} className="cursor-pointer hover:text-[#F8A41E]">Custom Packages</li>
               </ul>
             </div>
             <div>
