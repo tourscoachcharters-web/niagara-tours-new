@@ -48,7 +48,14 @@ const TOURS_DATA = [
       { t: 'Picturesque Views', d: 'Stop at the best viewing spots, including Table Rock and Queen Victoria Park.', i: Camera },
       { t: 'Cultural Experience', d: 'Visit a local maple syrup farm for a sweet taste of Canadian culture.', i: Grape }
     ],
-    idealFor: 'First-time visitors, budget-conscious travelers, families'
+    idealFor: 'First-time visitors, budget-conscious travelers, families',
+    facts: [
+      { l: 'Duration', v: '9 - 10 Hours', i: Clock },
+      { l: 'Group Size', v: 'Max 50 Guests', i: Users },
+      { l: 'Languages', v: 'English', i: Globe },
+      { l: 'Transport', v: 'Luxury Coach', i: Bus },
+      { l: 'Pickup', v: 'Toronto Downtown', i: MapPin }
+    ]
   },
   {
     id: 'ultimate-adventure',
@@ -64,7 +71,14 @@ const TOURS_DATA = [
       { t: 'Skylon Tower', d: 'Enjoy bird’s-eye views of the falls and the surrounding landscape.', i: Navigation },
       { t: 'Niagara City Cruises', d: 'Get close to the cascading waters for a truly memorable experience.', i: Wind }
     ],
-    idealFor: 'Tourists who want the full Niagara experience, adventure seekers, families, couples'
+    idealFor: 'Tourists who want the full Niagara experience, adventure seekers, families, couples',
+    facts: [
+      { l: 'Duration', v: '9 Hours', i: Clock },
+      { l: 'Group Size', v: 'Max 25 Guests', i: Users },
+      { l: 'Languages', v: 'English / French', i: Globe },
+      { l: 'Inclusions', v: 'All Entrance Fees', i: ShieldCheck },
+      { l: 'Pickup', v: 'Hotel Included', i: MapPin }
+    ]
   },
   {
     id: 'evening-illumination',
@@ -80,7 +94,14 @@ const TOURS_DATA = [
       { t: 'Fireworks Display', d: 'During peak seasons, enjoy a spectacular fireworks show over the falls.', i: Star },
       { t: 'Evening Serenity', d: 'The falls look magical at night, a perfect way to wrap up your day.', i: Clock }
     ],
-    idealFor: 'Couples, photographers, anyone wanting to experience Niagara Falls at night'
+    idealFor: 'Couples, photographers, anyone wanting to experience Niagara Falls at night',
+    facts: [
+      { l: 'Duration', v: '10 Hours', i: Clock },
+      { l: 'Atmosphere', v: 'Romantic / Scenic', i: Star },
+      { l: 'Best For', v: 'Couples', i: Users },
+      { l: 'Timing', v: '2 PM Departure', i: Clock },
+      { l: 'Pickup', v: 'Toronto & Niagara', i: MapPin }
+    ]
   },
   {
     id: 'wine-country',
@@ -96,7 +117,14 @@ const TOURS_DATA = [
       { t: 'Wine Tastings', d: 'Sample world-class wines at two of Niagara’s premier wineries.', i: Grape },
       { t: 'Vineyard Walk', d: 'Stroll through scenic vineyards while soaking in the sights and fresh air.', i: Camera }
     ],
-    idealFor: 'Wine enthusiasts, couples, small groups'
+    idealFor: 'Wine enthusiasts, couples, small groups',
+    facts: [
+      { l: 'Duration', v: '8 - 9 Hours', i: Clock },
+      { l: 'Tastings', v: '2 Wineries Incl.', i: Grape },
+      { l: 'Group Size', v: 'Small Group (14)', i: Users },
+      { l: 'Age', v: '19+ for Wine', i: ShieldCheck },
+      { l: 'Pickup', v: 'Toronto/Niagara', i: MapPin }
+    ]
   },
   {
     id: 'vip-experience',
@@ -112,7 +140,14 @@ const TOURS_DATA = [
       { t: 'Personalized Itinerary', d: 'Pick and choose your own attractions to create the perfect day.', i: Navigation },
       { t: 'Exclusive Stops', d: 'Visit off-the-beaten-path spots like local wineries and unique attractions.', i: ShieldCheck }
     ],
-    idealFor: 'VIP guests, families, corporate groups, special occasions'
+    idealFor: 'VIP guests, families, corporate groups, special occasions',
+    facts: [
+      { l: 'Duration', v: 'Completely Flexible', i: Clock },
+      { l: 'Transport', v: 'Private SUV/Limo', i: Bus },
+      { l: 'Group Size', v: 'Up to 6 Guests', i: Users },
+      { l: 'Pace', v: 'Your Choice', i: Zap },
+      { l: 'Pickup', v: 'Door-to-Door', i: MapPin }
+    ]
   },
   {
     id: 'three-day-tour',
@@ -128,7 +163,14 @@ const TOURS_DATA = [
       { t: 'Niagara Falls', d: 'Visit the world’s most famous waterfall with multiple attractions.', i: MapIcon },
       { t: 'Toronto & Kingston', d: 'Discover two major Canadian cities filled with history, culture, and architecture.', i: Globe }
     ],
-    idealFor: 'International tourists, those wanting to explore multiple destinations in one tour'
+    idealFor: 'International tourists, those wanting to explore multiple destinations in one tour',
+    facts: [
+      { l: 'Duration', v: '3 Days / 2 Nights', i: Clock },
+      { l: 'Stay', v: 'Hotel Included', i: MapPin },
+      { l: 'Meals', v: 'Breakfast Incl.', i: Utensils },
+      { l: 'Guide', v: 'Licensed Expert', i: Users },
+      { l: 'Destinations', v: '3 Major Hubs', i: Globe }
+    ]
   }
 ];
 
@@ -204,6 +246,33 @@ const NavItem = ({ label, active, onClick }) => (
   <div onClick={onClick} className={`flex items-center gap-1 font-black text-[11px] uppercase tracking-widest cursor-pointer transition-colors ${active ? 'text-[#F8A41E]' : 'text-[#0C3136] hover:text-[#F8A41E]'}`}>
     {label}
   </div>
+);
+
+// --- SHARED COMPONENT: WHY TRAVELERS LOVE THIS TOUR ---
+const WhyTravelersLoveSection = () => (
+  <section className="py-20 bg-slate-50/50 border-t border-slate-100">
+    <div className="container mx-auto px-4">
+      <h3 className="text-2xl font-black text-[#0C3136] mb-10 tracking-tight text-center lg:text-left">Why Travelers Love This Tour</h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[
+          { icon: Camera, t: 'Breathtaking Views', d: 'See the natural wonder of Niagara Falls up close.', color: 'text-teal-600', bg: 'bg-teal-50' },
+          { icon: Users, t: 'Expert Local Guide', d: 'Learn the history and stories from our friendly guides.', color: 'text-blue-600', bg: 'bg-blue-50' },
+          { icon: Bus, t: 'Comfortable Transport', d: 'Travel in clean, modern vehicles with A/C.', color: 'text-orange-600', bg: 'bg-orange-50' },
+          { icon: ShieldCheck, t: 'Free Cancellation', d: 'Cancel up to 24 hours in advance for a full refund.', color: 'text-red-600', bg: 'bg-red-50' }
+        ].map((item, idx) => (
+          <div key={idx} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 group hover:shadow-md transition-all">
+            <div className={`shrink-0 w-12 h-12 rounded-full ${item.bg} ${item.color} flex items-center justify-center`}>
+              <item.icon className="w-6 h-6" />
+            </div>
+            <div>
+              <h4 className="font-bold text-[13px] text-[#0C3136] leading-tight mb-1">{item.t}</h4>
+              <p className="text-[11px] text-slate-500 font-medium leading-tight">{item.d}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
 );
 
 // --- PAGE: HOME ---
@@ -332,12 +401,15 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const calendarRef = useRef(null);
+  
   useEffect(() => {
     const handleClickOutside = (event) => { if (calendarRef.current && !calendarRef.current.contains(event.target)) setShowCalendar(false); };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
   if (!tour) return <div className="p-20 text-center font-black">Tour not found.</div>;
+
   return (
     <div className="animate-in fade-in duration-700 bg-white">
       <section className="relative h-[480px] flex items-center text-white overflow-hidden">
@@ -352,6 +424,7 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
            </div>
         </div>
       </section>
+
       <main className="container mx-auto px-4 py-20 grid grid-cols-1 lg:grid-cols-12 gap-16">
         <div className="lg:col-span-8">
            <h2 className="text-3xl font-black text-[#0C3136] mb-6 tracking-tight">Overview</h2>
@@ -368,27 +441,6 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
               ))}
            </div>
 
-           {/* Why Travelers Love This Tour (Ref: image_b190f1.png) */}
-           <h3 className="text-2xl font-black text-[#0C3136] mb-8 tracking-tight">Why Travelers Love This Tour</h3>
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-             {[
-               { icon: Camera, t: 'Breathtaking Views', d: 'See the natural wonder of Niagara Falls up close.', color: 'text-teal-600', bg: 'bg-teal-50' },
-               { icon: Users, t: 'Expert Local Guide', d: 'Learn the history and stories from our friendly guides.', color: 'text-blue-600', bg: 'bg-blue-50' },
-               { icon: Bus, t: 'Comfortable Transport', d: 'Travel in clean, modern vehicles with A/C.', color: 'text-orange-600', bg: 'bg-orange-50' },
-               { icon: ShieldCheck, t: 'Free Cancellation', d: 'Cancel up to 24 hours in advance for a full refund.', color: 'text-red-600', bg: 'bg-red-50' }
-             ].map((item, idx) => (
-               <div key={idx} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 group hover:shadow-md transition-all">
-                 <div className={`shrink-0 w-12 h-12 rounded-full ${item.bg} ${item.color} flex items-center justify-center`}>
-                   <item.icon className="w-6 h-6" />
-                 </div>
-                 <div>
-                   <h4 className="font-bold text-[13px] text-[#0C3136] leading-tight mb-1">{item.t}</h4>
-                   <p className="text-[11px] text-slate-500 font-medium leading-tight">{item.d}</p>
-                 </div>
-               </div>
-             ))}
-           </div>
-
            <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl overflow-hidden mb-12">
               <div className="bg-[#125D66] text-white px-8 py-5 font-black text-xs uppercase tracking-widest">Package Inclusions</div>
               <div className="p-10 space-y-4 grid grid-cols-1 md:grid-cols-2">
@@ -398,26 +450,78 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
               </div>
            </div>
         </div>
+
+        {/* --- ENHANCED SIDEBAR --- */}
         <div className="lg:col-span-4">
            <div className="sticky top-28 space-y-10">
-              <div className="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.2)] border border-slate-100 overflow-hidden">
-                 <div className="bg-[#0C3136] px-10 py-10 text-white">
-                    <h3 className="text-sm font-black uppercase tracking-[0.2em] mb-8 leading-tight">Book This Tour</h3>
-                    <div className="space-y-0.5">
-                       <p className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">Starting From</p>
-                       <h4 className="text-[44px] font-black text-[#F8A41E] tracking-tighter leading-none flex items-baseline gap-2">CAD ${tour.price} <span className="text-[11px] font-medium text-slate-400 italic">/ person</span></h4>
+              {/* Main Booking Card */}
+              {/* Removed overflow-hidden to allow calendar to show fully */}
+              <div className="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.2)] border border-slate-100 group">
+                 <div className="bg-gradient-to-br from-[#0C3136] to-[#125D66] px-10 py-12 text-white relative rounded-t-[2.5rem] overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-10 -mt-10 blur-2xl"></div>
+                    <h3 className="text-sm font-black uppercase tracking-[0.2em] mb-8 leading-tight relative z-10">Book Your Experience</h3>
+                    <div className="space-y-0.5 relative z-10">
+                       <p className="text-[10px] font-black uppercase text-slate-300 tracking-[0.2em]">Starting From</p>
+                       <h4 className="text-[44px] font-black text-[#F8A41E] tracking-tighter leading-none flex items-baseline gap-2">
+                          CAD ${tour.price} <span className="text-[12px] font-black text-white/90 tracking-normal italic">/ person</span>
+                       </h4>
+                    </div>
+                    <div className="flex flex-col gap-2 mt-6 relative z-10">
+                      <div className="flex items-center gap-2 text-[10px] font-black tracking-widest text-emerald-400">
+                         <Zap className="w-3.5 h-3.5 fill-current" /> BEST PRICE GUARANTEED
+                      </div>
+                      <div className="flex items-center gap-2 text-[11px] font-bold text-white/90 bg-white/10 w-fit px-3 py-1.5 rounded-lg border border-white/10 animate-pulse">
+                        <Users className="w-3.5 h-3.5" /> 10 people already booked this tour, Hurry get yours!
+                      </div>
                     </div>
                  </div>
-                 <div className="p-10 space-y-8 bg-white relative">
+                 
+                 <div className="p-10 space-y-8 bg-white relative rounded-b-[2.5rem]">
                     <div ref={calendarRef} className="relative">
-                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3.5 block">Select Date</label>
-                       <button type="button" onClick={() => setShowCalendar(!showCalendar)} className="w-full flex items-center justify-between border border-slate-200 p-4.5 rounded-2xl bg-white group hover:border-[#F8A41E] cursor-pointer transition-all shadow-sm relative z-10">
+                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3.5 block">1. Select Tour Date</label>
+                       <button type="button" onClick={() => setShowCalendar(!showCalendar)} className="w-full flex items-center justify-between border border-slate-200 p-4.5 rounded-2xl bg-white hover:border-[#F8A41E] cursor-pointer transition-all shadow-sm relative z-10">
                           <div className="flex items-center gap-3.5 font-bold text-slate-600 text-sm"><Calendar className="w-5 h-5 text-[#F8A41E]" /> {selectedDate || "Choose Date"}</div>
                           <ChevronRight className={`w-4 h-4 rotate-90 text-slate-300 transition-transform ${showCalendar ? 'rotate-[-90deg]' : ''}`} />
                        </button>
                        {showCalendar && <CalendarDropdown onSelectDate={(d) => { setSelectedDate(d.toLocaleDateString()); setShowCalendar(false); }} />}
                     </div>
-                    <button className="w-full bg-[#D91E1E] hover:bg-[#b01818] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl transition-all">RESERVE NOW</button>
+
+                    <button className="w-full bg-[#D91E1E] hover:bg-[#b01818] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl shadow-red-900/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0">RESERVE NOW</button>
+                    
+                    <div className="flex items-center justify-center gap-4 pt-2 border-t border-slate-50">
+                       <div className="flex items-center gap-1.5 text-slate-400 text-[9px] font-black uppercase tracking-widest"><ShieldCheck className="w-3 h-3" /> Secure Payment</div>
+                       <div className="flex items-center gap-1.5 text-slate-400 text-[9px] font-black uppercase tracking-widest"><Clock className="w-3 h-3" /> Instant Confirmation</div>
+                    </div>
+                 </div>
+              </div>
+
+              {/* Quick Facts Card */}
+              {tour.facts && (
+                <div className="bg-white rounded-[2.5rem] shadow-xl border border-slate-100 overflow-hidden">
+                   <div className="px-8 py-5 border-b border-slate-100 text-[10px] font-black text-[#0C3136] uppercase tracking-[0.2em] bg-slate-50/50">Tour Quick Facts</div>
+                   <div className="p-8 space-y-5">
+                      {tour.facts.map((f, i) => (
+                        <div key={i} className="flex justify-between items-center">
+                          <div className="flex items-center gap-3 text-[10px] font-black text-slate-400 uppercase tracking-widest"><f.i className="w-4 h-4 text-[#F8A41E]" /> {f.l}</div>
+                          <div className="font-black text-[#0C3136] text-[11px]">{f.v}</div>
+                        </div>
+                      ))}
+                   </div>
+                </div>
+              )}
+
+              {/* Need Help Card */}
+              <div className="bg-[#0C3136] p-10 rounded-[2.5rem] text-white relative overflow-hidden group shadow-2xl">
+                 <div className="relative z-10">
+                    <h4 className="font-black text-lg uppercase tracking-widest mb-3">Need Help?</h4>
+                    <p className="text-[11px] text-slate-400 font-medium mb-8 leading-relaxed max-w-[200px]">Our local Niagara experts are here to help you plan your dream trip.</p>
+                    <div className="space-y-4">
+                       <div className="flex items-center gap-3 text-lg font-black tracking-tight hover:text-[#F8A41E] cursor-pointer transition-colors"><Phone className="w-5 h-5 text-[#F8A41E]" /> +1 (905) 123-4567</div>
+                       <div className="flex items-center gap-3 text-[11px] font-bold text-slate-300"><Mail className="w-4 h-4 text-[#F8A41E]" /> info@niagaravistatours.com</div>
+                    </div>
+                 </div>
+                 <div className="absolute -bottom-10 -right-10 w-56 h-56 rounded-full overflow-hidden border-8 border-white/5 opacity-40 group-hover:scale-110 transition-transform duration-1000 grayscale group-hover:grayscale-0">
+                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Local Expert" className="w-full h-full object-cover" />
                  </div>
               </div>
            </div>
@@ -468,7 +572,11 @@ export default function App() {
         </div>
       </header>
 
-      <main className="min-h-screen">{renderPage()}</main>
+      <main className="min-h-screen">
+        {renderPage()}
+        {/* Global Component: Why Travelers Love This (Positioned above footer) */}
+        {(page === 'home' || TOURS_DATA.some(t => t.id === page)) && <WhyTravelersLoveSection />}
+      </main>
 
       <footer className="bg-[#0C3136] text-white pt-20 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
@@ -478,9 +586,7 @@ export default function App() {
                 <Compass className="w-8 h-8 text-[#F8A41E]" />
                 <h1 className="text-lg font-black tracking-tighter uppercase leading-none">Niagara <span className="block text-[9px] tracking-[0.2em] text-[#F8A41E] mt-1">Vista Tours</span></h1>
               </div>
-              <p className="text-slate-400 text-xs leading-relaxed mb-8 font-medium">
-                Your trusted local tour operator in Niagara Falls, Canada. Creating unforgettable experiences since 2010.
-              </p>
+              <p className="text-slate-400 text-xs leading-relaxed mb-8 font-medium">Your trusted local tour operator in Niagara Falls, Canada. Creating unforgettable experiences since 2010.</p>
               <div className="flex gap-3">
                 <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform"><FacebookIcon className="w-4 h-4 text-white" /></div>
                 <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform"><InstagramIcon className="w-4 h-4 text-white" /></div>
@@ -514,22 +620,10 @@ export default function App() {
             <div>
               <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-8 border-b border-white/10 pb-2">Contact Us</h4>
               <ul className="space-y-4 text-xs font-medium text-slate-400">
-                <li className="flex items-start gap-3">
-                  <MapPin className="w-4 h-4 text-[#F8A41E] shrink-0" />
-                  <span>Niagara Falls, Ontario,<br />Canada L2G 3Y9</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Phone className="w-4 h-4 text-[#F8A41E] shrink-0" />
-                  <span>+1 (905) 123-4567</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Mail className="w-4 h-4 text-[#F8A41E] shrink-0" />
-                  <span>info@niagaravistatours.com</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Clock className="w-4 h-4 text-[#F8A41E] shrink-0" />
-                  <span>Open Daily 8:00 AM – 8:00 PM</span>
-                </li>
+                <li className="flex items-start gap-3"><MapPin className="w-4 h-4 text-[#F8A41E] shrink-0" /><span>Niagara Falls, Ontario,<br />Canada L2G 3Y9</span></li>
+                <li className="flex items-center gap-3"><Phone className="w-4 h-4 text-[#F8A41E] shrink-0" /><span>+1 (905) 123-4567</span></li>
+                <li className="flex items-center gap-3"><Mail className="w-4 h-4 text-[#F8A41E] shrink-0" /><span>info@niagaravistatours.com</span></li>
+                <li className="flex items-center gap-3"><Clock className="w-4 h-4 text-[#F8A41E] shrink-0" /><span>Open Daily 8:00 AM – 8:00 PM</span></li>
               </ul>
             </div>
             <div>
@@ -542,16 +636,10 @@ export default function App() {
             </div>
           </div>
           <div className="pt-8 pb-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-2 md:order-1">
-              © 2026 Niagara Vista Tours. All Rights Reserved.
-            </div>
-            <div className="flex items-center justify-center order-1 md:order-2">
-              <MapleLeafIcon className="w-6 h-6 text-red-600" />
-            </div>
+            <div className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-2 md:order-1">© 2026 Niagara Vista Tours. All Rights Reserved.</div>
+            <div className="flex items-center justify-center order-1 md:order-2"><MapleLeafIcon className="w-6 h-6 text-red-600" /></div>
             <div className="flex gap-6 text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-3">
-              <a href="#" className="hover:text-[#F8A41E]">Privacy Policy</a>
-              <span className="opacity-20">|</span>
-              <a href="#" className="hover:text-[#F8A41E]">Terms & Conditions</a>
+              <a href="#" className="hover:text-[#F8A41E]">Privacy Policy</a><span className="opacity-20">|</span><a href="#" className="hover:text-[#F8A41E]">Terms & Conditions</a>
             </div>
           </div>
         </div>
