@@ -38,10 +38,8 @@ import {
 /**
  * PRODUCTION IMAGE GUIDE:
  * To see your images live, upload your files to 'public/images/' in your GitHub repo.
- * 
- * LOGO:
- * - Filename: logo.png
- * - Recommended Size: 300 x 100 px (Horizontal)
+ * * LOGO:
+ * - Current Source: https://niagara-tours-new.vercel.app/images/logo.png
  */
 
 const ImageWithFallback = ({ src, alt, className, size, isLogo }) => {
@@ -632,7 +630,6 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
         <div className="lg:col-span-4">
            <div className="sticky top-28 space-y-10">
               {/* Main Booking Card */}
-              {/* Removed overflow-hidden to allow calendar to show fully */}
               <div className="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.2)] border border-slate-100 group">
                  <div className="bg-gradient-to-br from-[#0C3136] to-[#125D66] px-10 py-12 text-white relative rounded-t-[2.5rem] overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-10 -mt-10 blur-2xl"></div>
@@ -731,10 +728,9 @@ export default function App() {
       <header className={`sticky top-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-md py-2' : 'bg-white py-5'}`}>
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
           <div onClick={() => navigateTo('home')} className="flex items-center gap-3 cursor-pointer">
-            <div className="w-12 h-12 overflow-hidden flex items-center justify-center">
-              <ImageWithFallback src="/images/logo.png" size="300 x 100 px" isLogo alt="Niagara Vista Tours" className="max-h-full max-w-full object-contain" />
+            <div className="w-32 h-12 overflow-hidden flex items-center justify-center">
+              <ImageWithFallback src="https://niagara-tours-new.vercel.app/images/logo.png" size="300 x 100 px" isLogo alt="Niagara Vista Tours" className="max-h-full max-w-full object-contain" />
             </div>
-            <div><h1 className="text-2xl font-black text-[#0C3136] tracking-tighter leading-none uppercase">Niagara</h1><p className="text-[9px] font-black text-[#F8A41E] tracking-[0.3em] uppercase leading-none">Vista Tours</p></div>
           </div>
           <nav className="hidden lg:flex items-center gap-10">
             <NavItem label="Home" active={page === 'home'} onClick={() => navigateTo('home')} />
@@ -754,8 +750,7 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
             <div className="lg:col-span-1">
               <div className="flex items-center gap-3 mb-6">
-                <ImageWithFallback src="/images/logo.png" size="300 x 100 px" isLogo alt="Logo" className="w-12 h-12 object-contain" />
-                <h1 className="text-lg font-black tracking-tighter uppercase leading-none">Niagara <span className="block text-[9px] tracking-[0.2em] text-[#F8A41E] mt-1">Vista Tours</span></h1>
+                <ImageWithFallback src="https://niagara-tours-new.vercel.app/images/logo.png" size="300 x 100 px" isLogo alt="Logo" className="w-32 h-12 object-contain" />
               </div>
               <p className="text-slate-400 text-xs leading-relaxed mb-8 font-medium">Your trusted local tour operator in Niagara Falls, Canada. Creating unforgettable experiences since 2010.</p>
               <div className="flex gap-3">
