@@ -418,7 +418,6 @@ const HomePage = ({ navigateTo }) => {
   );
 };
 
-// --- PAGE: TOURS LISTING ---
 const ToursPage = ({ navigateTo }) => {
   return (
     <div className="animate-in fade-in duration-700 bg-white">
@@ -613,6 +612,14 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const calendarRef = useRef(null);
+
+  const pickupPoints = [
+    { name: "Royal Ontario Museum", sub: "(Queen's Park Entrance), 100 Queens Park, Toronto, M5S 2C6", area: "Downtown Toronto", time: "7:55 AM" },
+    { name: "Holiday Inn Downtown Centre", sub: "30 Carlton St", area: "Downtown Toronto", time: "8:00 AM" },
+    { name: "Chelsea Hotel", sub: "33 Gerrard St W, Toronto, ON M5G", area: "Downtown Toronto", time: "8:15 AM" },
+    { name: "Sheraton Centre", sub: "123 Queen St W, Toronto, ON M5H 2M9", area: "Downtown Toronto", time: "8:15 AM" },
+    { name: "Maple Leaf Square", sub: "@ the South Entrance of Union Station", area: "Downtown Toronto", time: "8:30 AM" }
+  ];
   
   useEffect(() => {
     const handleClickOutside = (event) => { if (calendarRef.current && !calendarRef.current.contains(event.target)) setShowCalendar(false); };
@@ -642,8 +649,32 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
 
       <main className="container mx-auto px-4 py-20 grid grid-cols-1 lg:grid-cols-12 gap-16">
         <div className="lg:col-span-8">
-           <h2 className="text-3xl font-black text-[#0C3136] mb-6 tracking-tight">Overview</h2>
-           <p className="text-slate-600 text-lg leading-relaxed mb-12">{tour.overview}</p>
+           <div className="mb-16">
+              <h2 className="text-3xl font-black text-[#0C3136] mb-6 tracking-tight">Overview</h2>
+              <p className="text-slate-600 text-lg leading-relaxed">{tour.overview}</p>
+           </div>
+
+           {/* Tour Itinerary Section */}
+           <div className="mb-16 bg-slate-50 p-10 rounded-[2.5rem] border border-slate-100">
+              <h3 className="text-2xl font-black text-[#0C3136] mb-8 flex items-center gap-3">
+                 <Navigation className="text-[#F8A41E]" /> Tour Itinerary
+              </h3>
+              <ul className="space-y-6">
+                {[
+                  "Morning departure from downtown Toronto",
+                  "Quick maple syrup tasting stop",
+                  "Time at Niagara Falls (you can do this add‑on here)",
+                  "Optional independent sightseeing like Clifton Hill",
+                  "A stop at Niagara‑on‑the‑Lake",
+                  "Return to Toronto in the late afternoon/evening"
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-4">
+                    <div className="w-2 h-2 rounded-full bg-[#F8A41E] mt-2 shrink-0"></div>
+                    <span className="text-slate-700 font-bold text-base">{item}</span>
+                  </li>
+                ))}
+              </ul>
+           </div>
            
            <h3 className="text-2xl font-black text-[#0C3136] mb-10 tracking-tight">Tour Highlights</h3>
            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
@@ -654,6 +685,35 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
                   <p className="text-[10px] text-slate-500 font-medium leading-relaxed">{h.d}</p>
                 </div>
               ))}
+           </div>
+
+           {/* Pickup Points Section */}
+           <div className="mb-16">
+              <h3 className="text-2xl font-black text-[#0C3136] mb-8 flex items-center gap-3">
+                 <MapPin className="text-[#F8A41E]" /> Toronto Pickup Points
+              </h3>
+              <div className="space-y-4">
+                 {pickupPoints.map((point, i) => (
+                   <div key={i} className="flex flex-col md:flex-row md:items-center justify-between p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:border-[#F8A41E] transition-all group">
+                      <div className="flex gap-5 items-start">
+                         <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-[#125D66] group-hover:bg-[#F8A41E] group-hover:text-[#0C3136] transition-all shrink-0">
+                            <MapPin className="w-5 h-5" />
+                         </div>
+                         <div>
+                            <h4 className="font-black text-[#0C3136] text-sm">{point.name}</h4>
+                            <p className="text-xs text-slate-400 font-medium mt-0.5">{point.sub}</p>
+                            <div className="flex items-center gap-4 mt-2">
+                               <span className="text-[10px] font-black uppercase text-[#125D66] tracking-wider">{point.area}</span>
+                               <span className="text-[10px] font-black uppercase text-[#F8A41E] hover:underline cursor-pointer tracking-wider italic">• View on Map</span>
+                            </div>
+                         </div>
+                      </div>
+                      <div className="mt-4 md:mt-0 px-6 py-2 bg-[#0C3136] text-[#F8A41E] rounded-full text-sm font-black w-fit whitespace-nowrap">
+                         {point.time}
+                      </div>
+                   </div>
+                 ))}
+              </div>
            </div>
 
            <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl overflow-hidden mb-12">
