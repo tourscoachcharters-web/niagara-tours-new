@@ -70,6 +70,14 @@ const TOURS_DATA = [
     tag: 'BEST VALUE',
     overview: 'The Niagara Classic Day Escape is perfect for first-time visitors to Niagara Falls. Whether you\'re traveling solo, with friends, or with family, this affordable day tour offers a comprehensive Niagara Falls experience, including the breathtaking boat ride and stunning views of Horseshoe Falls.',
     inclusions: ['Round-trip Transport from Toronto', 'Niagara Falls Sightseeing', 'Niagara City Cruises (Seasonal)', 'Photo Stops at iconic locations', 'Free Time for exploration', 'Maple Syrup Tasting'],
+    itinerary: [
+      "Morning departure from downtown Toronto",
+      "Quick maple syrup tasting stop at a local farm",
+      "Prime time at Niagara Falls (Boat ride add-on available)",
+      "Optional independent sightseeing at Clifton Hill",
+      "A charming stop at historic Niagara-on-the-Lake",
+      "Return to Toronto in the late afternoon/evening"
+    ],
     highlights: [
       { t: 'Niagara Falls Boat Ride', d: 'Get up close to the falls with an unforgettable boat ride during the summer season.', i: Wind },
       { t: 'Picturesque Views', d: 'Stop at the best viewing spots, including Table Rock and Queen Victoria Park.', i: Camera },
@@ -93,6 +101,15 @@ const TOURS_DATA = [
     tag: 'MOST POPULAR',
     overview: 'The Ultimate Niagara Adventure is the complete Niagara Falls experience. Perfect for visitors who want to see it all, this tour includes iconic attractions like Journey Behind the Falls, Niagara City Cruises, and Skylon Tower, all in one action-packed day.',
     inclusions: ['Niagara City Cruises Boat Ride', 'Journey Behind the Falls Admission', 'Skylon Tower Observation Deck', 'Scenic Photo Stops', 'Maple Syrup & Chocolate Tasting'],
+    itinerary: [
+      "Early morning luxury pickup from your Toronto hotel",
+      "Panoramic views from the Skylon Tower Observation Deck",
+      "Thrilling 'Journey Behind the Falls' experience",
+      "Iconic Boat Cruise into the heart of the mist",
+      "Gourmet buffet lunch overlooking the Horseshoe Falls",
+      "Guided tour of the Niagara Parkway and Whirlpool Rapids",
+      "Return to Toronto with door-to-door drop-off"
+    ],
     highlights: [
       { t: 'Journey Behind the Falls', d: 'Discover Niagara\'s natural wonder from a unique perspective inside the rock behind the falls.', i: MapIcon },
       { t: 'Skylon Tower', d: 'Enjoy bird’s-eye views of the falls and the surrounding landscape.', i: Navigation },
@@ -116,6 +133,15 @@ const TOURS_DATA = [
     tag: 'ROMANTIC',
     overview: 'Experience Niagara Falls in a whole new light on this evening tour. After a day of sightseeing, enjoy the illuminated falls and seasonal fireworks display, making this the perfect evening tour for photographers, couples, and anyone wanting to see the falls sparkle at night.',
     inclusions: ['Niagara Falls Sightseeing', 'Niagara City Cruises (Daytime)', 'Skylon Tower Night Views', 'Optional Dinner Stop', 'Niagara Falls Illumination', 'Seasonal Fireworks Display'],
+    itinerary: [
+      "Mid-afternoon departure from Toronto (2:00 PM)",
+      "Visit to the world's smallest chapel and the Floral Clock",
+      "Afternoon sightseeing and Boat Cruise experience",
+      "Free time for dinner with a view of the falls",
+      "Evening Illumination: watch the falls light up in color",
+      "Seasonal Fireworks display (Weather permitting)",
+      "Late night arrival back in Toronto (approx. midnight)"
+    ],
     highlights: [
       { t: 'Falls Illumination', d: 'See the falls lit up in vibrant colors against the night sky.', i: Zap },
       { t: 'Fireworks Display', d: 'During peak seasons, enjoy a spectacular fireworks show over the falls.', i: Star },
@@ -139,6 +165,15 @@ const TOURS_DATA = [
     tag: 'WINE LOVERS',
     overview: 'This tour combines the best of both worlds—Niagara Falls’ natural beauty and the stunning vineyards of Niagara-on-the-Lake. Perfect for wine lovers, this tour offers a relaxing and scenic day with a wine-tasting experience after visiting the falls.',
     inclusions: ['Niagara Falls Sightseeing', 'Scenic Niagara-on-the-Lake Drive', 'Winery Tour & Tasting (2 locations)', 'Vineyard Walk', 'Photo Stops', 'Optional Gourmet Winery Lunch'],
+    itinerary: [
+      "Morning departure through the scenic Golden Horseshoe",
+      "Guided sightseeing at the brink of Niagara Falls",
+      "Scenic drive along the Niagara Parkway to Wine Country",
+      "Tasting and cellar tour at a boutique award-winning winery",
+      "Leisurely lunch and shopping in Niagara-on-the-Lake",
+      "Second premium tasting featuring world-famous Icewine",
+      "Evening return to Toronto through the rolling countryside"
+    ],
     highlights: [
       { t: 'Niagara-on-the-Lake', d: 'A charming town known for its wineries, heritage, and views of Lake Ontario.', i: MapPin },
       { t: 'Wine Tastings', d: 'Sample world-class wines at two of Niagara’s premier wineries.', i: Grape },
@@ -162,6 +197,15 @@ const TOURS_DATA = [
     tag: 'PRIVATE / VIP',
     overview: 'For those who want a personalized experience, the Private Custom Niagara VIP Experience offers luxury transportation and a flexible itinerary, ensuring you get the most out of your day in Niagara Falls and the surrounding area. Ideal for groups, families, or corporate outings.',
     inclusions: ['Private Chauffeur & Vehicle', 'Fully Custom Itinerary', 'Niagara City Cruises', 'Skylon Tower VIP Access', 'Wine & Food Tastings', 'Flexible Schedule'],
+    itinerary: [
+      "Luxury pickup at your preferred time and location",
+      "Personal chauffeur-guide for the entire day",
+      "Bespoke itinerary tailored to your specific interests",
+      "Front-of-the-line access to major attractions",
+      "Exclusive stops at 'locals-only' hidden viewpoints",
+      "Gourmet dining reservations at the region's finest tables",
+      "Flexible return time with door-to-door drop-off"
+    ],
     highlights: [
       { t: 'VIP Experience', d: 'Private vehicle with a personal driver, offering a completely tailored experience.', i: Users },
       { t: 'Personalized Itinerary', d: 'Pick and choose your own attractions to create the perfect day.', i: Navigation },
@@ -185,6 +229,14 @@ const TOURS_DATA = [
     tag: 'MULTI-CITY',
     overview: 'Make the most of your trip to Canada with this 3-day guided tour, visiting Toronto, Thousand Islands, Kingston, and Niagara Falls. Ideal for those with more time, this tour gives you a taste of Canada’s natural beauty and urban culture.',
     inclusions: ['Expert Tour Guide', 'Toronto Sightseeing', 'Thousand Islands Cruise', 'Kingston Historic Visit', 'Niagara Falls Full Experience', 'Hotel Accommodations (2 nights)'],
+    itinerary: [
+      "Day 1: Comprehensive Toronto City Tour & travel to Kingston",
+      "Day 1: Guided walk through historic Kingston (Canada's first capital)",
+      "Day 2: Thousand Islands cruise through the heart of the St. Lawrence",
+      "Day 2: Scenic drive to the Niagara region and hotel check-in",
+      "Day 3: Full Niagara Falls adventure including Boat Cruise",
+      "Day 3: Afternoon at Niagara-on-the-Lake and return to Toronto"
+    ],
     highlights: [
       { t: 'Thousand Islands Cruise', d: 'A stunning cruise through one of the most beautiful spots in Canada.', i: Wind },
       { t: 'Niagara Falls', d: 'Visit the world’s most famous waterfall with multiple attractions.', i: MapIcon },
@@ -660,14 +712,14 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
                  <Navigation className="text-[#F8A41E]" /> Tour Itinerary
               </h3>
               <ul className="space-y-6">
-                {[
+                {(tour.itinerary || [
                   "Morning departure from downtown Toronto",
                   "Quick maple syrup tasting stop",
                   "Time at Niagara Falls (you can do this add‑on here)",
                   "Optional independent sightseeing like Clifton Hill",
                   "A stop at Niagara‑on‑the‑Lake",
                   "Return to Toronto in the late afternoon/evening"
-                ].map((item, i) => (
+                ]).map((item, i) => (
                   <li key={i} className="flex items-start gap-4">
                     <div className="w-2 h-2 rounded-full bg-[#F8A41E] mt-2 shrink-0"></div>
                     <span className="text-slate-700 font-bold text-base">{item}</span>
