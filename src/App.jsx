@@ -34,7 +34,8 @@ import {
   Coffee, 
   Plane,
   CreditCard,
-  Ticket
+  Ticket,
+  Loader2
 } from 'lucide-react';
 
 /**
@@ -827,11 +828,74 @@ const CheckoutPage = ({ tourId, initialDate, navigateTo }) => {
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [pickup, setPickup] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const childPrice = tour ? tour.price - 10 : 89;
   const subtotal = tour ? (adults * tour.price) + (children * childPrice) : 0;
   const taxes = subtotal * 0.13;
   const total = subtotal + taxes;
+
+  const handleCompleteBooking = async () => {
+    if (!fullName || !email || !pickup) {
+      alert("Please fill in all required fields (Name, Email, and Pickup Location).");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    // Simulate sending an email and processing payment
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    // Trigger local email client as a demonstration (optional fallback)
+    const emailBody = `
+      New Booking for: ${tour.title}
+      Date: ${initialDate}
+      Guest: ${fullName}
+      Email: ${email}
+      Phone: ${phone}
+      Pickup: ${pickup}
+      Total: CAD $${total.toFixed(2)}
+    `.trim();
+
+    // In a real app, you would POST this to a backend or EmailJS
+    console.log("Sending Confirmation Email to:", email);
+    
+    setIsSubmitting(false);
+    setIsSuccess(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  if (isSuccess) {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center bg-slate-50 animate-in fade-in zoom-in-95 duration-500">
+        <div className="max-w-xl w-full bg-white p-12 rounded-[3rem] shadow-2xl border border-slate-100 text-center">
+           <div className="w-24 h-24 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce">
+              <CheckCircle2 size={48} />
+           </div>
+           <h2 className="text-4xl font-black text-[#0C3136] mb-4 tracking-tighter">Booking Confirmed!</h2>
+           <p className="text-slate-500 font-medium mb-8 leading-relaxed">
+             Thank you for choosing Niagara Vista Tours, <span className="text-[#0C3136] font-black">{fullName}</span>. 
+             A confirmation email has been sent to <span className="text-[#125D66] font-bold">{email}</span> with your e-tickets and pickup details.
+           </p>
+           <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 text-left mb-10 space-y-3">
+              <div className="flex justify-between text-xs font-black uppercase text-slate-400 tracking-widest">
+                 <span>Tour ID</span>
+                 <span className="text-[#0C3136]">NVT-${Math.floor(1000 + Math.random() * 9000)}</span>
+              </div>
+              <div className="flex justify-between text-xs font-black uppercase text-slate-400 tracking-widest">
+                 <span>Pickup Point</span>
+                 <span className="text-[#0C3136]">{pickup}</span>
+              </div>
+           </div>
+           <button onClick={() => navigateTo('home')} className="bg-[#0C3136] text-white px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#125D66] transition-all">RETURN HOME</button>
+        </div>
+      </div>
+    );
+  }
 
   if (!tour) return <div className="p-20 text-center font-black">Session expired. Please restart your booking.</div>;
 
@@ -842,15 +906,13 @@ const CheckoutPage = ({ tourId, initialDate, navigateTo }) => {
            <button onClick={() => navigateTo(tourId)} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#0C3136] hover:text-[#F8A41E] transition-all">
               <ChevronLeft className="w-4 h-4" /> Back to Tour
            </button>
-           <h2 className="text-sm font-black uppercase tracking-[0.2em] text-[#0C3136]">Checkout</h2>
+           <h2 className="text-sm font-black uppercase tracking-[0.2em] text-[#0C3136]">Secure Checkout</h2>
            <div className="w-20"></div>
         </div>
       </div>
 
       <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-12">
-        {/* Left Column: Form Sections */}
         <div className="lg:col-span-8 space-y-8">
-           {/* Section 1: Visit Date & Tickets */}
            <div className="bg-white p-8 lg:p-12 rounded-[2.5rem] border border-slate-200 shadow-sm">
               <div className="flex items-center gap-4 mb-10">
                  <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-[#125D66]">
@@ -860,7 +922,6 @@ const CheckoutPage = ({ tourId, initialDate, navigateTo }) => {
               </div>
 
               <div className="space-y-8">
-                 {/* Selected Date Display */}
                  <div className="flex items-center justify-between pb-8 border-b border-slate-100">
                     <div>
                        <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-1 block">Selected Date</label>
@@ -869,7 +930,6 @@ const CheckoutPage = ({ tourId, initialDate, navigateTo }) => {
                     <button className="text-[10px] font-black uppercase tracking-widest text-[#F8A41E] hover:underline" onClick={() => navigateTo(tourId)}>Change Date</button>
                  </div>
 
-                 {/* Adult Tickets */}
                  <div className="flex items-center justify-between py-2">
                     <div>
                        <h4 className="font-black text-[#0C3136] text-base leading-tight">Adults (Mens/Womens)</h4>
@@ -882,7 +942,6 @@ const CheckoutPage = ({ tourId, initialDate, navigateTo }) => {
                     </div>
                  </div>
 
-                 {/* Children Tickets */}
                  <div className="flex items-center justify-between py-2">
                     <div>
                        <h4 className="font-black text-[#0C3136] text-base leading-tight">Children</h4>
@@ -897,7 +956,6 @@ const CheckoutPage = ({ tourId, initialDate, navigateTo }) => {
               </div>
            </div>
 
-           {/* Section 2: Pickup Location */}
            <div className="bg-white p-8 lg:p-12 rounded-[2.5rem] border border-slate-200 shadow-sm">
               <div className="flex items-center gap-4 mb-10">
                  <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-[#125D66]">
@@ -918,10 +976,8 @@ const CheckoutPage = ({ tourId, initialDate, navigateTo }) => {
                  </select>
                  <ChevronRight className="absolute right-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 rotate-90" />
               </div>
-              <p className="mt-4 text-[11px] text-slate-400 font-bold px-1 italic">* Please be ready at least 10 minutes prior to departure.</p>
            </div>
 
-           {/* Section 3: Contact Details */}
            <div className="bg-white p-8 lg:p-12 rounded-[2.5rem] border border-slate-200 shadow-sm">
               <div className="flex items-center gap-4 mb-10">
                  <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-[#125D66]">
@@ -932,52 +988,47 @@ const CheckoutPage = ({ tourId, initialDate, navigateTo }) => {
               <div className="space-y-6">
                  <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">Full Name</label>
-                    <input type="text" placeholder="John Doe" className="w-full p-5 bg-slate-50 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-[#F8A41E] transition-all" />
+                    <input value={fullName} onChange={(e) => setFullName(e.target.value)} type="text" placeholder="John Doe" className="w-full p-5 bg-slate-50 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-[#F8A41E] transition-all" />
                  </div>
                  <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">Email Address</label>
-                    <input type="email" placeholder="john@example.com" className="w-full p-5 bg-slate-50 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-[#F8A41E] transition-all" />
+                    <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="john@example.com" className="w-full p-5 bg-slate-50 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-[#F8A41E] transition-all" />
                  </div>
                  <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">Phone Number (Optional)</label>
                     <div className="flex gap-2">
                        <div className="w-20 p-5 bg-slate-50 border-2 border-slate-50 rounded-2xl font-bold text-center text-sm text-slate-400">+1</div>
-                       <input type="tel" placeholder="(555) 000-0000" className="flex-1 p-5 bg-slate-50 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-[#F8A41E] transition-all" />
+                       <input value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" placeholder="(555) 000-0000" className="flex-1 p-5 bg-slate-50 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-[#F8A41E] transition-all" />
                     </div>
                  </div>
               </div>
            </div>
         </div>
 
-        {/* Right Column: Order Summary */}
         <div className="lg:col-span-4">
            <div className="sticky top-28 space-y-6">
               <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-xl overflow-hidden">
                  <div className="p-8 lg:p-10">
                     <h3 className="text-xl font-black text-[#0C3136] mb-8">Order Summary</h3>
                     
-                    <div className="space-y-6 pb-8 border-b border-slate-100">
+                    <div className="space-y-6 pb-8 border-b border-slate-100 text-sm font-bold text-slate-600">
                        <div className="flex items-center gap-3">
                           <Calendar className="w-4 h-4 text-slate-300" />
-                          <span className="text-[13px] font-bold text-slate-600">Fri, {initialDate}</span>
-                       </div>
-                       <div className="flex gap-2">
-                          <div className="flex-1 bg-slate-50 border border-slate-100 rounded-xl p-3">
-                             <input type="text" placeholder="Promo code" className="bg-transparent w-full text-xs font-bold outline-none uppercase placeholder:text-slate-300" />
-                          </div>
-                          <button className="px-6 bg-slate-400 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-[#0C3136] transition-all">Apply</button>
+                          <span>{initialDate}</span>
                        </div>
                     </div>
 
                     <div className="py-8 space-y-4">
                        <div className="flex justify-between text-xs font-bold text-slate-500">
-                          <span>Tickets Total</span>
-                          <span className="text-slate-700">CAD ${subtotal.toFixed(2)}</span>
+                          <span>{adults} Adult Tickets</span>
+                          <span className="text-slate-700">CAD ${(adults * tour.price).toFixed(2)}</span>
                        </div>
-                       <div className="flex justify-between text-xs font-bold text-slate-500">
-                          <span>Subtotal</span>
-                          <span className="text-slate-700">CAD ${subtotal.toFixed(2)}</span>
-                       </div>
+                       {children > 0 && (
+                        <div className="flex justify-between text-xs font-bold text-slate-500">
+                           <span>{children} Child Tickets</span>
+                           <span className="text-slate-700">CAD ${(children * childPrice).toFixed(2)}</span>
+                        </div>
+                       )}
                        <div className="flex justify-between text-xs font-bold text-slate-500">
                           <span>Taxes (13%)</span>
                           <span className="text-slate-700">CAD ${taxes.toFixed(2)}</span>
@@ -989,21 +1040,17 @@ const CheckoutPage = ({ tourId, initialDate, navigateTo }) => {
                        <span className="text-3xl font-black text-[#0C3136]">CAD ${total.toFixed(2)}</span>
                     </div>
 
-                    <button className="w-full bg-[#D91E1E] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-[#b01818] transition-all mb-4">
-                       COMPLETE BOOKING
+                    <button 
+                      disabled={isSubmitting}
+                      onClick={handleCompleteBooking}
+                      className="w-full bg-[#D91E1E] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-[#b01818] transition-all mb-4 flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed"
+                    >
+                       {isSubmitting ? <><Loader2 className="w-4 h-4 animate-spin mr-2" /> PROCESSING...</> : 'COMPLETE BOOKING'}
                     </button>
                     
                     <div className="flex items-center justify-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest">
                        <ShieldCheck className="w-4 h-4 text-emerald-500" /> Secure Checkout
                     </div>
-                 </div>
-              </div>
-
-              <div className="p-8 bg-emerald-50 border border-emerald-100 rounded-3xl flex items-start gap-4">
-                 <Zap className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                 <div>
-                    <p className="font-black text-xs text-emerald-900 uppercase tracking-wider mb-1">Instant Confirmation</p>
-                    <p className="text-[11px] text-emerald-700 leading-relaxed font-medium">Your tickets will be sent to your email immediately after booking.</p>
                  </div>
               </div>
            </div>
@@ -1177,7 +1224,7 @@ export default function App() {
     <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-800">
       <div className="hidden lg:flex bg-[#0C3136] text-white px-8 py-2.5 justify-between items-center text-[10px] font-black tracking-[0.1em] uppercase">
         <div className="flex gap-10 items-center"><div className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-[#F8A41E]" /> Niagara Falls, Ontario</div><div className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-[#F8A41E]" /> +1 (905) 123-4567</div></div>
-        <div className="flex items-center gap-4"><span className="text-[10px] font-bold text-[#F8A41E] animate-pulse">(Open 24/7)</span><button className="bg-[#D91E1E] text-white px-5 py-1.5 rounded-md font-black hover:bg-white hover:text-[#D91E1E] transition-all">BOOK NOW</button></div>
+        <div className="flex items-center gap-4"><span className="text-[10px] font-bold text-[#F8A41E] animate-pulse">(Open 24/7)</span><button onClick={() => navigateTo('tours')} className="bg-[#D91E1E] text-white px-5 py-1.5 rounded-md font-black hover:bg-white hover:text-[#D91E1E] transition-all">BOOK NOW</button></div>
       </div>
 
       <header className={`sticky top-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-md py-2' : 'bg-white py-5'}`}>
@@ -1215,7 +1262,7 @@ export default function App() {
                    {item.label}
                  </div>
                ))}
-               <button className="bg-[#D91E1E] text-white py-4 rounded-xl font-black text-xs uppercase tracking-widest shadow-lg">BOOK NOW</button>
+               <button onClick={() => navigateTo('tours')} className="bg-[#D91E1E] text-white py-4 rounded-xl font-black text-xs uppercase tracking-widest shadow-lg">BOOK NOW</button>
             </div>
           )}
         </div>
