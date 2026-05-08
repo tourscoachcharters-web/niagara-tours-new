@@ -35,15 +35,10 @@ import {
   Plane,
   CreditCard,
   Ticket,
-  Loader2
+  Loader2,
+  Quote,
+  ThumbsUp
 } from 'lucide-react';
-
-/**
- * PRODUCTION IMAGE GUIDE:
- * To see your images live, upload your files to 'public/images/' in your GitHub repo.
- * * LOGO:
- * - Current Source: https://niagara-tours-new.vercel.app/images/logo.png
- */
 
 const ImageWithFallback = ({ src, alt, className, size, isLogo }) => {
   const [error, setError] = useState(false);
@@ -256,6 +251,18 @@ const TOURS_DATA = [
   }
 ];
 
+const REVIEWS_DATA = [
+  { id: 1, name: "Sarah Jenkins", date: "August 15, 2025", rating: 5, tour: "Niagara Classic Day Escape", text: "Absolutely incredible experience! Our guide was so knowledgeable and knew exactly where to take us to avoid the biggest crowds. The boat ride was the highlight of our trip to Canada. Highly recommend this company to anyone visiting." },
+  { id: 2, name: "Mark & Lisa Thompson", date: "July 22, 2025", rating: 5, tour: "Niagara Evening Illumination Tour", text: "Seeing the falls lit up at night is something we will never forget. The dinner overlooking the falls was spectacular. Highly recommend this tour for couples looking for a romantic and stress-free evening." },
+  { id: 3, name: "David Chen", date: "September 05, 2025", rating: 4, tour: "Ultimate Niagara Adventure", text: "A very packed day but totally worth it if you only have one day to see everything. Journey Behind the Falls was amazing. The bus was comfortable and the pickup was prompt. Four stars only because the lunch was a bit rushed." },
+  { id: 4, name: "Elena Rodriguez", date: "October 12, 2025", rating: 5, tour: "Niagara Wine Country & Falls Tour", text: "The perfect balance of sightseeing and relaxing. The falls were beautiful, but the wineries in Niagara-on-the-Lake were the real hidden gem. The icewine tasting was superb! Our guide Michael was the absolute best." },
+  { id: 5, name: "The Patel Family", date: "June 30, 2025", rating: 5, tour: "Private Custom Niagara VIP Experience", text: "We had a large family group with young kids and elderly parents. Booking the private VIP tour was the best decision. Our driver catered to all our needs, modified the itinerary on the fly, and paced the day perfectly." },
+  { id: 6, name: "James Wilson", date: "May 18, 2025", rating: 5, tour: "Toronto, Thousand Islands & Niagara 3-Day Tour", text: "A fantastic 3-day overview of the region. Everything was taken care of seamlessly - hotels, transport, tickets. Thousand Islands was surprisingly beautiful, but Niagara was definitely the grand finale." },
+  { id: 7, name: "Emma Dubois", date: "April 02, 2025", rating: 5, tour: "Niagara Classic Day Escape", text: "Excellent value for money. The maple syrup stop was a sweet bonus that my kids loved. The coach was pristine and had wifi which was great for the ride back to Toronto." },
+  { id: 8, name: "Robert Klein", date: "March 15, 2025", rating: 4, tour: "Ultimate Niagara Adventure", text: "Great tour covering all the bases. The Skylon tower view is unbeatable. I would suggest bringing an extra pair of socks for the boat ride, you will get wet!" },
+  { id: 9, name: "Sophie & Alex", date: "February 14, 2025", rating: 5, tour: "Niagara Evening Illumination Tour", text: "We did this for Valentine's Day and it was magical. The fireworks were the cherry on top. Our guide made sure we got the perfect spot to take photos." }
+];
+
 const PICKUP_POINTS = [
   { name: "Royal Ontario Museum", sub: "(Queen's Park Entrance), 100 Queens Park, Toronto, M5S 2C6", area: "Downtown Toronto", time: "7:55 AM" },
   { name: "Holiday Inn Downtown Centre", sub: "30 Carlton St", area: "Downtown Toronto", time: "8:00 AM" },
@@ -331,10 +338,11 @@ const CalendarDropdown = ({ onSelectDate }) => {
   );
 };
 
-const NavItem = ({ label, active, onClick }) => (
-  <div onClick={onClick} className={`flex items-center gap-1 font-black text-[11px] uppercase tracking-widest cursor-pointer transition-colors ${active ? 'text-[#F8A41E]' : 'text-[#0C3136] hover:text-[#F8A41E]'}`}>
+// SEO Upgrade: Using 'a' tags instead of divs for proper web crawler linking
+const NavItem = ({ label, href, active, onClick }) => (
+  <a href={href} onClick={onClick} className={`flex items-center gap-1 font-black text-[11px] uppercase tracking-widest cursor-pointer transition-colors ${active ? 'text-[#F8A41E]' : 'text-[#0C3136] hover:text-[#F8A41E]'}`}>
     {label}
-  </div>
+  </a>
 );
 
 const WhyTravelersLoveSection = () => (
@@ -363,7 +371,7 @@ const WhyTravelersLoveSection = () => (
   </section>
 );
 
-const HomePage = ({ navigateTo }) => {
+const HomePage = () => {
   return (
     <div className="animate-in fade-in duration-700">
       <section className="relative min-h-[90vh] flex items-center overflow-hidden">
@@ -383,8 +391,12 @@ const HomePage = ({ navigateTo }) => {
             </h2>
             <p className="text-lg text-slate-200 mb-10 max-w-xl leading-relaxed font-medium">Unforgettable experiences. Breathtaking views. Memories that last a lifetime.</p>
             <div className="flex flex-wrap gap-4">
-              <button onClick={() => navigateTo('classic-day-escape')} className="bg-[#D91E1E] hover:bg-[#b01818] text-white px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-red-900/30 flex items-center gap-3">EXPLORE TOURS <ChevronRight className="w-4 h-4" /></button>
-              <button onClick={() => navigateTo('custom-itinerary')} className="bg-white hover:bg-slate-50 text-[#0C3136] px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-lg flex items-center gap-3"><Settings className="w-4 h-4 text-[#F8A41E]" /> CUSTOM PACKAGE</button>
+              <a href="#/tour/classic-day-escape" className="bg-[#D91E1E] hover:bg-[#b01818] text-white px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-red-900/30 flex items-center gap-3">
+                EXPLORE TOURS <ChevronRight className="w-4 h-4" />
+              </a>
+              <a href="#/custom-itinerary" className="bg-white hover:bg-slate-50 text-[#0C3136] px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-lg flex items-center gap-3">
+                <Settings className="w-4 h-4 text-[#F8A41E]" /> CUSTOM PACKAGE
+              </a>
             </div>
           </div>
         </div>
@@ -466,14 +478,14 @@ const HomePage = ({ navigateTo }) => {
                     <p className="text-slate-500 text-sm leading-relaxed mb-8 flex-1 line-clamp-3">{tour.overview}</p>
                     <div className="flex justify-between items-center pt-6 border-t border-slate-100 mt-auto">
                        <div><span className="text-slate-400 text-[10px] font-black block uppercase tracking-widest">FROM</span><span className="text-2xl font-black text-[#0C3136]">CAD ${tour.price}</span></div>
-                       <button onClick={() => navigateTo(tour.id)} className="bg-[#D91E1E] hover:bg-[#b01818] text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all">VIEW TOUR</button>
+                       <a href={`#/tour/${tour.id}`} className="bg-[#D91E1E] hover:bg-[#b01818] text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all block text-center">VIEW TOUR</a>
                     </div>
                  </div>
               </div>
             ))}
           </div>
           <div className="mt-16 text-center">
-            <button onClick={() => navigateTo('tours')} className="bg-[#0C3136] text-white px-12 py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#125D66] transition-all shadow-xl">VIEW ALL {TOURS_DATA.length} TOURS</button>
+            <a href="#/tours" className="inline-block bg-[#0C3136] text-white px-12 py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#125D66] transition-all shadow-xl">VIEW ALL {TOURS_DATA.length} TOURS</a>
           </div>
         </div>
       </section>
@@ -481,7 +493,7 @@ const HomePage = ({ navigateTo }) => {
   );
 };
 
-const ToursPage = ({ navigateTo }) => {
+const ToursPage = () => {
   return (
     <div className="animate-in fade-in duration-700 bg-white">
       <section className="relative h-[450px] flex items-center text-white overflow-hidden">
@@ -513,7 +525,7 @@ const ToursPage = ({ navigateTo }) => {
                   <p className="text-slate-500 text-sm leading-relaxed mb-8 flex-1 line-clamp-3">{tour.overview}</p>
                   <div className="flex justify-between items-center pt-6 border-t border-slate-100 mt-auto">
                      <div><span className="text-slate-400 text-[10px] font-black block uppercase tracking-widest">FROM</span><span className="text-2xl font-black text-[#0C3136]">CAD ${tour.price}</span></div>
-                     <button onClick={() => navigateTo(tour.id)} className="bg-[#D91E1E] hover:bg-[#b01818] text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all">VIEW DETAILS</button>
+                     <a href={`#/tour/${tour.id}`} className="bg-[#D91E1E] hover:bg-[#b01818] text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all">VIEW DETAILS</a>
                   </div>
                </div>
             </div>
@@ -524,7 +536,7 @@ const ToursPage = ({ navigateTo }) => {
   );
 };
 
-const CustomItineraryPage = ({ navigateTo }) => {
+const CustomItineraryPage = () => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const calendarRef = useRef(null);
@@ -670,7 +682,7 @@ const CustomItineraryPage = ({ navigateTo }) => {
   );
 };
 
-const TourDetailPage = ({ tourId, navigateTo }) => {
+const TourDetailPage = ({ tourId }) => {
   const tour = TOURS_DATA.find(t => t.id === tourId);
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -687,10 +699,6 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
 
   if (!tour) return <div className="p-20 text-center font-black">Tour not found.</div>;
 
-  const handleReserve = () => {
-    navigateTo('checkout', { tourId, date: selectedDate || new Date().toLocaleDateString() });
-  };
-
   return (
     <div className="animate-in fade-in duration-700 bg-white">
       <section className="relative h-[480px] flex items-center text-white overflow-hidden">
@@ -699,7 +707,7 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
           <div className="absolute inset-0 bg-gradient-to-r from-[#0C3136]/90 via-[#0C3136]/50 to-transparent"></div>
         </div>
         <div className="container mx-auto px-4 z-10">
-           <div className="flex items-center gap-2 text-[10px] font-black text-slate-300 uppercase tracking-widest mb-6 cursor-pointer" onClick={() => navigateTo('home')}>Home / Tours / {tour.title}</div>
+           <a href="#/" className="flex w-max items-center gap-2 text-[10px] font-black text-slate-300 uppercase tracking-widest mb-6 cursor-pointer hover:text-white">Home / Tours / {tour.title}</a>
            <span className="bg-cyan-600 text-white text-[10px] font-black px-4 py-2 rounded-lg uppercase tracking-[0.2em] mb-6 inline-block shadow-lg">{tour.tag}</span>
            <h1 className="text-4xl lg:text-7xl font-black leading-tight tracking-tighter mb-4">{tour.title}</h1>
            <div className="flex flex-wrap gap-8 p-6 bg-white/5 backdrop-blur-2xl rounded-[2.5rem] border border-white/10 w-fit">
@@ -757,7 +765,6 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
                             <p className="text-xs text-slate-400 font-medium mt-0.5">{point.sub}</p>
                             <div className="flex items-center gap-4 mt-2">
                                <span className="text-[10px] font-black uppercase text-[#125D66] tracking-wider">{point.area}</span>
-                               <span className="text-[10px] font-black uppercase text-[#F8A41E] hover:underline cursor-pointer tracking-wider italic">• View on Map</span>
                             </div>
                          </div>
                       </div>
@@ -796,7 +803,7 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
                          <Zap className="w-3.5 h-3.5 fill-current" /> BEST PRICE GUARANTEED
                       </div>
                       <div className="flex items-center gap-2 text-[11px] font-bold text-white/90 bg-white/10 w-fit px-3 py-1.5 rounded-lg border border-white/10 animate-pulse">
-                        <Users className="w-3.5 h-3.5" /> {bookingCount} people already booked this tour, Hurry get yours!
+                        <Users className="w-3.5 h-3.5" /> {bookingCount} people already booked this tour!
                       </div>
                     </div>
                  </div>
@@ -811,7 +818,7 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
                        {showCalendar && <CalendarDropdown onSelectDate={(d) => { setSelectedDate(d.toLocaleDateString()); setShowCalendar(false); }} />}
                     </div>
 
-                    <button onClick={handleReserve} className="w-full bg-[#D91E1E] hover:bg-[#b01818] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl shadow-red-900/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0">RESERVE NOW</button>
+                    <a href={`#/checkout/${tour.id}?date=${selectedDate ? encodeURIComponent(selectedDate) : encodeURIComponent(new Date().toLocaleDateString())}`} className="block w-full text-center bg-[#D91E1E] hover:bg-[#b01818] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl shadow-red-900/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0">RESERVE NOW</a>
                     <div className="flex items-center justify-center gap-4 pt-2 border-t border-slate-50">
                        <div className="flex items-center gap-1.5 text-slate-400 text-[9px] font-black uppercase tracking-widest"><ShieldCheck className="w-3 h-3" /> Secure Payment</div>
                        <div className="flex items-center gap-1.5 text-slate-400 text-[9px] font-black uppercase tracking-widest"><Clock className="w-3 h-3" /> Instant Confirmation</div>
@@ -826,7 +833,7 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
   );
 };
 
-const CheckoutPage = ({ tourId, initialDate, navigateTo }) => {
+const CheckoutPage = ({ tourId, initialDate }) => {
   const tour = TOURS_DATA.find(t => t.id === tourId);
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
@@ -850,7 +857,6 @@ const CheckoutPage = ({ tourId, initialDate, navigateTo }) => {
 
     setIsSubmitting(true);
     await new Promise(resolve => setTimeout(resolve, 2000));
-    console.log("Sending Confirmation Email to:", email);
     setIsSubmitting(false);
     setIsSuccess(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -878,7 +884,7 @@ const CheckoutPage = ({ tourId, initialDate, navigateTo }) => {
                  <span className="text-[#0C3136]">{pickup}</span>
               </div>
            </div>
-           <button onClick={() => navigateTo('home')} className="bg-[#0C3136] text-white px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#125D66] transition-all">RETURN HOME</button>
+           <a href="#/" className="inline-block bg-[#0C3136] text-white px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#125D66] transition-all">RETURN HOME</a>
         </div>
       </div>
     );
@@ -890,9 +896,9 @@ const CheckoutPage = ({ tourId, initialDate, navigateTo }) => {
     <div className="animate-in fade-in duration-700 bg-slate-50 pb-20">
       <div className="bg-white border-b border-slate-200 py-6 mb-12">
         <div className="container mx-auto px-4 flex items-center justify-between">
-           <button onClick={() => navigateTo(tourId)} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#0C3136] hover:text-[#F8A41E] transition-all">
+           <a href={`#/tour/${tourId}`} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#0C3136] hover:text-[#F8A41E] transition-all">
               <ChevronLeft className="w-4 h-4" /> Back to Tour
-           </button>
+           </a>
            <h2 className="text-sm font-black uppercase tracking-[0.2em] text-[#0C3136]">Secure Checkout</h2>
            <div className="w-20"></div>
         </div>
@@ -914,7 +920,7 @@ const CheckoutPage = ({ tourId, initialDate, navigateTo }) => {
                        <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-1 block">Selected Date</label>
                        <p className="text-lg font-black text-[#0C3136]">{initialDate}</p>
                     </div>
-                    <button className="text-[10px] font-black uppercase tracking-widest text-[#F8A41E] hover:underline" onClick={() => navigateTo(tourId)}>Change Date</button>
+                    <a href={`#/tour/${tourId}`} className="text-[10px] font-black uppercase tracking-widest text-[#F8A41E] hover:underline">Change Date</a>
                  </div>
 
                  <div className="flex items-center justify-between py-2">
@@ -1183,73 +1189,210 @@ const ContactPage = () => {
   );
 };
 
+const ReviewsPage = () => {
+  return (
+    <div className="animate-in fade-in duration-700 bg-[#F8FAFC]">
+      <section className="relative h-[450px] flex items-center text-white overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <ImageWithFallback src="/images/hero-reviews.jpg" size="1920 x 800 px" alt="Reviews Background" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0C3136]/95 to-[#0C3136]/60"></div>
+        </div>
+        <div className="container mx-auto px-4 z-10 flex flex-col md:flex-row items-center justify-between gap-10">
+          <div className="max-w-xl">
+            <span className="bg-[#F8A41E] text-[#0C3136] text-[10px] font-black px-4 py-2 rounded-lg uppercase tracking-[0.2em] mb-6 inline-block shadow-lg">Guest Experiences</span>
+            <h1 className="text-5xl lg:text-7xl font-black leading-tight tracking-tighter mb-4">What Our <br />Guests Say</h1>
+            <p className="text-slate-200 text-lg font-medium opacity-90">Don't just take our word for it. Read honest reviews from thousands of travelers who chose Niagara Vista Tours.</p>
+          </div>
+          
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-[2.5rem] text-center w-full md:w-auto shrink-0 shadow-2xl">
+            <div className="text-5xl font-black text-[#F8A41E] mb-2">4.9</div>
+            <div className="flex justify-center gap-1 mb-3 text-[#F8A41E]">
+              {[...Array(5)].map((_, i) => <Star key={i} className="w-6 h-6 fill-current" />)}
+            </div>
+            <p className="text-sm font-bold text-white mb-1">Excellent Rating</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-white/60">Based on 1,500+ Reviews</p>
+          </div>
+        </div>
+      </section>
+
+      <main className="container mx-auto px-4 py-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {REVIEWS_DATA.map((review) => (
+            <div key={review.id} className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 hover:shadow-xl transition-all duration-300 flex flex-col group">
+              <div className="flex justify-between items-start mb-6">
+                <div className="flex gap-1 text-[#F8A41E]">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className={`w-4 h-4 ${i < review.rating ? 'fill-current' : 'text-slate-200'}`} />
+                  ))}
+                </div>
+                <Quote className="w-8 h-8 text-slate-100 group-hover:text-[#F8A41E]/20 transition-colors" />
+              </div>
+              
+              <h4 className="font-bold text-slate-700 text-sm leading-relaxed mb-8 flex-1 italic">"{review.text}"</h4>
+              
+              <div className="pt-6 border-t border-slate-50 mt-auto">
+                <div className="flex justify-between items-end mb-3">
+                  <div>
+                    <h5 className="font-black text-[#0C3136] text-sm">{review.name}</h5>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">{review.date}</p>
+                  </div>
+                  <div className="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-[#125D66]">
+                    <ThumbsUp className="w-4 h-4" />
+                  </div>
+                </div>
+                <div className="bg-[#0C3136]/5 text-[#125D66] text-[9px] font-black uppercase tracking-wider px-3 py-1.5 rounded-lg inline-block truncate max-w-full">
+                  Tour: {review.tour}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-20 bg-[#0C3136] rounded-[3rem] p-12 lg:p-20 text-center relative overflow-hidden shadow-2xl">
+           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+           <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#F8A41E]/10 rounded-full -ml-32 -mb-32 blur-3xl"></div>
+           
+           <div className="relative z-10 max-w-2xl mx-auto">
+             <h2 className="text-3xl lg:text-5xl font-black text-white mb-6">Traveled With Us Recently?</h2>
+             <p className="text-slate-300 font-medium text-lg mb-10">We would love to hear about your experience! Your feedback helps us continue to provide five-star service to all our guests.</p>
+             <a href="#/contact" className="inline-block bg-[#D91E1E] text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-white hover:text-[#D91E1E] transition-all">
+               WRITE A REVIEW
+             </a>
+           </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
 export default function App() {
-  const [page, setPage] = useState('home');
-  const [pageParams, setPageParams] = useState(null);
+  const [currentHash, setCurrentHash] = useState(window.location.hash || '#/');
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
-  useEffect(() => { const handleScroll = () => setIsScrolled(window.scrollY > 20); window.addEventListener('scroll', handleScroll); return () => window.removeEventListener('scroll', handleScroll); }, []);
+  useEffect(() => { 
+    const handleScroll = () => setIsScrolled(window.scrollY > 20); 
+    window.addEventListener('scroll', handleScroll); 
+    return () => window.removeEventListener('scroll', handleScroll); 
+  }, []);
   
-  const navigateTo = (p, params = null) => { 
-    setPage(p); 
-    setPageParams(params);
-    setMobileMenuOpen(false); 
-    window.scrollTo({ top: 0, behavior: 'smooth' }); 
-  };
+  // 1. ROUTING UPGRADE: Listen to URL hash changes so deep links work
+  useEffect(() => {
+    const handleHashChange = () => {
+      setCurrentHash(window.location.hash || '#/');
+      setMobileMenuOpen(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  // 2. SEO UPGRADE: Dynamically set Title and Meta Description for Google Crawler
+  useEffect(() => {
+    const path = currentHash.replace('#', '');
+    let pageTitle = 'Niagara Vista Tours | Premium Niagara Falls Experiences';
+    let pageDescription = 'Discover the magic of Niagara Falls with our guided tours, from classic day escapes to private VIP experiences.';
+
+    if (path.startsWith('/tour/')) {
+      const tourId = path.split('/')[2];
+      const tour = TOURS_DATA.find(t => t.id === tourId);
+      if (tour) {
+        pageTitle = `${tour.title} | Niagara Vista Tours`;
+        pageDescription = tour.overview;
+      }
+    } else if (path === '/tours') {
+      pageTitle = 'All Tour Packages | Niagara Vista Tours';
+    } else if (path === '/custom-itinerary') {
+      pageTitle = 'Build a Custom Itinerary | Niagara Vista Tours';
+    } else if (path === '/reviews') {
+      pageTitle = 'Guest Reviews | Niagara Vista Tours';
+    } else if (path === '/contact') {
+      pageTitle = 'Contact Us | Niagara Vista Tours';
+    } else if (path.startsWith('/checkout/')) {
+      pageTitle = 'Secure Checkout | Niagara Vista Tours';
+    }
+
+    // Set Document Title
+    document.title = pageTitle;
+
+    // Set Meta Description
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (!metaDescription) {
+      metaDescription = document.createElement('meta');
+      metaDescription.name = "description";
+      document.head.appendChild(metaDescription);
+    }
+    metaDescription.content = pageDescription;
+
+  }, [currentHash]);
   
   const renderPage = () => { 
-    if (page === 'home') return <HomePage navigateTo={navigateTo} />; 
-    if (page === 'contact') return <ContactPage />; 
-    if (page === 'custom-itinerary') return <CustomItineraryPage navigateTo={navigateTo} />;
-    if (page === 'tours') return <ToursPage navigateTo={navigateTo} />;
-    if (page === 'checkout') return <CheckoutPage tourId={pageParams?.tourId} initialDate={pageParams?.date} navigateTo={navigateTo} />;
-    return <TourDetailPage tourId={page} navigateTo={navigateTo} />; 
+    const path = currentHash.replace('#', '');
+    const urlParams = new URLSearchParams(path.split('?')[1]);
+    const cleanPath = path.split('?')[0];
+
+    if (cleanPath === '/' || cleanPath === '') return <HomePage />; 
+    if (cleanPath === '/contact') return <ContactPage />; 
+    if (cleanPath === '/custom-itinerary') return <CustomItineraryPage />;
+    if (cleanPath === '/tours') return <ToursPage />;
+    if (cleanPath === '/reviews') return <ReviewsPage />;
+    if (cleanPath.startsWith('/checkout/')) {
+       const tourId = cleanPath.split('/')[2];
+       const date = urlParams.get('date');
+       return <CheckoutPage tourId={tourId} initialDate={date} />;
+    }
+    if (cleanPath.startsWith('/tour/')) {
+       const tourId = cleanPath.split('/')[2];
+       return <TourDetailPage tourId={tourId} />;
+    }
+    return <HomePage />; 
   };
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-800">
       <div className="hidden lg:flex bg-[#0C3136] text-white px-8 py-2.5 justify-between items-center text-[10px] font-black tracking-[0.1em] uppercase">
         <div className="flex gap-10 items-center"><div className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-[#F8A41E]" /> Niagara Falls, Ontario</div><div className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-[#F8A41E]" /> +1 (905) 123-4567</div></div>
-        <div className="flex items-center gap-4"><span className="text-[10px] font-bold text-[#F8A41E] animate-pulse">(Open 24/7)</span><button onClick={() => navigateTo('tours')} className="bg-[#D91E1E] text-white px-5 py-1.5 rounded-md font-black hover:bg-white hover:text-[#D91E1E] transition-all">BOOK NOW</button></div>
+        <div className="flex items-center gap-4"><span className="text-[10px] font-bold text-[#F8A41E] animate-pulse">(Open 24/7)</span><a href="#/tours" className="bg-[#D91E1E] text-white px-5 py-1.5 rounded-md font-black hover:bg-white hover:text-[#D91E1E] transition-all">BOOK NOW</a></div>
       </div>
 
       <header className={`sticky top-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-md py-2' : 'bg-white py-5'}`}>
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center relative">
-          <div onClick={() => navigateTo('home')} className="flex items-center gap-3 cursor-pointer">
+          <a href="#/" className="flex items-center gap-3 cursor-pointer">
             <div className="w-56 h-21 overflow-hidden flex items-center justify-center">
               <ImageWithFallback src="https://niagara-tours-new.vercel.app/images/logo.png" size="300 x 100 px" isLogo alt="Niagara Vista Tours" className="max-h-full max-w-full object-contain" />
             </div>
-          </div>
+          </a>
           
           <nav className="hidden lg:flex items-center gap-10">
-            <NavItem label="Home" active={page === 'home'} onClick={() => navigateTo('home')} />
-            <NavItem label="Tours" active={page === 'tours' || TOURS_DATA.some(t => t.id === page)} onClick={() => navigateTo('tours')} />
-            <NavItem label="Custom Itinerary" active={page === 'custom-itinerary'} onClick={() => navigateTo('custom-itinerary')} />
-            <NavItem label="Contact" active={page === 'contact'} onClick={() => navigateTo('contact')} />
+            <NavItem label="Home" href="#/" active={currentHash === '#/' || currentHash === ''} />
+            <NavItem label="Tours" href="#/tours" active={currentHash.includes('/tours') || currentHash.includes('/tour/')} />
+            <NavItem label="Custom Itinerary" href="#/custom-itinerary" active={currentHash === '#/custom-itinerary'} />
+            <NavItem label="Reviews" href="#/reviews" active={currentHash === '#/reviews'} />
+            <NavItem label="Contact" href="#/contact" active={currentHash === '#/contact'} />
           </nav>
           
-          <button className="lg:hidden text-[#0C3136] p-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          <button className="lg:hidden text-[#0C3136] p-2" aria-label="Toggle Menu" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
 
           {mobileMenuOpen && (
             <div className="lg:hidden absolute top-full left-0 w-full bg-white border-t border-slate-100 shadow-2xl p-6 flex flex-col gap-6 animate-in slide-in-from-top duration-300 z-[100]">
                {[
-                 { label: 'Home', id: 'home' },
-                 { label: 'Tours', id: 'tours' },
-                 { label: 'Custom Itinerary', id: 'custom-itinerary' },
-                 { label: 'Contact', id: 'contact' }
+                 { label: 'Home', path: '/' },
+                 { label: 'Tours', path: '/tours' },
+                 { label: 'Custom Itinerary', path: '/custom-itinerary' },
+                 { label: 'Reviews', path: '/reviews' },
+                 { label: 'Contact', path: '/contact' }
                ].map(item => (
-                 <div 
-                   key={item.id} 
-                   onClick={() => navigateTo(item.id)} 
-                   className={`font-black text-sm uppercase tracking-widest py-3 border-b border-slate-50 transition-colors ${page === item.id ? 'text-[#F8A41E]' : 'text-[#0C3136]'}`}
+                 <a 
+                   key={item.path} 
+                   href={`#${item.path}`} 
+                   className={`font-black block text-sm uppercase tracking-widest py-3 border-b border-slate-50 transition-colors ${currentHash === `#${item.path}` ? 'text-[#F8A41E]' : 'text-[#0C3136]'}`}
                  >
                    {item.label}
-                 </div>
+                 </a>
                ))}
-               <button onClick={() => navigateTo('tours')} className="bg-[#D91E1E] text-white py-4 rounded-xl font-black text-xs uppercase tracking-widest shadow-lg">BOOK NOW</button>
+               <a href="#/tours" className="block text-center bg-[#D91E1E] text-white py-4 rounded-xl font-black text-xs uppercase tracking-widest shadow-lg">BOOK NOW</a>
             </div>
           )}
         </div>
@@ -1277,22 +1420,22 @@ export default function App() {
             </div>
             <div>
               <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-8 border-b border-white/10 pb-2">Quick Links</h4>
-              <ul className="space-y-3 text-xs font-bold text-slate-400 uppercase tracking-widest">
-                <li onClick={() => navigateTo('home')} className="hover:text-[#F8A41E] cursor-pointer transition-colors">Home</li>
-                <li onClick={() => navigateTo('tours')} className="hover:text-[#F8A41E] cursor-pointer transition-colors">Tours</li>
-                <li onClick={() => navigateTo('custom-itinerary')} className="hover:text-[#F8A41E] cursor-pointer transition-colors">Custom Itinerary</li>
-                <li onClick={() => navigateTo('contact')} className="hover:text-[#F8A41E] cursor-pointer transition-colors">Contact Us</li>
+              <ul className="space-y-3 text-xs font-bold text-slate-400 uppercase tracking-widest flex flex-col">
+                <a href="#/" className="hover:text-[#F8A41E] transition-colors">Home</a>
+                <a href="#/tours" className="hover:text-[#F8A41E] transition-colors">Tours</a>
+                <a href="#/custom-itinerary" className="hover:text-[#F8A41E] transition-colors">Custom Itinerary</a>
+                <a href="#/reviews" className="hover:text-[#F8A41E] transition-colors">Reviews</a>
+                <a href="#/contact" className="hover:text-[#F8A41E] transition-colors">Contact Us</a>
               </ul>
             </div>
             <div>
               <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-8 border-b border-white/10 pb-2">Top Tours</h4>
-              <ul className="space-y-3 text-xs font-bold text-slate-400 uppercase tracking-widest">
-                <li onClick={() => navigateTo('classic-day-escape')} className="cursor-pointer hover:text-[#F8A41E]">Niagara Day Tour</li>
-                <li onClick={() => navigateTo('wine-country')} className="cursor-pointer hover:text-[#F8A41E]">Falls & Winery Escape</li>
-                <li onClick={() => navigateTo('ultimate-adventure')} className="cursor-pointer hover:text-[#F8A41E]">Family Adventure Package</li>
-                <li className="cursor-pointer hover:text-[#F8A41E]">Boat Cruise</li>
-                <li onClick={() => navigateTo('vip-experience')} className="cursor-pointer hover:text-[#F8A41E]">Private Tours</li>
-                <li onClick={() => navigateTo('custom-itinerary')} className="cursor-pointer hover:text-[#F8A41E]">Custom Packages</li>
+              <ul className="space-y-3 text-xs font-bold text-slate-400 uppercase tracking-widest flex flex-col">
+                <a href="#/tour/classic-day-escape" className="hover:text-[#F8A41E]">Niagara Day Tour</a>
+                <a href="#/tour/wine-country" className="hover:text-[#F8A41E]">Falls & Winery Escape</a>
+                <a href="#/tour/ultimate-adventure" className="hover:text-[#F8A41E]">Family Adventure Package</a>
+                <a href="#/tour/vip-experience" className="hover:text-[#F8A41E]">Private Tours</a>
+                <a href="#/custom-itinerary" className="hover:text-[#F8A41E]">Custom Packages</a>
               </ul>
             </div>
             <div>
@@ -1308,7 +1451,7 @@ export default function App() {
               <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-8 border-b border-white/10 pb-2">Newsletter</h4>
               <p className="text-xs text-slate-400 font-medium mb-6">Subscribe for exclusive offers, travel tips and the latest updates.</p>
               <div className="flex items-stretch gap-0 overflow-hidden rounded-lg">
-                <input type="email" placeholder="Enter your email" className="bg-white px-4 py-3 text-xs w-full text-slate-800 focus:outline-none" />
+                <input type="email" placeholder="Enter your email" aria-label="Email address" className="bg-white px-4 py-3 text-xs w-full text-slate-800 focus:outline-none" />
                 <button className="bg-[#D91E1E] text-white px-4 font-black text-[10px] uppercase tracking-widest hover:bg-white hover:text-[#D91E1E] transition-all">Subscribe</button>
               </div>
             </div>
@@ -1317,7 +1460,7 @@ export default function App() {
             <div className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-2 md:order-1">© 2026 Niagara Vista Tours. All Rights Reserved.</div>
             <div className="flex items-center justify-center order-1 md:order-2"><MapleLeafIcon className="w-6 h-6 text-red-600" /></div>
             <div className="flex gap-6 text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-3">
-              <a href="#" className="hover:text-[#F8A41E]">Privacy Policy</a><span className="opacity-20">|</span><a href="#" className="hover:text-[#F8A41E]">Terms & Conditions</a>
+              <a href="#/privacy" className="hover:text-[#F8A41E]">Privacy Policy</a><span className="opacity-20">|</span><a href="#/terms" className="hover:text-[#F8A41E]">Terms & Conditions</a>
             </div>
           </div>
         </div>
