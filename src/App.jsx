@@ -676,6 +676,9 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const calendarRef = useRef(null);
   
+  // Randomize booking count once per page load
+  const [bookingCount] = useState(Math.floor(Math.random() * (24 - 7 + 1)) + 7);
+  
   useEffect(() => {
     const handleClickOutside = (event) => { if (calendarRef.current && !calendarRef.current.contains(event.target)) setShowCalendar(false); };
     document.addEventListener("mousedown", handleClickOutside);
@@ -793,7 +796,7 @@ const TourDetailPage = ({ tourId, navigateTo }) => {
                          <Zap className="w-3.5 h-3.5 fill-current" /> BEST PRICE GUARANTEED
                       </div>
                       <div className="flex items-center gap-2 text-[11px] font-bold text-white/90 bg-white/10 w-fit px-3 py-1.5 rounded-lg border border-white/10 animate-pulse">
-                        <Users className="w-3.5 h-3.5" /> 10 people already book this tour, Hurry get yours!
+                        <Users className="w-3.5 h-3.5" /> {bookingCount} people already booked this tour, Hurry get yours!
                       </div>
                     </div>
                  </div>
@@ -846,24 +849,8 @@ const CheckoutPage = ({ tourId, initialDate, navigateTo }) => {
     }
 
     setIsSubmitting(true);
-
-    // Simulate sending an email and processing payment
     await new Promise(resolve => setTimeout(resolve, 2000));
-
-    // Trigger local email client as a demonstration (optional fallback)
-    const emailBody = `
-      New Booking for: ${tour.title}
-      Date: ${initialDate}
-      Guest: ${fullName}
-      Email: ${email}
-      Phone: ${phone}
-      Pickup: ${pickup}
-      Total: CAD $${total.toFixed(2)}
-    `.trim();
-
-    // In a real app, you would POST this to a backend or EmailJS
     console.log("Sending Confirmation Email to:", email);
-    
     setIsSubmitting(false);
     setIsSuccess(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
