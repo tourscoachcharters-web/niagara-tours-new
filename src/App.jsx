@@ -23,10 +23,20 @@ import {
   Send, 
   MessageSquare, 
   Map as MapIcon, 
+  Info, 
+  Plus, 
+  Minus, 
+  Bus, 
+  Utensils, 
+  Grape, 
+  Wind, 
   Camera, 
   CheckCircle2, 
+  LifeBuoy, 
   Settings, 
+  Coffee, 
   Plane,
+  CreditCard,
   Ticket,
   Loader2,
   Quote,
@@ -35,11 +45,7 @@ import {
   CheckCircle,
   XCircle,
   Trash2,
-  DollarSign,
-  Bus,
-  Wind,
-  Grape,
-  Utensils
+  DollarSign
 } from 'lucide-react';
 
 // --- FIREBASE INITIALIZATION ---
@@ -703,6 +709,7 @@ const TourDetailPage = ({ tourId }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const calendarRef = useRef(null);
   
+  // Randomize booking count once per page load
   const [bookingCount] = useState(Math.floor(Math.random() * (24 - 7 + 1)) + 7);
   
   useEffect(() => {
@@ -1643,7 +1650,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center relative">
           <a href="#/" className="flex items-center gap-3 cursor-pointer">
             <div className="w-56 h-21 overflow-hidden flex items-center justify-center">
-              <ImageWithFallback src="/images/logo.png" size="300 x 100 px" isLogo alt="Niagara Vista Tours" className="max-h-full max-w-full object-contain" />
+              <ImageWithFallback src="https://niagara-tours-new.vercel.app/images/logo.png" size="300 x 100 px" isLogo alt="Niagara Vista Tours" className="max-h-full max-w-full object-contain" />
             </div>
           </a>
           
@@ -1693,7 +1700,7 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
             <div className="lg:col-span-1">
               <div className="flex items-center gap-3 mb-6">
-                <ImageWithFallback src="/images/logo.png" size="300 x 100 px" isLogo alt="Logo" className="w-56 h-20 object-contain" />
+                <ImageWithFallback src="https://niagara-tours-new.vercel.app/images/logo.png" size="300 x 100 px" isLogo alt="Logo" className="w-56 h-20 object-contain" />
               </div>
               <p className="text-slate-400 text-xs leading-relaxed mb-8 font-medium">Your trusted local tour operator in Niagara Falls, Canada. Creating unforgettable experiences since 2010.</p>
               <div className="flex gap-3">
