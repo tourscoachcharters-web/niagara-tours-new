@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { initializeApp } from 'firebase/app';
+import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
+import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { 
   Phone, 
   Mail, 
@@ -20,25 +23,38 @@ import {
   Send, 
   MessageSquare, 
   Map as MapIcon, 
-  Info, 
-  Plus, 
-  Minus, 
-  Bus, 
-  Utensils, 
-  Grape, 
-  Wind, 
   Camera, 
   CheckCircle2, 
-  LifeBuoy, 
   Settings, 
-  Coffee, 
   Plane,
-  CreditCard,
   Ticket,
   Loader2,
   Quote,
-  ThumbsUp
+  ThumbsUp,
+  LayoutDashboard,
+  CheckCircle,
+  XCircle,
+  Trash2,
+  DollarSign,
+  Bus,
+  Wind,
+  Grape,
+  Utensils
 } from 'lucide-react';
+
+// --- FIREBASE INITIALIZATION ---
+const firebaseConfig = {
+  apiKey: "AIzaSyC5DVk0W9tBFW4sTwVZIEG6vQRiQHisIcY",
+  authDomain: "new-niagara-tours.firebaseapp.com",
+  projectId: "new-niagara-tours",
+  storageBucket: "new-niagara-tours.firebasestorage.app",
+  messagingSenderId: "617199953253",
+  appId: "1:617199953253:web:1014a1aad3ce755da56d8c"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 const ImageWithFallback = ({ src, alt, className, size, isLogo }) => {
   const [error, setError] = useState(false);
@@ -338,7 +354,6 @@ const CalendarDropdown = ({ onSelectDate }) => {
   );
 };
 
-// SEO Upgrade: Using 'a' tags instead of divs for proper web crawler linking
 const NavItem = ({ label, href, active, onClick }) => (
   <a href={href} onClick={onClick} className={`flex items-center gap-1 font-black text-[11px] uppercase tracking-widest cursor-pointer transition-colors ${active ? 'text-[#F8A41E]' : 'text-[#0C3136] hover:text-[#F8A41E]'}`}>
     {label}
@@ -688,7 +703,6 @@ const TourDetailPage = ({ tourId }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const calendarRef = useRef(null);
   
-  // Randomize booking count once per page load
   const [bookingCount] = useState(Math.floor(Math.random() * (24 - 7 + 1)) + 7);
   
   useEffect(() => {
@@ -833,7 +847,7 @@ const TourDetailPage = ({ tourId }) => {
   );
 };
 
-const CheckoutPage = ({ tourId, initialDate }) => {
+const CheckoutPage = ({ tourId, initialDate, onBook }) => {
   const tour = TOURS_DATA.find(t => t.id === tourId);
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
@@ -842,7 +856,7 @@ const CheckoutPage = ({ tourId, initialDate }) => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [confirmedBooking, setConfirmedBooking] = useState(null);
 
   const childPrice = tour ? tour.price - 10 : 89;
   const subtotal = tour ? (adults * tour.price) + (children * childPrice) : 0;
@@ -856,13 +870,31 @@ const CheckoutPage = ({ tourId, initialDate }) => {
     }
 
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    const newBooking = {
+      id: `NVT-${Math.floor(1000 + Math.random() * 9000)}`,
+      tourId: tour.id,
+      tourName: tour.title,
+      customerName: fullName,
+      email: email,
+      phone: phone,
+      date: initialDate,
+      adults: adults,
+      children: children,
+      total: total,
+      pickup: pickup,
+      status: 'Pending',
+      createdAt: new Date().toISOString()
+    };
+
+    await onBook(newBooking);
+    
+    setConfirmedBooking(newBooking);
     setIsSubmitting(false);
-    setIsSuccess(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  if (isSuccess) {
+  if (confirmedBooking) {
     return (
       <div className="min-h-[80vh] flex items-center justify-center bg-slate-50 animate-in fade-in zoom-in-95 duration-500">
         <div className="max-w-xl w-full bg-white p-12 rounded-[3rem] shadow-2xl border border-slate-100 text-center">
@@ -871,20 +903,27 @@ const CheckoutPage = ({ tourId, initialDate }) => {
            </div>
            <h2 className="text-4xl font-black text-[#0C3136] mb-4 tracking-tighter">Booking Confirmed!</h2>
            <p className="text-slate-500 font-medium mb-8 leading-relaxed">
-             Thank you for choosing Niagara Vista Tours, <span className="text-[#0C3136] font-black">{fullName}</span>. 
-             A confirmation email has been sent to <span className="text-[#125D66] font-bold">{email}</span> with your e-tickets and pickup details.
+             Thank you for choosing Niagara Vista Tours, <span className="text-[#0C3136] font-black">{confirmedBooking.customerName}</span>. 
+             A confirmation email has been sent to <span className="text-[#125D66] font-bold">{confirmedBooking.email}</span> with your e-tickets and pickup details.
            </p>
            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 text-left mb-10 space-y-3">
               <div className="flex justify-between text-xs font-black uppercase text-slate-400 tracking-widest">
-                 <span>Tour ID</span>
-                 <span className="text-[#0C3136]">NVT-${Math.floor(1000 + Math.random() * 9000)}</span>
+                 <span>Booking ID</span>
+                 <span className="text-[#0C3136]">{confirmedBooking.id}</span>
+              </div>
+              <div className="flex justify-between text-xs font-black uppercase text-slate-400 tracking-widest">
+                 <span>Tour Date</span>
+                 <span className="text-[#0C3136]">{confirmedBooking.date}</span>
               </div>
               <div className="flex justify-between text-xs font-black uppercase text-slate-400 tracking-widest">
                  <span>Pickup Point</span>
-                 <span className="text-[#0C3136]">{pickup}</span>
+                 <span className="text-[#0C3136]">{confirmedBooking.pickup}</span>
               </div>
            </div>
-           <a href="#/" className="inline-block bg-[#0C3136] text-white px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#125D66] transition-all">RETURN HOME</a>
+           <div className="flex gap-4 justify-center">
+             <a href="#/" className="inline-block bg-slate-100 text-slate-600 px-8 py-4 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all">RETURN HOME</a>
+             <a href="#/admin" className="inline-block bg-[#0C3136] text-white px-8 py-4 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#125D66] transition-all">VIEW DASHBOARD</a>
+           </div>
         </div>
       </div>
     );
@@ -1106,7 +1145,7 @@ const ContactPage = () => {
                   <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">Message</label>
                   <textarea placeholder="How can we help you plan your perfect trip?" className="w-full p-4 bg-slate-50 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none h-40 focus:border-[#F8A41E] transition-all resize-none" />
                 </div>
-                <button className="w-full bg-[#D91E1E] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-[#b01818] transition-all flex items-center justify-center gap-3">
+                <button type="button" onClick={() => alert("Message Sent! We will get back to you shortly.")} className="w-full bg-[#D91E1E] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-[#b01818] transition-all flex items-center justify-center gap-3">
                   SEND MESSAGE <Send className="w-4 h-4" />
                 </button>
               </form>
@@ -1265,10 +1304,250 @@ const ReviewsPage = () => {
   );
 };
 
+/* --- ADMIN DASHBOARD COMPONENTS --- */
+
+const AdminDashboard = ({ bookings, updateBookingStatus, deleteBooking }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  
+  // Calculate Stats
+  const totalRevenue = bookings.reduce((sum, b) => sum + (b.status !== 'Cancelled' ? b.total : 0), 0);
+  const pendingBookings = bookings.filter(b => b.status === 'Pending').length;
+
+  const filteredBookings = bookings.filter(b => 
+    b.customerName?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    b.id?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <div className="min-h-screen bg-slate-100 flex flex-col md:flex-row animate-in fade-in duration-500">
+      
+      {/* Sidebar */}
+      <aside className="w-full md:w-64 bg-[#0C3136] text-white flex flex-col shadow-2xl z-20 shrink-0">
+        <div className="p-6 flex items-center gap-3 border-b border-white/10">
+          <div className="bg-[#F8A41E] p-2 rounded-lg"><LayoutDashboard className="w-5 h-5 text-[#0C3136]" /></div>
+          <div>
+             <h2 className="font-black text-sm tracking-widest uppercase text-[#F8A41E]">Admin Panel</h2>
+             <p className="text-[10px] text-slate-400">Niagara Vista Tours</p>
+          </div>
+        </div>
+        
+        <nav className="p-4 flex-1">
+          <ul className="space-y-2">
+            <li>
+              <a href="#/admin" className="flex items-center gap-3 px-4 py-3 bg-white/10 rounded-xl text-sm font-bold text-white transition-all">
+                <Ticket className="w-4 h-4" /> Bookings Management
+              </a>
+            </li>
+          </ul>
+        </nav>
+        
+        <div className="p-4 border-t border-white/10">
+           <a href="#/" className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl text-sm font-bold text-slate-400 hover:text-white transition-all">
+             <Globe className="w-4 h-4" /> Return to Website
+           </a>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col h-screen overflow-hidden">
+        {/* Topbar */}
+        <header className="bg-white px-8 py-5 flex items-center justify-between border-b border-slate-200 shadow-sm shrink-0">
+          <h1 className="text-xl font-black text-[#0C3136]">Dashboard Overview</h1>
+          <div className="flex items-center gap-4">
+             <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-[#125D66] font-black">
+                A
+             </div>
+          </div>
+        </header>
+
+        {/* Dashboard Content */}
+        <div className="p-8 flex-1 overflow-y-auto">
+           {/* Stats Row */}
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center gap-5">
+                 <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                    <DollarSign className="w-7 h-7" />
+                 </div>
+                 <div>
+                    <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">Total Revenue</p>
+                    <h3 className="text-3xl font-black text-[#0C3136]">CAD ${totalRevenue.toLocaleString(undefined, {minimumFractionDigits: 2})}</h3>
+                 </div>
+              </div>
+              <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center gap-5">
+                 <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                    <Ticket className="w-7 h-7" />
+                 </div>
+                 <div>
+                    <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">Total Bookings</p>
+                    <h3 className="text-3xl font-black text-[#0C3136]">{bookings.length}</h3>
+                 </div>
+              </div>
+              <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center gap-5">
+                 <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+                    <Clock className="w-7 h-7" />
+                 </div>
+                 <div>
+                    <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">Pending Action</p>
+                    <h3 className="text-3xl font-black text-[#0C3136]">{pendingBookings}</h3>
+                 </div>
+              </div>
+           </div>
+
+           {/* Bookings Table Section */}
+           <div className="bg-white rounded-[2rem] border border-slate-200 shadow-sm overflow-hidden flex flex-col h-full min-h-[500px]">
+              <div className="p-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                 <h2 className="text-lg font-black text-[#0C3136]">Recent Bookings</h2>
+                 <div className="relative">
+                    <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <input 
+                      type="text" 
+                      placeholder="Search by ID or Name..." 
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold w-full md:w-64 focus:outline-none focus:border-[#F8A41E] transition-colors"
+                    />
+                 </div>
+              </div>
+              
+              <div className="overflow-x-auto flex-1">
+                 <table className="w-full text-left border-collapse">
+                    <thead>
+                       <tr className="bg-slate-50 text-[10px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-200">
+                          <th className="p-5">Booking ID</th>
+                          <th className="p-5">Customer</th>
+                          <th className="p-5">Tour Details</th>
+                          <th className="p-5">Date</th>
+                          <th className="p-5">Total</th>
+                          <th className="p-5">Status</th>
+                          <th className="p-5 text-right">Actions</th>
+                       </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-sm font-medium text-slate-700">
+                       {filteredBookings.length === 0 ? (
+                         <tr>
+                            <td colSpan="7" className="p-10 text-center text-slate-400 font-bold">No bookings found.</td>
+                         </tr>
+                       ) : (
+                         filteredBookings.map(b => (
+                           <tr key={b.id} className="hover:bg-slate-50/50 transition-colors">
+                              <td className="p-5 font-black text-[#0C3136]">{b.id}</td>
+                              <td className="p-5">
+                                 <div className="font-bold text-[#0C3136]">{b.customerName}</div>
+                                 <div className="text-xs text-slate-400 mt-0.5">{b.email}</div>
+                              </td>
+                              <td className="p-5">
+                                 <div className="font-bold">{b.tourName}</div>
+                                 <div className="text-xs text-slate-400 mt-0.5 flex items-center gap-1"><Users className="w-3 h-3"/> {b.adults}A, {b.children}C</div>
+                              </td>
+                              <td className="p-5 font-bold">{b.date}</td>
+                              <td className="p-5 font-black text-[#0C3136]">CAD ${b.total.toFixed(2)}</td>
+                              <td className="p-5">
+                                 <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center w-max gap-1
+                                   ${b.status === 'Confirmed' ? 'bg-emerald-100 text-emerald-700' : 
+                                     b.status === 'Pending' ? 'bg-amber-100 text-amber-700' : 
+                                     'bg-red-100 text-red-700'}`
+                                 }>
+                                    {b.status === 'Confirmed' && <CheckCircle size={12} />}
+                                    {b.status === 'Pending' && <Clock size={12} />}
+                                    {b.status === 'Cancelled' && <XCircle size={12} />}
+                                    {b.status}
+                                 </span>
+                              </td>
+                              <td className="p-5 text-right">
+                                 <div className="flex items-center justify-end gap-2">
+                                    {b.status !== 'Confirmed' && b.status !== 'Cancelled' && (
+                                       <button onClick={() => updateBookingStatus(b.id, 'Confirmed')} className="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Confirm Booking">
+                                          <CheckCircle size={18} />
+                                       </button>
+                                    )}
+                                    {b.status !== 'Cancelled' && (
+                                       <button onClick={() => updateBookingStatus(b.id, 'Cancelled')} className="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Cancel Booking">
+                                          <XCircle size={18} />
+                                       </button>
+                                    )}
+                                    <button onClick={() => { if(window.confirm('Delete this booking forever?')) deleteBooking(b.id) }} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Delete Record">
+                                       <Trash2 size={18} />
+                                    </button>
+                                 </div>
+                              </td>
+                           </tr>
+                         ))
+                       )}
+                    </tbody>
+                 </table>
+              </div>
+           </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+/* --- MAIN APP CONTAINER --- */
+
 export default function App() {
   const [currentHash, setCurrentHash] = useState(window.location.hash || '#/');
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Firebase State
+  const [bookings, setBookings] = useState([]);
+  const [user, setUser] = useState(null);
+
+  // Initialize Firebase Auth
+  useEffect(() => {
+    signInAnonymously(auth).catch((error) => {
+      console.error("Auth error:", error);
+    });
+    
+    const unsubscribe = onAuthStateChanged(auth, setUser);
+    return () => unsubscribe();
+  }, []);
+
+  // Sync Bookings with Firestore
+  useEffect(() => {
+    if (!user) return;
+    
+    const bookingsRef = collection(db, 'bookings');
+    const unsubscribe = onSnapshot(bookingsRef, 
+      (snapshot) => {
+        const loadedBookings = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        loadedBookings.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setBookings(loadedBookings);
+      },
+      (error) => console.error("Firestore error:", error)
+    );
+    
+    return () => unsubscribe();
+  }, [user]);
+
+  // Firebase Mutators
+  const handleAddBooking = async (newBooking) => {
+    if (!user) return;
+    try {
+      await setDoc(doc(db, 'bookings', newBooking.id), newBooking);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const updateBookingStatus = async (id, newStatus) => {
+    if (!user) return;
+    try {
+      await updateDoc(doc(db, 'bookings', id), { status: newStatus });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const deleteBooking = async (id) => {
+    if (!user) return;
+    try {
+      await deleteDoc(doc(db, 'bookings', id));
+    } catch (e) {
+      console.error(e);
+    }
+  };
   
   useEffect(() => { 
     const handleScroll = () => setIsScrolled(window.scrollY > 20); 
@@ -1276,7 +1555,6 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll); 
   }, []);
   
-  // 1. ROUTING UPGRADE: Listen to URL hash changes so deep links work
   useEffect(() => {
     const handleHashChange = () => {
       setCurrentHash(window.location.hash || '#/');
@@ -1287,7 +1565,6 @@ export default function App() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  // 2. SEO UPGRADE: Dynamically set Title and Meta Description for Google Crawler
   useEffect(() => {
     const path = currentHash.replace('#', '');
     let pageTitle = 'Niagara Vista Tours | Premium Niagara Falls Experiences';
@@ -1310,12 +1587,11 @@ export default function App() {
       pageTitle = 'Contact Us | Niagara Vista Tours';
     } else if (path.startsWith('/checkout/')) {
       pageTitle = 'Secure Checkout | Niagara Vista Tours';
+    } else if (path === '/admin') {
+      pageTitle = 'Admin Dashboard | Niagara Vista Tours';
     }
 
-    // Set Document Title
     document.title = pageTitle;
-
-    // Set Meta Description
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
       metaDescription = document.createElement('meta');
@@ -1323,13 +1599,19 @@ export default function App() {
       document.head.appendChild(metaDescription);
     }
     metaDescription.content = pageDescription;
-
   }, [currentHash]);
   
+  // Render routing
+  const path = currentHash.replace('#', '');
+  const cleanPath = path.split('?')[0];
+
+  // If on admin route, render exclusively the Admin Dashboard
+  if (cleanPath === '/admin') {
+    return <AdminDashboard bookings={bookings} updateBookingStatus={updateBookingStatus} deleteBooking={deleteBooking} />;
+  }
+
   const renderPage = () => { 
-    const path = currentHash.replace('#', '');
     const urlParams = new URLSearchParams(path.split('?')[1]);
-    const cleanPath = path.split('?')[0];
 
     if (cleanPath === '/' || cleanPath === '') return <HomePage />; 
     if (cleanPath === '/contact') return <ContactPage />; 
@@ -1338,8 +1620,8 @@ export default function App() {
     if (cleanPath === '/reviews') return <ReviewsPage />;
     if (cleanPath.startsWith('/checkout/')) {
        const tourId = cleanPath.split('/')[2];
-       const date = urlParams.get('date');
-       return <CheckoutPage tourId={tourId} initialDate={date} />;
+       const date = urlParams.get('date') || new Date().toLocaleDateString();
+       return <CheckoutPage tourId={tourId} initialDate={date} onBook={handleAddBooking} />;
     }
     if (cleanPath.startsWith('/tour/')) {
        const tourId = cleanPath.split('/')[2];
@@ -1350,16 +1632,18 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-800">
+      {/* Top Bar */}
       <div className="hidden lg:flex bg-[#0C3136] text-white px-8 py-2.5 justify-between items-center text-[10px] font-black tracking-[0.1em] uppercase">
         <div className="flex gap-10 items-center"><div className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-[#F8A41E]" /> Niagara Falls, Ontario</div><div className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-[#F8A41E]" /> +1 (905) 123-4567</div></div>
         <div className="flex items-center gap-4"><span className="text-[10px] font-bold text-[#F8A41E] animate-pulse">(Open 24/7)</span><a href="#/tours" className="bg-[#D91E1E] text-white px-5 py-1.5 rounded-md font-black hover:bg-white hover:text-[#D91E1E] transition-all">BOOK NOW</a></div>
       </div>
 
+      {/* Header */}
       <header className={`sticky top-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-md py-2' : 'bg-white py-5'}`}>
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center relative">
           <a href="#/" className="flex items-center gap-3 cursor-pointer">
             <div className="w-56 h-21 overflow-hidden flex items-center justify-center">
-              <ImageWithFallback src="https://niagara-tours-new.vercel.app/images/logo.png" size="300 x 100 px" isLogo alt="Niagara Vista Tours" className="max-h-full max-w-full object-contain" />
+              <ImageWithFallback src="/images/logo.png" size="300 x 100 px" isLogo alt="Niagara Vista Tours" className="max-h-full max-w-full object-contain" />
             </div>
           </a>
           
@@ -1387,12 +1671,13 @@ export default function App() {
                  <a 
                    key={item.path} 
                    href={`#${item.path}`} 
+                   onClick={() => setMobileMenuOpen(false)}
                    className={`font-black block text-sm uppercase tracking-widest py-3 border-b border-slate-50 transition-colors ${currentHash === `#${item.path}` ? 'text-[#F8A41E]' : 'text-[#0C3136]'}`}
                  >
                    {item.label}
                  </a>
                ))}
-               <a href="#/tours" className="block text-center bg-[#D91E1E] text-white py-4 rounded-xl font-black text-xs uppercase tracking-widest shadow-lg">BOOK NOW</a>
+               <a href="#/tours" onClick={() => setMobileMenuOpen(false)} className="block text-center bg-[#D91E1E] text-white py-4 rounded-xl font-black text-xs uppercase tracking-widest shadow-lg">BOOK NOW</a>
             </div>
           )}
         </div>
@@ -1402,12 +1687,13 @@ export default function App() {
         {renderPage()}
       </main>
 
+      {/* Footer */}
       <footer className="bg-[#0C3136] text-white pt-20 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
             <div className="lg:col-span-1">
               <div className="flex items-center gap-3 mb-6">
-                <ImageWithFallback src="https://niagara-tours-new.vercel.app/images/logo.png" size="300 x 100 px" isLogo alt="Logo" className="w-56 h-20 object-contain" />
+                <ImageWithFallback src="/images/logo.png" size="300 x 100 px" isLogo alt="Logo" className="w-56 h-20 object-contain" />
               </div>
               <p className="text-slate-400 text-xs leading-relaxed mb-8 font-medium">Your trusted local tour operator in Niagara Falls, Canada. Creating unforgettable experiences since 2010.</p>
               <div className="flex gap-3">
@@ -1459,8 +1745,10 @@ export default function App() {
           <div className="pt-8 pb-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-2 md:order-1">© 2026 Niagara Vista Tours. All Rights Reserved.</div>
             <div className="flex items-center justify-center order-1 md:order-2"><MapleLeafIcon className="w-6 h-6 text-red-600" /></div>
-            <div className="flex gap-6 text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-3">
-              <a href="#/privacy" className="hover:text-[#F8A41E]">Privacy Policy</a><span className="opacity-20">|</span><a href="#/terms" className="hover:text-[#F8A41E]">Terms & Conditions</a>
+            <div className="flex items-center gap-6 text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-3">
+              <a href="#/privacy" className="hover:text-[#F8A41E]">Privacy Policy</a><span className="opacity-20">|</span>
+              <a href="#/terms" className="hover:text-[#F8A41E]">Terms & Conditions</a><span className="opacity-20">|</span>
+              <a href="#/admin" className="hover:text-[#F8A41E] flex items-center gap-1"><LayoutDashboard className="w-3 h-3" /> Admin Login</a>
             </div>
           </div>
         </div>
