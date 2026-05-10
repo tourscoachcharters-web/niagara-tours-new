@@ -927,10 +927,11 @@ const CheckoutPage = ({ tourId, initialDate, onBook }) => {
                  <span className="text-[#0C3136]">{confirmedBooking.pickup}</span>
               </div>
            </div>
-           <div className="flex gap-4 justify-center">
-             <a href="#/" className="inline-block bg-slate-100 text-slate-600 px-8 py-4 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all">RETURN HOME</a>
-             <a href="#/admin" className="inline-block bg-[#0C3136] text-white px-8 py-4 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#125D66] transition-all">VIEW DASHBOARD</a>
-           </div>
+<div className="flex justify-center">
+  <a href="#/" className="inline-block bg-[#0C3136] text-white px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#125D66] transition-all shadow-lg">
+    RETURN HOME
+  </a>
+</div>
         </div>
       </div>
     );
