@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, signInAnonymously, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { 
   Phone, 
@@ -23,20 +23,10 @@ import {
   Send, 
   MessageSquare, 
   Map as MapIcon, 
-  Info, 
-  Plus, 
-  Minus, 
-  Bus, 
-  Utensils, 
-  Grape, 
-  Wind, 
   Camera, 
   CheckCircle2, 
-  LifeBuoy, 
   Settings, 
-  Coffee, 
   Plane,
-  CreditCard,
   Ticket,
   Loader2,
   Quote,
@@ -45,7 +35,14 @@ import {
   CheckCircle,
   XCircle,
   Trash2,
-  DollarSign
+  DollarSign,
+  Bus,
+  Wind,
+  Grape,
+  Utensils,
+  LogOut,
+  Plus,
+  Minus
 } from 'lucide-react';
 
 // --- FIREBASE INITIALIZATION ---
@@ -709,7 +706,6 @@ const TourDetailPage = ({ tourId }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const calendarRef = useRef(null);
   
-  // Randomize booking count once per page load
   const [bookingCount] = useState(Math.floor(Math.random() * (24 - 7 + 1)) + 7);
   
   useEffect(() => {
@@ -809,43 +805,43 @@ const TourDetailPage = ({ tourId }) => {
 
         <div className="lg:col-span-4">
            <div className="sticky top-28 space-y-10">
-<div className="bg-white rounded-[2rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)] border border-slate-100 group">
-   <div className="bg-gradient-to-br from-[#0C3136] to-[#125D66] px-8 py-8 text-white relative rounded-t-[2rem] overflow-hidden">
-      <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-8 -mt-8 blur-xl"></div>
-      <h3 className="text-xs font-black uppercase tracking-[0.2em] mb-6 leading-tight relative z-10">Book Your Experience</h3>
-      <div className="space-y-0.5 relative z-10">
-         <p className="text-[9px] font-black uppercase text-slate-300 tracking-[0.2em]">Starting From</p>
-         <h4 className="text-[36px] font-black text-[#F8A41E] tracking-tighter leading-none flex items-baseline gap-2">
-            CAD ${tour.price} <span className="text-[10px] font-black text-white/90 tracking-normal italic leading-none">/ person</span>
-         </h4>
-      </div>
-      <div className="flex flex-col gap-2 mt-5 relative z-10">
-        <div className="flex items-center gap-2 text-[9px] font-black tracking-widest text-emerald-400">
-           <Zap className="w-3 h-3 fill-current" /> BEST PRICE GUARANTEED
-        </div>
-        <div className="flex items-center gap-2 text-[10px] font-bold text-white/90 bg-white/10 w-fit px-3 py-1 rounded-lg border border-white/10 animate-pulse">
-          <Users className="w-3 h-3" /> {bookingCount} people already booked this tour!
-        </div>
-      </div>
-   </div>
-   
-   <div className="p-8 space-y-6 bg-white relative rounded-b-[2rem]">
-      <div ref={calendarRef} className="relative">
-         <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2.5 block">1. Select Tour Date</label>
-         <button type="button" onClick={() => setShowCalendar(!showCalendar)} className="w-full flex items-center justify-between border border-slate-200 p-3.5 rounded-xl bg-white hover:border-[#F8A41E] cursor-pointer transition-all shadow-sm relative z-10">
-            <div className="flex items-center gap-3 font-bold text-slate-600 text-sm"><Calendar className="w-4 h-4 text-[#F8A41E]" /> {selectedDate || "Choose Date"}</div>
-            <ChevronRight className={`w-4 h-4 rotate-90 text-slate-300 transition-transform ${showCalendar ? 'rotate-[-90deg]' : ''}`} />
-         </button>
-         {showCalendar && <CalendarDropdown onSelectDate={(d) => { setSelectedDate(d.toLocaleDateString()); setShowCalendar(false); }} />}
-      </div>
+              <div className="bg-white rounded-[2rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)] border border-slate-100 group">
+                 <div className="bg-gradient-to-br from-[#0C3136] to-[#125D66] px-8 py-8 text-white relative rounded-t-[2rem] overflow-hidden">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-8 -mt-8 blur-xl"></div>
+                    <h3 className="text-xs font-black uppercase tracking-[0.2em] mb-6 leading-tight relative z-10">Book Your Experience</h3>
+                    <div className="space-y-0.5 relative z-10">
+                       <p className="text-[9px] font-black uppercase text-slate-300 tracking-[0.2em]">Starting From</p>
+                       <h4 className="text-[36px] font-black text-[#F8A41E] tracking-tighter leading-none flex items-baseline gap-2">
+                          CAD ${tour.price} <span className="text-[10px] font-black text-white/90 tracking-normal italic leading-none">/ person</span>
+                       </h4>
+                    </div>
+                    <div className="flex flex-col gap-2 mt-5 relative z-10">
+                      <div className="flex items-center gap-2 text-[9px] font-black tracking-widest text-emerald-400">
+                         <Zap className="w-3 h-3 fill-current" /> BEST PRICE GUARANTEED
+                      </div>
+                      <div className="flex items-center gap-2 text-[10px] font-bold text-white/90 bg-white/10 w-fit px-3 py-1 rounded-lg border border-white/10 animate-pulse">
+                        <Users className="w-3 h-3" /> {bookingCount} people already booked this tour!
+                      </div>
+                    </div>
+                 </div>
+                 
+                 <div className="p-8 space-y-6 bg-white relative rounded-b-[2rem]">
+                    <div ref={calendarRef} className="relative">
+                       <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2.5 block">1. Select Tour Date</label>
+                       <button type="button" onClick={() => setShowCalendar(!showCalendar)} className="w-full flex items-center justify-between border border-slate-200 p-3.5 rounded-xl bg-white hover:border-[#F8A41E] cursor-pointer transition-all shadow-sm relative z-10">
+                          <div className="flex items-center gap-3 font-bold text-slate-600 text-sm"><Calendar className="w-4 h-4 text-[#F8A41E]" /> {selectedDate || "Choose Date"}</div>
+                          <ChevronRight className={`w-4 h-4 rotate-90 text-slate-300 transition-transform ${showCalendar ? 'rotate-[-90deg]' : ''}`} />
+                       </button>
+                       {showCalendar && <CalendarDropdown onSelectDate={(d) => { setSelectedDate(d.toLocaleDateString()); setShowCalendar(false); }} />}
+                    </div>
 
-      <a href={`#/checkout/${tour.id}?date=${selectedDate ? encodeURIComponent(selectedDate) : encodeURIComponent(new Date().toLocaleDateString())}`} className="block w-full text-center bg-[#D91E1E] hover:bg-[#b01818] text-white py-4 rounded-xl font-black text-[11px] uppercase tracking-[0.3em] shadow-lg shadow-red-900/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0">RESERVE NOW</a>
-      <div className="flex items-center justify-center gap-4 pt-1 border-t border-slate-50">
-         <div className="flex items-center gap-1 text-slate-400 text-[8px] font-black uppercase tracking-widest"><ShieldCheck className="w-3 h-3" /> Secure Payment</div>
-         <div className="flex items-center gap-1 text-slate-400 text-[8px] font-black uppercase tracking-widest"><Clock className="w-3 h-3" /> Instant Confirmation</div>
-      </div>
-   </div>
-</div>
+                    <a href={`#/checkout/${tour.id}?date=${selectedDate ? encodeURIComponent(selectedDate) : encodeURIComponent(new Date().toLocaleDateString())}`} className="block w-full text-center bg-[#D91E1E] hover:bg-[#b01818] text-white py-4 rounded-xl font-black text-[11px] uppercase tracking-[0.3em] shadow-lg shadow-red-900/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0">RESERVE NOW</a>
+                    <div className="flex items-center justify-center gap-4 pt-1 border-t border-slate-50">
+                       <div className="flex items-center gap-1 text-slate-400 text-[8px] font-black uppercase tracking-widest"><ShieldCheck className="w-3 h-3" /> Secure Payment</div>
+                       <div className="flex items-center gap-1 text-slate-400 text-[8px] font-black uppercase tracking-widest"><Clock className="w-3 h-3" /> Instant Confirmation</div>
+                    </div>
+                 </div>
+              </div>
            </div>
         </div>
       </main>
@@ -878,6 +874,9 @@ const CheckoutPage = ({ tourId, initialDate, onBook }) => {
 
     setIsSubmitting(true);
     
+    // Simulate network delay for smooth UI
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
     const newBooking = {
       id: `NVT-${Math.floor(1000 + Math.random() * 9000)}`,
       tourId: tour.id,
@@ -894,7 +893,32 @@ const CheckoutPage = ({ tourId, initialDate, onBook }) => {
       createdAt: new Date().toISOString()
     };
 
+    // Save to Firebase
     await onBook(newBooking);
+
+    // Send Confirmation Email via our new Vercel API & Resend
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          fullName: fullName,
+          bookingId: newBooking.id,
+          tourName: tour.title,
+          tourDate: initialDate,
+          pickup: pickup,
+          total: `CAD $${total.toFixed(2)}`
+        }),
+      });
+      
+      const result = await response.json();
+      console.log("Email sent via Resend!", result);
+    } catch (error) {
+      console.error("Failed to trigger email API:", error);
+    }
     
     setConfirmedBooking(newBooking);
     setIsSubmitting(false);
@@ -927,11 +951,11 @@ const CheckoutPage = ({ tourId, initialDate, onBook }) => {
                  <span className="text-[#0C3136]">{confirmedBooking.pickup}</span>
               </div>
            </div>
-<div className="flex justify-center">
-  <a href="#/" className="inline-block bg-[#0C3136] text-white px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#125D66] transition-all shadow-lg">
-    RETURN HOME
-  </a>
-</div>
+           <div className="flex justify-center">
+             <a href="#/" className="inline-block bg-[#0C3136] text-white px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#125D66] transition-all shadow-lg">
+               RETURN HOME
+             </a>
+           </div>
         </div>
       </div>
     );
@@ -1312,9 +1336,63 @@ const ReviewsPage = () => {
   );
 };
 
+/* --- ADMIN LOGIN COMPONENT --- */
+const AdminLogin = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (err) {
+      setError('Invalid admin credentials.');
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center p-4 animate-in fade-in duration-500">
+      <div className="max-w-md w-full bg-white rounded-[2rem] shadow-xl border border-slate-100 p-10">
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 bg-[#0C3136]/5 text-[#F8A41E] rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <LayoutDashboard className="w-8 h-8" />
+          </div>
+          <h2 className="text-2xl font-black text-[#0C3136]">Admin Access</h2>
+          <p className="text-sm text-slate-500 font-medium mt-2">Enter your credentials to manage bookings.</p>
+        </div>
+        {error && <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm font-bold mb-6 text-center">{error}</div>}
+        <form onSubmit={handleLogin} className="space-y-5">
+          <div>
+            <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">Admin Email</label>
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)} className="w-full p-4 bg-slate-50 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-[#F8A41E] transition-all" required />
+          </div>
+          <div>
+            <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">Password</label>
+            <input type="password" value={password} onChange={e => setPassword(e.target.value)} className="w-full p-4 bg-slate-50 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-[#F8A41E] transition-all" required />
+          </div>
+          <button type="submit" disabled={loading} className="w-full bg-[#0C3136] text-white py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg hover:bg-[#125D66] transition-all flex justify-center items-center">
+            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'SECURE LOGIN'}
+          </button>
+        </form>
+        <div className="mt-8 text-center">
+          <a href="#/" className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-[#F8A41E] flex items-center justify-center gap-1">
+            <ChevronLeft className="w-3 h-3" /> Return to Website
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
 /* --- ADMIN DASHBOARD COMPONENTS --- */
 
-const AdminDashboard = ({ bookings, updateBookingStatus, deleteBooking }) => {
+const AdminDashboard = ({ bookings, updateBookingStatus, deleteBooking, handleLogout }) => {
   const [searchTerm, setSearchTerm] = useState('');
   
   // Calculate Stats
@@ -1349,10 +1427,13 @@ const AdminDashboard = ({ bookings, updateBookingStatus, deleteBooking }) => {
           </ul>
         </nav>
         
-        <div className="p-4 border-t border-white/10">
+        <div className="p-4 border-t border-white/10 space-y-2">
            <a href="#/" className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl text-sm font-bold text-slate-400 hover:text-white transition-all">
-             <Globe className="w-4 h-4" /> Return to Website
+             <Globe className="w-4 h-4" /> View Live Site
            </a>
+           <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 hover:bg-red-500/10 rounded-xl text-sm font-bold text-red-400 hover:text-red-300 transition-all text-left">
+             <LogOut className="w-4 h-4" /> Secure Logout
+           </button>
         </div>
       </aside>
 
@@ -1504,13 +1585,21 @@ export default function App() {
 
   // Initialize Firebase Auth
   useEffect(() => {
-    signInAnonymously(auth).catch((error) => {
-      console.error("Auth error:", error);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        // If not logged in at all, sign in anonymously for normal bookings
+        signInAnonymously(auth).catch((error) => console.error("Auth error:", error));
+      }
     });
-    
-    const unsubscribe = onAuthStateChanged(auth, setUser);
     return () => unsubscribe();
   }, []);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    window.location.hash = '#/';
+  };
 
   // Sync Bookings with Firestore
   useEffect(() => {
@@ -1613,9 +1702,15 @@ export default function App() {
   const path = currentHash.replace('#', '');
   const cleanPath = path.split('?')[0];
 
-  // If on admin route, render exclusively the Admin Dashboard
+  // Admin Route Protection
   if (cleanPath === '/admin') {
-    return <AdminDashboard bookings={bookings} updateBookingStatus={updateBookingStatus} deleteBooking={deleteBooking} />;
+    if (user && !user.isAnonymous) {
+      // User is logged in securely via email
+      return <AdminDashboard bookings={bookings} updateBookingStatus={updateBookingStatus} deleteBooking={deleteBooking} handleLogout={handleLogout} />;
+    } else {
+      // Show login screen
+      return <AdminLogin />;
+    }
   }
 
   const renderPage = () => { 
@@ -1651,7 +1746,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center relative">
           <a href="#/" className="flex items-center gap-3 cursor-pointer">
             <div className="w-56 h-21 overflow-hidden flex items-center justify-center">
-              <ImageWithFallback src="https://niagara-tours-new.vercel.app/images/logo.png" size="300 x 100 px" isLogo alt="Niagara Vista Tours" className="max-h-full max-w-full object-contain" />
+              <ImageWithFallback src="/images/logo.png" size="300 x 100 px" isLogo alt="Niagara Vista Tours" className="max-h-full max-w-full object-contain" />
             </div>
           </a>
           
@@ -1701,7 +1796,7 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
             <div className="lg:col-span-1">
               <div className="flex items-center gap-3 mb-6">
-                <ImageWithFallback src="https://niagara-tours-new.vercel.app/images/logo.png" size="300 x 100 px" isLogo alt="Logo" className="w-56 h-20 object-contain" />
+                <ImageWithFallback src="/images/logo.png" size="300 x 100 px" isLogo alt="Logo" className="w-56 h-20 object-contain" />
               </div>
               <p className="text-slate-400 text-xs leading-relaxed mb-8 font-medium">Your trusted local tour operator in Niagara Falls, Canada. Creating unforgettable experiences since 2010.</p>
               <div className="flex gap-3">
