@@ -809,43 +809,43 @@ const TourDetailPage = ({ tourId }) => {
 
         <div className="lg:col-span-4">
            <div className="sticky top-28 space-y-10">
-              <div className="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.2)] border border-slate-100 group">
-                 <div className="bg-gradient-to-br from-[#0C3136] to-[#125D66] px-10 py-12 text-white relative rounded-t-[2.5rem] overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-10 -mt-10 blur-2xl"></div>
-                    <h3 className="text-sm font-black uppercase tracking-[0.2em] mb-8 leading-tight relative z-10">Book Your Experience</h3>
-                    <div className="space-y-0.5 relative z-10">
-                       <p className="text-[10px] font-black uppercase text-slate-300 tracking-[0.2em]">Starting From</p>
-                       <h4 className="text-[44px] font-black text-[#F8A41E] tracking-tighter leading-none flex items-baseline gap-2">
-                          CAD ${tour.price} <span className="text-[12px] font-black text-white/90 tracking-normal italic leading-none">/ person</span>
-                       </h4>
-                    </div>
-                    <div className="flex flex-col gap-2 mt-6 relative z-10">
-                      <div className="flex items-center gap-2 text-[10px] font-black tracking-widest text-emerald-400">
-                         <Zap className="w-3.5 h-3.5 fill-current" /> BEST PRICE GUARANTEED
-                      </div>
-                      <div className="flex items-center gap-2 text-[11px] font-bold text-white/90 bg-white/10 w-fit px-3 py-1.5 rounded-lg border border-white/10 animate-pulse">
-                        <Users className="w-3.5 h-3.5" /> {bookingCount} people already booked this tour!
-                      </div>
-                    </div>
-                 </div>
-                 
-                 <div className="p-10 space-y-8 bg-white relative rounded-b-[2.5rem]">
-                    <div ref={calendarRef} className="relative">
-                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3.5 block">1. Select Tour Date</label>
-                       <button type="button" onClick={() => setShowCalendar(!showCalendar)} className="w-full flex items-center justify-between border border-slate-200 p-4.5 rounded-2xl bg-white hover:border-[#F8A41E] cursor-pointer transition-all shadow-sm relative z-10">
-                          <div className="flex items-center gap-3.5 font-bold text-slate-600 text-sm"><Calendar className="w-5 h-5 text-[#F8A41E]" /> {selectedDate || "Choose Date"}</div>
-                          <ChevronRight className={`w-4 h-4 rotate-90 text-slate-300 transition-transform ${showCalendar ? 'rotate-[-90deg]' : ''}`} />
-                       </button>
-                       {showCalendar && <CalendarDropdown onSelectDate={(d) => { setSelectedDate(d.toLocaleDateString()); setShowCalendar(false); }} />}
-                    </div>
+<div className="bg-white rounded-[2rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)] border border-slate-100 group">
+   <div className="bg-gradient-to-br from-[#0C3136] to-[#125D66] px-8 py-8 text-white relative rounded-t-[2rem] overflow-hidden">
+      <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-8 -mt-8 blur-xl"></div>
+      <h3 className="text-xs font-black uppercase tracking-[0.2em] mb-6 leading-tight relative z-10">Book Your Experience</h3>
+      <div className="space-y-0.5 relative z-10">
+         <p className="text-[9px] font-black uppercase text-slate-300 tracking-[0.2em]">Starting From</p>
+         <h4 className="text-[36px] font-black text-[#F8A41E] tracking-tighter leading-none flex items-baseline gap-2">
+            CAD ${tour.price} <span className="text-[10px] font-black text-white/90 tracking-normal italic leading-none">/ person</span>
+         </h4>
+      </div>
+      <div className="flex flex-col gap-2 mt-5 relative z-10">
+        <div className="flex items-center gap-2 text-[9px] font-black tracking-widest text-emerald-400">
+           <Zap className="w-3 h-3 fill-current" /> BEST PRICE GUARANTEED
+        </div>
+        <div className="flex items-center gap-2 text-[10px] font-bold text-white/90 bg-white/10 w-fit px-3 py-1 rounded-lg border border-white/10 animate-pulse">
+          <Users className="w-3 h-3" /> {bookingCount} people already booked this tour!
+        </div>
+      </div>
+   </div>
+   
+   <div className="p-8 space-y-6 bg-white relative rounded-b-[2rem]">
+      <div ref={calendarRef} className="relative">
+         <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2.5 block">1. Select Tour Date</label>
+         <button type="button" onClick={() => setShowCalendar(!showCalendar)} className="w-full flex items-center justify-between border border-slate-200 p-3.5 rounded-xl bg-white hover:border-[#F8A41E] cursor-pointer transition-all shadow-sm relative z-10">
+            <div className="flex items-center gap-3 font-bold text-slate-600 text-sm"><Calendar className="w-4 h-4 text-[#F8A41E]" /> {selectedDate || "Choose Date"}</div>
+            <ChevronRight className={`w-4 h-4 rotate-90 text-slate-300 transition-transform ${showCalendar ? 'rotate-[-90deg]' : ''}`} />
+         </button>
+         {showCalendar && <CalendarDropdown onSelectDate={(d) => { setSelectedDate(d.toLocaleDateString()); setShowCalendar(false); }} />}
+      </div>
 
-                    <a href={`#/checkout/${tour.id}?date=${selectedDate ? encodeURIComponent(selectedDate) : encodeURIComponent(new Date().toLocaleDateString())}`} className="block w-full text-center bg-[#D91E1E] hover:bg-[#b01818] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl shadow-red-900/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0">RESERVE NOW</a>
-                    <div className="flex items-center justify-center gap-4 pt-2 border-t border-slate-50">
-                       <div className="flex items-center gap-1.5 text-slate-400 text-[9px] font-black uppercase tracking-widest"><ShieldCheck className="w-3 h-3" /> Secure Payment</div>
-                       <div className="flex items-center gap-1.5 text-slate-400 text-[9px] font-black uppercase tracking-widest"><Clock className="w-3 h-3" /> Instant Confirmation</div>
-                    </div>
-                 </div>
-              </div>
+      <a href={`#/checkout/${tour.id}?date=${selectedDate ? encodeURIComponent(selectedDate) : encodeURIComponent(new Date().toLocaleDateString())}`} className="block w-full text-center bg-[#D91E1E] hover:bg-[#b01818] text-white py-4 rounded-xl font-black text-[11px] uppercase tracking-[0.3em] shadow-lg shadow-red-900/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0">RESERVE NOW</a>
+      <div className="flex items-center justify-center gap-4 pt-1 border-t border-slate-50">
+         <div className="flex items-center gap-1 text-slate-400 text-[8px] font-black uppercase tracking-widest"><ShieldCheck className="w-3 h-3" /> Secure Payment</div>
+         <div className="flex items-center gap-1 text-slate-400 text-[8px] font-black uppercase tracking-widest"><Clock className="w-3 h-3" /> Instant Confirmation</div>
+      </div>
+   </div>
+</div>
            </div>
         </div>
       </main>
