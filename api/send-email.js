@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     const { email, fullName, bookingId, tourName, tourDate, pickup, total } = req.body;
 
     const data = await resend.emails.send({
-      from: 'Niagara Vista Tours <onboarding@resend.dev>',
+      from: 'Niagara Travels <onboarding@resend.dev>',
       // ⚠️ IMPORTANT: Because you are on the Resend free tier, 'onboarding@resend.dev' 
       // can ONLY send emails to your verified Resend account email. 
       // Once you add a real domain (like info@niagaravistatours.com) to Resend, 
@@ -25,7 +25,7 @@ export default async function handler(req, res) {
         <div style="font-family: sans-serif; max-w-xl; margin: 0 auto;">
           <h2 style="color: #0C3136;">Booking Confirmed!</h2>
           <p>Hi ${fullName},</p>
-          <p>Thank you for booking with Niagara Vista Tours. Your reservation for <strong>${tourName}</strong> is confirmed.</p>
+          <p>Thank you for booking with Niagara Travels. Your reservation for <strong>${tourName}</strong> is confirmed.</p>
           
           <div style="background-color: #f8fafc; padding: 20px; border-radius: 10px; margin: 20px 0;">
             <p style="margin: 5px 0;"><strong>Booking ID:</strong> ${bookingId}</p>
