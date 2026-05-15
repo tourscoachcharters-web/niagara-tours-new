@@ -934,7 +934,7 @@ const CheckoutPage = ({ tourId, initialDate, onBook }) => {
            </div>
            <h2 className="text-4xl font-black text-[#0C3136] mb-4 tracking-tighter">Booking Confirmed!</h2>
            <p className="text-slate-500 font-medium mb-8 leading-relaxed">
-             Thank you for choosing Niagara Vista Tours, <span className="text-[#0C3136] font-black">{confirmedBooking.customerName}</span>. 
+             Thank you for choosing Niagara Travels, <span className="text-[#0C3136] font-black">{confirmedBooking.customerName}</span>. 
              A confirmation email has been sent to <span className="text-[#125D66] font-bold">{confirmedBooking.email}</span> with your e-tickets and pickup details.
            </p>
            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 text-left mb-10 space-y-3">
@@ -1272,7 +1272,7 @@ const ReviewsPage = () => {
           <div className="max-w-xl">
             <span className="bg-[#F8A41E] text-[#0C3136] text-[10px] font-black px-4 py-2 rounded-lg uppercase tracking-[0.2em] mb-6 inline-block shadow-lg">Guest Experiences</span>
             <h1 className="text-5xl lg:text-7xl font-black leading-tight tracking-tighter mb-4">What Our <br />Guests Say</h1>
-            <p className="text-slate-200 text-lg font-medium opacity-90">Don't just take our word for it. Read honest reviews from thousands of travelers who chose Niagara Vista Tours.</p>
+            <p className="text-slate-200 text-lg font-medium opacity-90">Don't just take our word for it. Read honest reviews from thousands of travelers who chose Niagara Travels.</p>
           </div>
           
           <div className="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-[2.5rem] text-center w-full md:w-auto shrink-0 shadow-2xl">
@@ -1413,7 +1413,7 @@ const AdminDashboard = ({ bookings, updateBookingStatus, deleteBooking, handleLo
           <div className="bg-[#F8A41E] p-2 rounded-lg"><LayoutDashboard className="w-5 h-5 text-[#0C3136]" /></div>
           <div>
              <h2 className="font-black text-sm tracking-widest uppercase text-[#F8A41E]">Admin Panel</h2>
-             <p className="text-[10px] text-slate-400">Niagara Vista Tours</p>
+             <p className="text-[10px] text-slate-400">Niagara Travels</p>
           </div>
         </div>
         
@@ -1664,28 +1664,28 @@ export default function App() {
 
   useEffect(() => {
     const path = currentHash.replace('#', '');
-    let pageTitle = 'Niagara Vista Tours | Premium Niagara Falls Experiences';
+    let pageTitle = 'Niagara Travels | Premium Niagara Falls Experiences';
     let pageDescription = 'Discover the magic of Niagara Falls with our guided tours, from classic day escapes to private VIP experiences.';
 
     if (path.startsWith('/tour/')) {
       const tourId = path.split('/')[2];
       const tour = TOURS_DATA.find(t => t.id === tourId);
       if (tour) {
-        pageTitle = `${tour.title} | Niagara Vista Tours`;
+        pageTitle = `${tour.title} | Niagara Travels`;
         pageDescription = tour.overview;
       }
     } else if (path === '/tours') {
-      pageTitle = 'All Tour Packages | Niagara Vista Tours';
+      pageTitle = 'All Tour Packages | Niagara Travels';
     } else if (path === '/custom-itinerary') {
-      pageTitle = 'Build a Custom Itinerary | Niagara Vista Tours';
+      pageTitle = 'Build a Custom Itinerary | Niagara Travels';
     } else if (path === '/reviews') {
-      pageTitle = 'Guest Reviews | Niagara Vista Tours';
+      pageTitle = 'Guest Reviews | Niagara Travels';
     } else if (path === '/contact') {
-      pageTitle = 'Contact Us | Niagara Vista Tours';
+      pageTitle = 'Contact Us | Niagara Travels';
     } else if (path.startsWith('/checkout/')) {
-      pageTitle = 'Secure Checkout | Niagara Vista Tours';
+      pageTitle = 'Secure Checkout | Niagara Travels';
     } else if (path === '/admin') {
-      pageTitle = 'Admin Dashboard | Niagara Vista Tours';
+      pageTitle = 'Admin Dashboard | Niagara Travels';
     }
 
     document.title = pageTitle;
@@ -1746,7 +1746,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center relative">
           <a href="#/" className="flex items-center gap-3 cursor-pointer">
             <div className="w-56 h-21 overflow-hidden flex items-center justify-center">
-              <ImageWithFallback src="/images/logo.png" size="300 x 100 px" isLogo alt="Niagara Vista Tours" className="max-h-full max-w-full object-contain" />
+              <ImageWithFallback src="/images/logo.png" size="300 x 100 px" isLogo alt="Niagara Travels" className="max-h-full max-w-full object-contain" />
             </div>
           </a>
           
@@ -1846,7 +1846,7 @@ export default function App() {
             </div>
           </div>
           <div className="pt-8 pb-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-2 md:order-1">© 2026 Niagara Vista Tours. All Rights Reserved.</div>
+            <div className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-2 md:order-1">© 2026 Niagara Travels. All Rights Reserved.</div>
             <div className="flex items-center justify-center order-1 md:order-2"><MapleLeafIcon className="w-6 h-6 text-red-600" /></div>
             <div className="flex items-center gap-6 text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-3">
               <a href="#/privacy" className="hover:text-[#F8A41E]">Privacy Policy</a><span className="opacity-20">|</span>
