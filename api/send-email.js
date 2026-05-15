@@ -14,27 +14,27 @@ export default async function handler(req, res) {
     const { email, fullName, bookingId, tourName, tourDate, pickup, total } = req.body;
 
     const data = await resend.emails.send({
-      from: 'Niagara Travels <onboarding@resend.dev>',
-      // ⚠️ IMPORTANT: Because you are on the Resend free tier, 'onboarding@resend.dev' 
-      // can ONLY send emails to your verified Resend account email. 
-      // Once you add a real domain (like info@niagaravistatours.com) to Resend, 
-      // you can change this 'to' field to just the customer's `email` variable.
-      to: 'tourscoachcharters@gmail.com', 
-      subject: `Booking Confirmed: ${tourName}`,
+      // Once your domain is verified in Resend, update this "from" address:
+      from: 'Niagara Travels <info@niagaratravels.ca>',
+      
+      // We put an array here so it sends a copy to the customer AND a copy to you!
+      to: [email, 'tourscoachcharters@gmail.com'], 
+      
+      subject: `Booking Confirmed: ${tourName} - ${bookingId}`,
       html: `
         <div style="font-family: sans-serif; max-w-xl; margin: 0 auto;">
           <h2 style="color: #0C3136;">Booking Confirmed!</h2>
           <p>Hi ${fullName},</p>
           <p>Thank you for booking with Niagara Travels. Your reservation for <strong>${tourName}</strong> is confirmed.</p>
           
-          <div style="background-color: #f8fafc; padding: 20px; border-radius: 10px; margin: 20px 0;">
+          <div style="background-color: #f8fafc; padding: 20px; border-radius: 10px; margin: 20px 0; border: 1px solid #e2e8f0;">
             <p style="margin: 5px 0;"><strong>Booking ID:</strong> ${bookingId}</p>
             <p style="margin: 5px 0;"><strong>Date:</strong> ${tourDate}</p>
             <p style="margin: 5px 0;"><strong>Pickup:</strong> ${pickup}</p>
             <p style="margin: 5px 0;"><strong>Total Paid:</strong> ${total}</p>
           </div>
           
-          <p>Customer Email Provided: ${email}</p>
+          <p>If you have any questions, please reply to this email or call us at (416) 444-3000.</p>
           <p>We look forward to seeing you!</p>
         </div>
       `
