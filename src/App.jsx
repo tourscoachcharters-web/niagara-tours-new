@@ -689,7 +689,7 @@ const CustomItineraryPage = () => {
               <div className="bg-white p-10 rounded-[3rem] border border-slate-100 shadow-xl">
                  <h4 className="font-black text-[#0C3136] text-sm uppercase tracking-widest mb-6">Need Immediate Help?</h4>
                  <div className="space-y-4">
-                   <div className="flex items-center gap-3 text-lg font-black text-[#0C3136] hover:text-[#D91E1E] transition-colors cursor-pointer"><Phone className="w-5 h-5 text-[#F8A41E]" /> +1 (905) 123-4567</div>
+                   <div className="flex items-center gap-3 text-lg font-black text-[#0C3136] hover:text-[#D91E1E] transition-colors cursor-pointer"><Phone className="w-5 h-5 text-[#F8A41E]" /> (416) 444-3000</div>
                    <p className="text-xs text-slate-500 font-medium leading-relaxed">Call us and speak directly with a local planning expert today.</p>
                  </div>
               </div>
@@ -1188,8 +1188,7 @@ const ContactPage = () => {
             <div className="space-y-8">
               <h3 className="text-2xl font-black text-[#0C3136]">Office Locations</h3>
               {[
-                { name: 'Niagara Falls Head Office', addr: 'Clifton Hill, Niagara Falls, ON L2G 3Y9', icon: MapPin },
-                { name: 'Toronto Branch', addr: 'Union Station Area, Toronto, ON M5J 1E6', icon: Bus }
+                { name: 'Head Office', addr: '1315 Pickering Parkway, Suite 300, Pickering, ON L1V 7G5', icon: MapPin },
               ].map((loc, i) => (
                 <div key={i} className="flex gap-6 p-8 bg-white rounded-3xl shadow-lg border border-slate-50 group hover:border-[#F8A41E] transition-all">
                   <div className="w-12 h-12 rounded-2xl bg-[#0C3136]/5 flex items-center justify-center text-[#F8A41E] group-hover:bg-[#0C3136] group-hover:text-white transition-all">
@@ -1211,14 +1210,14 @@ const ContactPage = () => {
                     <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-[#F8A41E] transition-all"><Phone className="w-5 h-5" /></div>
                     <div>
                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Call Anytime</p>
-                      <p className="font-black text-lg">+1 (905) 123-4567</p>
+                      <p className="font-black text-lg">(416) 444-3000</p>
                     </div>
                  </div>
                  <div className="flex gap-4 items-center group cursor-pointer">
                     <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-[#F8A41E] transition-all"><Mail className="w-5 h-5" /></div>
                     <div>
                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Email Us</p>
-                      <p className="font-black text-sm">info@niagaravistatours.com</p>
+                      <p className="font-black text-sm">info@niagaratravels.ca</p>
                     </div>
                  </div>
                  <div className="pt-4 border-t border-white/10">
@@ -1737,7 +1736,7 @@ export default function App() {
     <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-800">
       {/* Top Bar */}
       <div className="hidden lg:flex bg-[#0C3136] text-white px-8 py-2.5 justify-between items-center text-[10px] font-black tracking-[0.1em] uppercase">
-        <div className="flex gap-10 items-center"><div className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-[#F8A41E]" /> Niagara Falls, Ontario</div><div className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-[#F8A41E]" /> +1 (905) 123-4567</div></div>
+        <div className="flex gap-10 items-center"><div className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-[#F8A41E]" /> Pickering, Ontario</div><div className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-[#F8A41E]" /> (416) 444-3000</div></div>
         <div className="flex items-center gap-4"><span className="text-[10px] font-bold text-[#F8A41E] animate-pulse">(Open 24/7)</span><a href="#/tours" className="bg-[#D91E1E] text-white px-5 py-1.5 rounded-md font-black hover:bg-white hover:text-[#D91E1E] transition-all">BOOK NOW</a></div>
       </div>
 
@@ -1830,9 +1829,9 @@ export default function App() {
             <div>
               <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-8 border-b border-white/10 pb-2">Contact Us</h4>
               <ul className="space-y-4 text-xs font-medium text-slate-400">
-                <li className="flex items-start gap-3"><MapPin className="w-4 h-4 text-[#F8A41E] shrink-0" /><span>Niagara Falls, Ontario,<br />Canada L2G 3Y9</span></li>
-                <li className="flex items-center gap-3"><Phone className="w-4 h-4 text-[#F8A41E] shrink-0" /><span>+1 (905) 123-4567</span></li>
-                <li className="flex items-center gap-3"><Mail className="w-4 h-4 text-[#F8A41E] shrink-0" /><span>info@niagaravistatours.com</span></li>
+                <li className="flex items-start gap-3"><MapPin className="w-4 h-4 text-[#F8A41E] shrink-0" /><span>1315 Pickering Parkway,<br />Suite 300, Pickering, ON L1V 7G5</span></li>
+                <li className="flex items-center gap-3"><Phone className="w-4 h-4 text-[#F8A41E] shrink-0" /><span>(416) 444-3000</span></li>
+                <li className="flex items-center gap-3"><Mail className="w-4 h-4 text-[#F8A41E] shrink-0" /><span>info@niagaratravels.ca</span></li>
                 <li className="flex items-center gap-3"><Clock className="w-4 h-4 text-[#F8A41E] shrink-0" /><span>Open Daily 8:00 AM – 8:00 PM</span></li>
               </ul>
             </div>
