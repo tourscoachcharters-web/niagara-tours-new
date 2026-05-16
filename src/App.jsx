@@ -44,7 +44,12 @@ import {
   Utensils,
   LogOut,
   Plus,
-  Minus
+  Minus,
+  AlertCircle,
+  Ban,
+  Sun,
+  FileText,
+  Baby
 } from 'lucide-react';
 
 // --- LEAFLET MARKER FIX ---
@@ -91,16 +96,18 @@ const TOURS_DATA = [
   {
     id: 'classic-day-escape',
     title: 'Niagara Classic Day Escape',
+    tagline: 'Feel the mist and hear the roar on our most comprehensive day tour.',
     price: 99,
     duration: '9-10 Hours',
     img: '/images/tour-classic.jpg', 
     tag: 'BEST VALUE',
-    overview: 'The Niagara Classic Day Escape is perfect for first-time visitors to Niagara Falls. Whether you\'re traveling solo, with friends, or with family, this affordable day tour offers a comprehensive Niagara Falls experience, including the breathtaking boat ride and stunning views of Horseshoe Falls.',
+    overview: 'The Niagara Classic Day Escape is perfect for first-time visitors to Niagara Falls. Whether you\'re traveling solo, with friends, or with family, this affordable day tour offers a comprehensive Niagara Falls experience. Feel the immense power of the water on the breathtaking boat ride, explore stunning viewpoints, and enjoy a sweet taste of Canada at a local maple syrup farm.',
     inclusions: ['Round-trip Transport from Toronto', 'Niagara Falls Sightseeing', 'Niagara City Cruises (Seasonal)', 'Photo Stops at iconic locations', 'Free Time for exploration', 'Maple Syrup Tasting'],
+    exclusions: ['Gratuities (Optional)', 'Meals and drinks', 'Pickup outside downtown Toronto'],
     itinerary: [
-      "Morning departure from downtown Toronto",
+      "Morning departure from downtown Toronto pickup points",
       "Quick maple syrup tasting stop at a local farm",
-      "Prime time at Niagara Falls (Boat ride add-on available)",
+      "Prime time at Niagara Falls including the iconic Boat Ride",
       "Optional independent sightseeing at Clifton Hill",
       "A charming stop at historic Niagara-on-the-Lake",
       "Return to Toronto in the late afternoon/evening"
@@ -122,18 +129,20 @@ const TOURS_DATA = [
   {
     id: 'ultimate-adventure',
     title: 'Ultimate Niagara Adventure',
+    tagline: 'See it all from above, behind, and deep inside the mist.',
     price: 199,
     duration: '9 Hours',
     img: '/images/tour-adventure.jpg',
     tag: 'MOST POPULAR',
-    overview: 'The Ultimate Niagara Adventure is the complete Niagara Falls experience. Perfect for visitors who want to see it all, this tour includes iconic attractions like Journey Behind the Falls, Niagara City Cruises, and Skylon Tower, all in one action-packed day.',
+    overview: 'The Ultimate Niagara Adventure is the complete Niagara Falls experience. Perfect for visitors who want to see it all, this tour includes premium access to iconic attractions like Journey Behind the Falls, Niagara City Cruises, and the Skylon Tower observation deck, all seamlessly guided in one action-packed day.',
     inclusions: ['Niagara City Cruises Boat Ride', 'Journey Behind the Falls Admission', 'Skylon Tower Observation Deck', 'Scenic Photo Stops', 'Maple Syrup & Chocolate Tasting'],
+    exclusions: ['Gratuities for guide/driver', 'Personal purchases', 'Transport to non-listed hotels'],
     itinerary: [
       "Early morning luxury pickup from your Toronto hotel",
       "Panoramic views from the Skylon Tower Observation Deck",
       "Thrilling 'Journey Behind the Falls' experience",
       "Iconic Boat Cruise into the heart of the mist",
-      "Gourmet buffet lunch overlooking the Horseshoe Falls",
+      "Gourmet buffet lunch overlooking the Horseshoe Falls (Optional Add-on)",
       "Guided tour of the Niagara Parkway and Whirlpool Rapids",
       "Return to Toronto with door-to-door drop-off"
     ],
@@ -154,12 +163,14 @@ const TOURS_DATA = [
   {
     id: 'evening-illumination',
     title: 'Niagara Evening Illumination Tour',
+    tagline: 'Watch the falls transform into a dazzling display of color and light.',
     price: 109,
     duration: '10 Hours',
     img: '/images/tour-evening.jpg',
     tag: 'ROMANTIC',
     overview: 'Experience Niagara Falls in a whole new light on this evening tour. After a day of sightseeing, enjoy the illuminated falls and seasonal fireworks display, making this the perfect evening tour for photographers, couples, and anyone wanting to see the falls sparkle at night.',
     inclusions: ['Niagara Falls Sightseeing', 'Niagara City Cruises (Daytime)', 'Skylon Tower Night Views', 'Optional Dinner Stop', 'Niagara Falls Illumination', 'Seasonal Fireworks Display'],
+    exclusions: ['Dinner cost', 'Gratuities', 'Hotel pickup (Meet at designated spots only)'],
     itinerary: [
       "Mid-afternoon departure from Toronto (2:00 PM)",
       "Visit to the world's smallest chapel and the Floral Clock",
@@ -186,12 +197,14 @@ const TOURS_DATA = [
   {
     id: 'wine-country',
     title: 'Niagara Wine Country & Falls Tour',
+    tagline: 'Sip award-winning icewine steps away from a world wonder.',
     price: 199,
     duration: 'Full Day',
     img: '/images/tour-wine.jpg',
     tag: 'WINE LOVERS',
     overview: 'This tour combines the best of both worlds—Niagara Falls’ natural beauty and the stunning vineyards of Niagara-on-the-Lake. Perfect for wine lovers, this tour offers a relaxing and scenic day with a wine-tasting experience after visiting the falls.',
     inclusions: ['Niagara Falls Sightseeing', 'Scenic Niagara-on-the-Lake Drive', 'Winery Tour & Tasting (2 locations)', 'Vineyard Walk', 'Photo Stops', 'Optional Gourmet Winery Lunch'],
+    exclusions: ['Lunch cost', 'Additional bottles of wine', 'Gratuities'],
     itinerary: [
       "Morning departure through the scenic Golden Horseshoe",
       "Guided sightseeing at the brink of Niagara Falls",
@@ -218,12 +231,14 @@ const TOURS_DATA = [
   {
     id: 'vip-experience',
     title: 'Private Custom Niagara VIP Experience',
+    tagline: 'Your schedule, your pace, your luxury vehicle.',
     price: 1795,
     duration: 'Flexible',
     img: '/images/tour-vip.jpg',
     tag: 'PRIVATE / VIP',
     overview: 'For those who want a personalized experience, the Private Custom Niagara VIP Experience offers luxury transportation and a flexible itinerary, ensuring you get the most out of your day in Niagara Falls and the surrounding area. Ideal for groups, families, or corporate outings.',
     inclusions: ['Private Chauffeur & Vehicle', 'Fully Custom Itinerary', 'Niagara City Cruises', 'Skylon Tower VIP Access', 'Wine & Food Tastings', 'Flexible Schedule'],
+    exclusions: ['Meals not specified in custom itinerary', 'Gratuities'],
     itinerary: [
       "Luxury pickup at your preferred time and location",
       "Personal chauffeur-guide for the entire day",
@@ -250,12 +265,14 @@ const TOURS_DATA = [
   {
     id: 'three-day-tour',
     title: 'Toronto, Thousand Islands & Niagara 3-Day Tour',
+    tagline: 'Discover Canada’s most famous urban and natural landmarks.',
     price: 329,
     duration: '3 Days',
     img: '/images/tour-3day.jpg',
     tag: 'MULTI-CITY',
     overview: 'Make the most of your trip to Canada with this 3-day guided tour, visiting Toronto, Thousand Islands, Kingston, and Niagara Falls. Ideal for those with more time, this tour gives you a taste of Canada’s natural beauty and urban culture.',
     inclusions: ['Expert Tour Guide', 'Toronto Sightseeing', 'Thousand Islands Cruise', 'Kingston Historic Visit', 'Niagara Falls Full Experience', 'Hotel Accommodations (2 nights)'],
+    exclusions: ['Lunches and Dinners', 'Gratuities', 'Personal expenses'],
     itinerary: [
       "Day 1: Comprehensive Toronto City Tour & travel to Kingston",
       "Day 1: Guided walk through historic Kingston (Canada's first capital)",
@@ -290,6 +307,14 @@ const REVIEWS_DATA = [
   { id: 7, name: "Emma Dubois", date: "April 02, 2025", rating: 5, tour: "Niagara Classic Day Escape", text: "Excellent value for money. The maple syrup stop was a sweet bonus that my kids loved. The coach was pristine and had wifi which was great for the ride back to Toronto." },
   { id: 8, name: "Robert Klein", date: "March 15, 2025", rating: 4, tour: "Ultimate Niagara Adventure", text: "Great tour covering all the bases. The Skylon tower view is unbeatable. I would suggest bringing an extra pair of socks for the boat ride, you will get wet!" },
   { id: 9, name: "Sophie & Alex", date: "February 14, 2025", rating: 5, tour: "Niagara Evening Illumination Tour", text: "We did this for Valentine's Day and it was magical. The fireworks were the cherry on top. Our guide made sure we got the perfect spot to take photos." }
+];
+
+const PICKUP_POINTS = [
+  { name: "Royal Ontario Museum", sub: "(Queen's Park Entrance), 100 Queens Park", area: "Downtown Toronto", time: "7:55 AM", lat: 43.6677, lng: -79.3948 },
+  { name: "Holiday Inn Downtown Centre", sub: "30 Carlton St", area: "Downtown Toronto", time: "8:00 AM", lat: 43.6624, lng: -79.3831 },
+  { name: "Chelsea Hotel", sub: "33 Gerrard St W", area: "Downtown Toronto", time: "8:15 AM", lat: 43.6580, lng: -79.3828 },
+  { name: "Sheraton Centre", sub: "123 Queen St W", area: "Downtown Toronto", time: "8:15 AM", lat: 43.6515, lng: -79.3836 },
+  { name: "Maple Leaf Square", sub: "@ the South Entrance of Union Station", area: "Downtown Toronto", time: "8:30 AM", lat: 43.6431, lng: -79.3802 }
 ];
 
 const MapleLeafIcon = (props) => (
@@ -710,75 +735,243 @@ const TourDetailPage = ({ tourId }) => {
   
   const [bookingCount] = useState(Math.floor(Math.random() * (24 - 7 + 1)) + 7);
   
+  // Filter reviews specifically for this tour
+  const tourReviews = REVIEWS_DATA.filter(r => r.tour === tour?.title);
+  
   useEffect(() => {
     const handleClickOutside = (event) => { if (calendarRef.current && !calendarRef.current.contains(event.target)) setShowCalendar(false); };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const scrollToBooking = (e) => {
+    e.preventDefault();
+    document.getElementById('booking-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   if (!tour) return <div className="p-20 text-center font-black">Tour not found.</div>;
 
   return (
-    <div className="animate-in fade-in duration-700 bg-white">
-      <section className="relative h-[480px] flex items-center text-white overflow-hidden">
+    <div className="animate-in fade-in duration-700 bg-[#F8FAFC]">
+      {/* 1. HERO SECTION */}
+      <section className="relative h-[550px] flex items-center text-white overflow-hidden">
         <div className="absolute inset-0 z-0">
           <ImageWithFallback src={tour.img} size="1920 x 800 px" alt={tour.title} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0C3136]/90 via-[#0C3136]/50 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0C3136]/95 via-[#0C3136]/60 to-transparent"></div>
         </div>
         <div className="container mx-auto px-4 z-10">
-           <a href="#/" className="flex w-max items-center gap-2 text-[10px] font-black text-slate-300 uppercase tracking-widest mb-6 cursor-pointer hover:text-white">Home / Tours / {tour.title}</a>
-           <span className="bg-cyan-600 text-white text-[10px] font-black px-4 py-2 rounded-lg uppercase tracking-[0.2em] mb-6 inline-block shadow-lg">{tour.tag}</span>
-           <h1 className="text-4xl lg:text-7xl font-black leading-tight tracking-tighter mb-4">{tour.title}</h1>
-           <div className="flex flex-wrap gap-8 p-6 bg-white/5 backdrop-blur-2xl rounded-[2.5rem] border border-white/10 w-fit">
-              <div className="flex items-center gap-3"><Clock className="w-5 h-5 text-[#F8A41E]" /><span className="text-sm font-black">{tour.duration}</span></div>
-              <div className="flex items-center gap-3"><Users className="w-5 h-5 text-[#F8A41E]" /><span className="text-sm font-black">Group & Private Available</span></div>
+           <div className="max-w-3xl">
+             <a href="#/tours" className="flex w-max items-center gap-2 text-[10px] font-black text-slate-300 uppercase tracking-widest mb-6 cursor-pointer hover:text-white transition-colors"><ChevronLeft className="w-3 h-3" /> Back to Tours</a>
+             <span className="bg-[#F8A41E] text-[#0C3136] text-[10px] font-black px-4 py-2 rounded-lg uppercase tracking-[0.2em] mb-4 inline-block shadow-lg">{tour.tag}</span>
+             <h1 className="text-4xl lg:text-7xl font-black leading-tight tracking-tighter mb-4">{tour.title}</h1>
+             <p className="text-xl text-slate-200 font-medium mb-8 leading-relaxed max-w-2xl border-l-4 border-[#F8A41E] pl-4">{tour.tagline || 'Experience the natural wonder of Niagara Falls with our premium, locally guided tours.'}</p>
+             <div className="flex flex-wrap items-center gap-6">
+               <div className="flex flex-col">
+                 <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">From</span>
+                 <span className="text-3xl font-black text-white">CAD ${tour.price}</span>
+               </div>
+               <button onClick={scrollToBooking} className="bg-[#D91E1E] hover:bg-[#b01818] text-white px-8 py-4 rounded-xl font-black text-[11px] uppercase tracking-[0.2em] transition-all shadow-xl shadow-red-900/20">Book Your Tour Today</button>
+             </div>
            </div>
         </div>
       </section>
 
-      <main className="container mx-auto px-4 py-20 grid grid-cols-1 lg:grid-cols-12 gap-16">
-        <div className="lg:col-span-8">
-           <div className="mb-16">
-              <h2 className="text-3xl font-black text-[#0C3136] mb-6 tracking-tight">Overview</h2>
-              <p className="text-slate-600 text-lg leading-relaxed">{tour.overview}</p>
-           </div>
-
-           <div className="mb-16 bg-slate-50 p-10 rounded-[2.5rem] border border-slate-100">
-              <h3 className="text-2xl font-black text-[#0C3136] mb-8 flex items-center gap-3">
-                 <Navigation className="text-[#F8A41E]" /> Tour Itinerary
-              </h3>
-              <ul className="space-y-6">
-                {(tour.itinerary || []).map((item, i) => (
-                  <li key={i} className="flex items-start gap-4">
-                    <div className="w-2 h-2 rounded-full bg-[#F8A41E] mt-2 shrink-0"></div>
-                    <span className="text-slate-700 font-bold text-base">{item}</span>
-                  </li>
-                ))}
-              </ul>
-           </div>
-           
-           <h3 className="text-2xl font-black text-[#0C3136] mb-10 tracking-tight">Tour Highlights</h3>
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-              {tour.highlights.map((h, i) => (
-                <div key={i} className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center text-center group hover:shadow-xl transition-all">
-                  <div className="bg-[#0C3136]/5 text-[#125D66] p-4 rounded-2xl mb-6 group-hover:bg-[#F8A41E] group-hover:text-[#0C3136] transition-all"><h.i className="w-7 h-7" /></div>
-                  <h4 className="font-black text-[11px] text-[#0C3136] uppercase tracking-widest mb-2">{h.t}</h4>
-                  <p className="text-[10px] text-slate-500 font-medium leading-relaxed">{h.d}</p>
-                </div>
-              ))}
-           </div>
-
-           <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl overflow-hidden mb-12">
-              <div className="bg-[#125D66] text-white px-8 py-5 font-black text-xs uppercase tracking-widest">Package Inclusions</div>
-              <div className="p-10 space-y-4 grid grid-cols-1 md:grid-cols-2">
-                 {tour.inclusions.map((item, i) => (
-                   <div key={i} className="flex gap-4 text-xs text-slate-600 font-bold items-start"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" /> {item}</div>
-                 ))}
+      {/* 2. QUICK FACTS BAR */}
+      <div className="bg-white border-b border-slate-200 shadow-sm relative z-20">
+        <div className="container mx-auto px-4">
+           <div className="flex flex-wrap justify-between items-center py-6 gap-6">
+              <div className="flex items-center gap-4">
+                 <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-[#125D66]"><Clock className="w-5 h-5" /></div>
+                 <div><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Duration</p><p className="font-bold text-[#0C3136] text-sm">{tour.duration}</p></div>
+              </div>
+              <div className="hidden md:block w-px h-10 bg-slate-100"></div>
+              <div className="flex items-center gap-4">
+                 <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-[#125D66]"><Sun className="w-5 h-5" /></div>
+                 <div><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Season</p><p className="font-bold text-[#0C3136] text-sm">Year-Round</p></div>
+              </div>
+              <div className="hidden lg:block w-px h-10 bg-slate-100"></div>
+              <div className="flex items-center gap-4">
+                 <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-[#125D66]"><MapPin className="w-5 h-5" /></div>
+                 <div><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Pickup</p><p className="font-bold text-[#0C3136] text-sm">Included</p></div>
+              </div>
+              <div className="hidden xl:block w-px h-10 bg-slate-100"></div>
+              <div className="flex items-center gap-4">
+                 <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-[#125D66]"><ShieldCheck className="w-5 h-5" /></div>
+                 <div><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Passport</p><p className="font-bold text-[#0C3136] text-sm">Domestic (Not Req.)</p></div>
               </div>
            </div>
         </div>
+      </div>
 
-        <div className="lg:col-span-4">
+      <main className="container mx-auto px-4 py-16 grid grid-cols-1 xl:grid-cols-12 gap-12 lg:gap-16">
+        
+        {/* LEFT COLUMN: MAIN CONTENT */}
+        <div className="xl:col-span-8 space-y-16">
+           
+           {/* 3. TOUR OVERVIEW */}
+           <section>
+              <h2 className="text-3xl font-black text-[#0C3136] mb-6 flex items-center gap-3"><Compass className="text-[#F8A41E]" /> Tour Overview</h2>
+              <p className="text-slate-600 text-lg leading-relaxed font-medium bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">{tour.overview}</p>
+           </section>
+
+           {/* 4 & 11. WHAT'S INCLUDED & EXCLUSIONS */}
+           <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-emerald-50/50 p-8 rounded-[2rem] border border-emerald-100 h-full">
+                 <h3 className="text-xl font-black text-[#0C3136] mb-6 flex items-center gap-3"><CheckCircle2 className="text-emerald-500" /> What's Included</h3>
+                 <ul className="space-y-4">
+                    {tour.inclusions.map((item, i) => (
+                      <li key={i} className="flex gap-3 text-sm text-slate-700 font-bold items-start"><CheckCircle className="w-5 h-5 text-emerald-500 shrink-0" /> {item}</li>
+                    ))}
+                 </ul>
+              </div>
+              <div className="bg-red-50/50 p-8 rounded-[2rem] border border-red-100 h-full">
+                 <h3 className="text-xl font-black text-[#0C3136] mb-6 flex items-center gap-3"><XCircle className="text-red-500" /> Exclusions</h3>
+                 <ul className="space-y-4">
+                    {(tour.exclusions || ['Gratuities (Optional)', 'Meals (Unless stated)', 'Transport outside pickup zone']).map((item, i) => (
+                      <li key={i} className="flex gap-3 text-sm text-slate-700 font-bold items-start"><Ban className="w-5 h-5 text-red-400 shrink-0" /> {item}</li>
+                    ))}
+                 </ul>
+              </div>
+           </section>
+
+           {/* 5. HIGHLIGHTS */}
+           <section>
+              <h3 className="text-3xl font-black text-[#0C3136] mb-8">Tour Highlights</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                 {tour.highlights.map((h, i) => (
+                   <div key={i} className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center text-center hover:border-[#F8A41E] transition-all">
+                     <div className="bg-[#0C3136]/5 text-[#125D66] p-4 rounded-2xl mb-5"><h.i className="w-6 h-6" /></div>
+                     <h4 className="font-black text-sm text-[#0C3136] mb-2">{h.t}</h4>
+                     <p className="text-xs text-slate-500 font-medium leading-relaxed">{h.d}</p>
+                   </div>
+                 ))}
+              </div>
+           </section>
+
+           {/* 6. ITINERARY */}
+           <section className="bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-sm">
+              <h3 className="text-3xl font-black text-[#0C3136] mb-10 flex items-center gap-3"><Navigation className="text-[#F8A41E]" /> Step-by-Step Itinerary</h3>
+              <div className="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-1 before:bg-slate-100">
+                {(tour.itinerary || []).map((item, i) => (
+                  <div key={i} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                    <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-[#F8A41E] text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                       <span className="font-black text-xs">{i+1}</span>
+                    </div>
+                    <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-slate-50 p-6 rounded-2xl border border-slate-100 text-sm font-bold text-slate-700">
+                       {item}
+                    </div>
+                  </div>
+                ))}
+              </div>
+           </section>
+
+           {/* 7. PICKUP & MEETING POINT */}
+           <section>
+              <h3 className="text-3xl font-black text-[#0C3136] mb-8 flex items-center gap-3"><MapPin className="text-[#F8A41E]" /> Pickup & Meeting Points</h3>
+              <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
+                 <div className="grid grid-cols-1 md:grid-cols-2">
+                    <div className="p-8 space-y-4">
+                       <p className="text-sm text-slate-500 font-bold mb-6">We offer complimentary pickup from the following central locations. Please arrive 10 minutes early.</p>
+                       {PICKUP_POINTS.slice(0, 4).map((point, i) => (
+                         <div key={i} className="flex flex-col justify-between p-4 bg-slate-50 rounded-2xl">
+                            <h4 className="font-black text-[#0C3136] text-sm">{point.name}</h4>
+                            <div className="flex justify-between items-center mt-2">
+                               <span className="text-xs text-slate-500 font-medium">{point.sub}</span>
+                               <span className="bg-[#0C3136] text-[#F8A41E] px-3 py-1 rounded-md text-[10px] font-black">{point.time}</span>
+                            </div>
+                         </div>
+                       ))}
+                    </div>
+                    <div className="bg-slate-200 min-h-[300px] h-full relative z-0">
+                       <MapContainer center={[43.655, -79.385]} zoom={13} scrollWheelZoom={false} style={{ height: '100%', width: '100%', zIndex: 0 }}>
+                          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                          {PICKUP_POINTS.map((p, i) => (
+                            <Marker key={i} position={[p.lat, p.lng]}>
+                              <Popup><strong className="block">{p.name}</strong>{p.time}</Popup>
+                            </Marker>
+                          ))}
+                       </MapContainer>
+                    </div>
+                 </div>
+              </div>
+           </section>
+
+           {/* 8. PRICING TABLE */}
+           <section>
+              <h3 className="text-3xl font-black text-[#0C3136] mb-8 flex items-center gap-3"><Ticket className="text-[#F8A41E]" /> Pricing Details</h3>
+              <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden">
+                 <table className="w-full text-left">
+                    <thead>
+                       <tr className="bg-slate-50 text-[10px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-100">
+                          <th className="p-6">Passenger Type</th>
+                          <th className="p-6">Age Group</th>
+                          <th className="p-6 text-right">Price (CAD)</th>
+                       </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-50 text-sm font-bold text-[#0C3136]">
+                       <tr className="hover:bg-slate-50/50 transition-colors">
+                          <td className="p-6 flex items-center gap-3"><Users className="w-5 h-5 text-slate-400" /> Adult</td>
+                          <td className="p-6 text-slate-500">13+ Years</td>
+                          <td className="p-6 text-right text-lg">${tour.price}.00</td>
+                       </tr>
+                       <tr className="hover:bg-slate-50/50 transition-colors">
+                          <td className="p-6 flex items-center gap-3"><Users className="w-5 h-5 text-slate-400 scale-75" /> Child</td>
+                          <td className="p-6 text-slate-500">2 - 12 Years</td>
+                          <td className="p-6 text-right text-lg">${tour.price - 10}.00</td>
+                       </tr>
+                       <tr className="hover:bg-slate-50/50 transition-colors">
+                          <td className="p-6 flex items-center gap-3"><Baby className="w-5 h-5 text-slate-400" /> Infant (Lap Child)</td>
+                          <td className="p-6 text-slate-500">Under 2 Years</td>
+                          <td className="p-6 text-right text-emerald-600 font-black uppercase tracking-widest text-[10px]">Free</td>
+                       </tr>
+                    </tbody>
+                 </table>
+              </div>
+           </section>
+
+           {/* 9 & 10. IMPORTANT INFO & CANCELLATION */}
+           <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
+                 <h3 className="text-lg font-black text-[#0C3136] mb-6 flex items-center gap-3"><AlertCircle className="text-[#F8A41E]" /> Important Information</h3>
+                 <ul className="space-y-4 text-sm font-medium text-slate-600">
+                    <li className="flex gap-3 items-start"><FileText className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" /> <strong>Passport:</strong> Not required for this domestic Canadian tour.</li>
+                    <li className="flex gap-3 items-start"><Wind className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" /> <strong>Weather:</strong> Tours operate rain or shine. Ponchos provided for the boat ride.</li>
+                    <li className="flex gap-3 items-start"><Phone className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" /> <strong>Confirmation:</strong> Please have your digital ticket ready on your phone.</li>
+                 </ul>
+              </div>
+              <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col justify-center text-center">
+                 <div className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 text-[#125D66]"><Calendar className="w-6 h-6" /></div>
+                 <h3 className="text-lg font-black text-[#0C3136] mb-2">Flexible Cancellation</h3>
+                 <p className="text-sm font-medium text-slate-500 mb-4">Plans change. We get it. Cancel up to 24 hours in advance of your tour departure time for a full, no-questions-asked refund.</p>
+                 <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3 py-1 rounded-md w-fit mx-auto">100% Risk Free Booking</span>
+              </div>
+           </section>
+
+           {/* 12. REVIEWS */}
+           {tourReviews.length > 0 && (
+             <section className="bg-[#0C3136] text-white p-10 rounded-[2.5rem] shadow-xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+                <h3 className="text-3xl font-black mb-10 flex items-center gap-3 relative z-10"><Star className="text-[#F8A41E] fill-current" /> Verified Guest Reviews</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+                   {tourReviews.slice(0, 4).map((review) => (
+                     <div key={review.id} className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/10 flex flex-col h-full">
+                       <div className="flex gap-1 text-[#F8A41E] mb-4">
+                         {[...Array(5)].map((_, i) => <Star key={i} className={`w-3.5 h-3.5 ${i < review.rating ? 'fill-current' : 'text-white/20'}`} />)}
+                       </div>
+                       <p className="font-medium text-sm leading-relaxed mb-6 flex-1 italic text-slate-200">"{review.text}"</p>
+                       <div className="flex justify-between items-center pt-4 border-t border-white/10">
+                         <span className="font-black text-xs">{review.name}</span>
+                         <span className="text-[9px] font-black uppercase tracking-widest text-white/50">{review.date}</span>
+                       </div>
+                     </div>
+                   ))}
+                </div>
+             </section>
+           )}
+        </div>
+
+        {/* RIGHT COLUMN: BOOKING STICKY SIDEBAR (FINAL CTA) */}
+        <div className="xl:col-span-4" id="booking-card">
            <div className="sticky top-28 space-y-10">
               <div className="bg-white rounded-[2rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)] border border-slate-100 group">
                  <div className="bg-gradient-to-br from-[#0C3136] to-[#125D66] px-8 py-8 text-white relative rounded-t-[2rem] overflow-hidden">
@@ -810,7 +1003,9 @@ const TourDetailPage = ({ tourId }) => {
                        {showCalendar && <CalendarDropdown onSelectDate={(d) => { setSelectedDate(d.toLocaleDateString()); setShowCalendar(false); }} />}
                     </div>
 
-                    <a href={`#/checkout/${tour.id}?date=${selectedDate ? encodeURIComponent(selectedDate) : encodeURIComponent(new Date().toLocaleDateString())}`} className="block w-full text-center bg-[#D91E1E] hover:bg-[#b01818] text-white py-4 rounded-xl font-black text-[11px] uppercase tracking-[0.3em] shadow-lg shadow-red-900/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0">RESERVE NOW</a>
+                    {/* 13. FINAL CTA BUTTON */}
+                    <a href={`#/checkout/${tour.id}?date=${selectedDate ? encodeURIComponent(selectedDate) : encodeURIComponent(new Date().toLocaleDateString())}`} className="block w-full text-center bg-[#D91E1E] hover:bg-[#b01818] text-white py-4 rounded-xl font-black text-[11px] uppercase tracking-[0.3em] shadow-lg shadow-red-900/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0">CHECK AVAILABILITY</a>
+                    
                     <div className="flex items-center justify-center gap-4 pt-1 border-t border-slate-50">
                        <div className="flex items-center gap-1 text-slate-400 text-[8px] font-black uppercase tracking-widest"><ShieldCheck className="w-3 h-3" /> Secure Payment</div>
                        <div className="flex items-center gap-1 text-slate-400 text-[8px] font-black uppercase tracking-widest"><Clock className="w-3 h-3" /> Instant Confirmation</div>
@@ -866,6 +1061,7 @@ const CheckoutPage = ({ tourId, initialDate, onBook }) => {
 
     setIsSubmitting(true);
     
+    // Simulate network delay for smooth UI
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     const newBooking = {
