@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import L from 'leaflet';
 import { 
   Phone, 
   Mail, 
@@ -44,6 +46,14 @@ import {
   Plus,
   Minus
 } from 'lucide-react';
+
+// --- LEAFLET MARKER FIX ---
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+});
 
 // --- FIREBASE INITIALIZATION ---
 const firebaseConfig = {
@@ -280,14 +290,6 @@ const REVIEWS_DATA = [
   { id: 7, name: "Emma Dubois", date: "April 02, 2025", rating: 5, tour: "Niagara Classic Day Escape", text: "Excellent value for money. The maple syrup stop was a sweet bonus that my kids loved. The coach was pristine and had wifi which was great for the ride back to Toronto." },
   { id: 8, name: "Robert Klein", date: "March 15, 2025", rating: 4, tour: "Ultimate Niagara Adventure", text: "Great tour covering all the bases. The Skylon tower view is unbeatable. I would suggest bringing an extra pair of socks for the boat ride, you will get wet!" },
   { id: 9, name: "Sophie & Alex", date: "February 14, 2025", rating: 5, tour: "Niagara Evening Illumination Tour", text: "We did this for Valentine's Day and it was magical. The fireworks were the cherry on top. Our guide made sure we got the perfect spot to take photos." }
-];
-
-const PICKUP_POINTS = [
-  { name: "Royal Ontario Museum", sub: "(Queen's Park Entrance), 100 Queens Park, Toronto, M5S 2C6", area: "Downtown Toronto", time: "7:55 AM" },
-  { name: "Holiday Inn Downtown Centre", sub: "30 Carlton St", area: "Downtown Toronto", time: "8:00 AM" },
-  { name: "Chelsea Hotel", sub: "33 Gerrard St W, Toronto, ON M5G", area: "Downtown Toronto", time: "8:15 AM" },
-  { name: "Sheraton Centre", sub: "123 Queen St W, Toronto, ON M5H 2M9", area: "Downtown Toronto", time: "8:15 AM" },
-  { name: "Maple Leaf Square", sub: "@ the South Entrance of Union Station", area: "Downtown Toronto", time: "8:30 AM" }
 ];
 
 const MapleLeafIcon = (props) => (
@@ -766,33 +768,6 @@ const TourDetailPage = ({ tourId }) => {
               ))}
            </div>
 
-           <div className="mb-16">
-              <h3 className="text-2xl font-black text-[#0C3136] mb-8 flex items-center gap-3">
-                 <MapPin className="text-[#F8A41E]" /> Toronto Pickup Points
-              </h3>
-              <div className="space-y-4">
-                 {PICKUP_POINTS.map((point, i) => (
-                   <div key={i} className="flex flex-col md:flex-row md:items-center justify-between p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:border-[#F8A41E] transition-all group">
-                      <div className="flex gap-5 items-start">
-                         <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-[#125D66] group-hover:bg-[#0C3136] group-hover:text-white transition-all shrink-0">
-                            <MapPin className="w-5 h-5" />
-                         </div>
-                         <div>
-                            <h4 className="font-black text-[#0C3136] text-sm">{point.name}</h4>
-                            <p className="text-xs text-slate-400 font-medium mt-0.5">{point.sub}</p>
-                            <div className="flex items-center gap-4 mt-2">
-                               <span className="text-[10px] font-black uppercase text-[#125D66] tracking-wider">{point.area}</span>
-                            </div>
-                         </div>
-                      </div>
-                      <div className="mt-4 md:mt-0 px-6 py-2 bg-[#0C3136] text-[#F8A41E] rounded-full text-sm font-black w-fit whitespace-nowrap">
-                         {point.time}
-                      </div>
-                   </div>
-                 ))}
-              </div>
-           </div>
-
            <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl overflow-hidden mb-12">
               <div className="bg-[#125D66] text-white px-8 py-5 font-black text-xs uppercase tracking-widest">Package Inclusions</div>
               <div className="p-10 space-y-4 grid grid-cols-1 md:grid-cols-2">
@@ -860,11 +835,28 @@ const CheckoutPage = ({ tourId, initialDate, onBook }) => {
   const [phone, setPhone] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmedBooking, setConfirmedBooking] = useState(null);
+  const [customPos, setCustomPos] = useState(null);
 
   const childPrice = tour ? tour.price - 10 : 89;
   const subtotal = tour ? (adults * tour.price) + (children * childPrice) : 0;
   const taxes = subtotal * 0.13;
   const total = subtotal + taxes;
+
+  // Listens for clicks on the map and sets the pin & text box
+  const LocationMarker = () => {
+    useMapEvents({
+      click(e) {
+        setCustomPos(e.latlng);
+        setPickup(`Map Pin: ${e.latlng.lat.toFixed(5)}, ${e.latlng.lng.toFixed(5)}`);
+      },
+    });
+
+    return customPos === null ? null : (
+      <Marker position={customPos}>
+        <Popup>Your Pickup Location</Popup>
+      </Marker>
+    );
+  };
 
   const handleCompleteBooking = async () => {
     if (!fullName || !email || !pickup) {
@@ -874,7 +866,6 @@ const CheckoutPage = ({ tourId, initialDate, onBook }) => {
 
     setIsSubmitting(true);
     
-    // Simulate network delay for smooth UI
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     const newBooking = {
@@ -896,7 +887,7 @@ const CheckoutPage = ({ tourId, initialDate, onBook }) => {
     // Save to Firebase
     await onBook(newBooking);
 
-    // Send Confirmation Email via our new Vercel API & Resend
+    // Send Confirmation Email via Resend API
     try {
       const response = await fetch('/api/send-email', {
         method: 'POST',
@@ -1021,24 +1012,38 @@ const CheckoutPage = ({ tourId, initialDate, onBook }) => {
            </div>
 
            <div className="bg-white p-8 lg:p-12 rounded-[2.5rem] border border-slate-200 shadow-sm">
-              <div className="flex items-center gap-4 mb-10">
+              <div className="flex items-center gap-4 mb-6">
                  <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-[#125D66]">
                     <MapPin className="w-5 h-5" />
                  </div>
                  <h3 className="text-2xl font-black text-[#0C3136]">Pickup Location</h3>
               </div>
-              <div className="relative">
-                 <select 
-                    value={pickup} 
-                    onChange={(e) => setPickup(e.target.value)}
-                    className="w-full p-5 bg-slate-50 border-2 border-slate-50 rounded-2xl font-bold text-slate-500 text-sm outline-none focus:border-[#F8A41E] transition-all appearance-none"
-                 >
-                    <option value="">Select a pickup location...</option>
-                    {PICKUP_POINTS.map((p, i) => (
-                      <option key={i} value={p.name}>{p.name} ({p.time})</option>
-                    ))}
-                 </select>
-                 <ChevronRight className="absolute right-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 rotate-90" />
+              
+              <div className="space-y-4">
+                 <p className="text-sm font-bold text-slate-500 mb-2">Tap anywhere on the map to drop a pin for your custom pickup location, or type your address below:</p>
+                 
+                 {/* Interactive Map Container */}
+                 <div className="h-[250px] w-full rounded-2xl overflow-hidden border-2 border-slate-100 relative z-0 cursor-crosshair shadow-inner">
+                    <MapContainer center={[43.655, -79.385]} zoom={11} scrollWheelZoom={true} style={{ height: '100%', width: '100%', zIndex: 0 }}>
+                       <TileLayer
+                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                       />
+                       <LocationMarker />
+                    </MapContainer>
+                 </div>
+
+                 {/* Text Input */}
+                 <div className="space-y-2 pt-2">
+                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">Address or Coordinates</label>
+                    <input 
+                       type="text"
+                       placeholder="Enter hotel name, address, or drop a pin..." 
+                       value={pickup} 
+                       onChange={(e) => setPickup(e.target.value)}
+                       className="w-full p-5 bg-slate-50 border-2 border-slate-50 rounded-2xl font-bold text-[#0C3136] text-sm outline-none focus:border-[#F8A41E] transition-all"
+                    />
+                 </div>
               </div>
            </div>
 
