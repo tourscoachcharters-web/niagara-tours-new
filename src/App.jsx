@@ -436,10 +436,10 @@ const HomePage = () => {
             </h2>
             <p className="text-lg text-slate-200 mb-10 max-w-xl leading-relaxed font-medium">Unforgettable experiences. Breathtaking views. Memories that last a lifetime.</p>
             <div className="flex flex-wrap gap-4">
-              <a href="#/tour/classic-day-escape" className="bg-[#D91E1E] hover:bg-[#b01818] text-white px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-red-900/30 flex items-center gap-3">
+              <a href="/tour/classic-day-escape" className="bg-[#D91E1E] hover:bg-[#b01818] text-white px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-red-900/30 flex items-center gap-3">
                 EXPLORE TOURS <ChevronRight className="w-4 h-4" />
               </a>
-              <a href="#/custom-itinerary" className="bg-white hover:bg-slate-50 text-[#0C3136] px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-lg flex items-center gap-3">
+              <a href="/custom-itinerary" className="bg-white hover:bg-slate-50 text-[#0C3136] px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-lg flex items-center gap-3">
                 <Settings className="w-4 h-4 text-[#F8A41E]" /> CUSTOM PACKAGE
               </a>
             </div>
@@ -523,14 +523,14 @@ const HomePage = () => {
                     <p className="text-slate-500 text-sm leading-relaxed mb-8 flex-1 line-clamp-3">{tour.overview}</p>
                     <div className="flex justify-between items-center pt-6 border-t border-slate-100 mt-auto">
                        <div><span className="text-slate-400 text-[10px] font-black block uppercase tracking-widest">FROM</span><span className="text-2xl font-black text-[#0C3136]">CAD ${tour.price}</span></div>
-                       <a href={`#/tour/${tour.id}`} className="bg-[#D91E1E] hover:bg-[#b01818] text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all block text-center">VIEW TOUR</a>
+                       <a href={`/tour/${tour.id}`} className="bg-[#D91E1E] hover:bg-[#b01818] text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all block text-center">VIEW TOUR</a>
                     </div>
                  </div>
               </div>
             ))}
           </div>
           <div className="mt-16 text-center">
-            <a href="#/tours" className="inline-block bg-[#0C3136] text-white px-12 py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#125D66] transition-all shadow-xl">VIEW ALL {TOURS_DATA.length} TOURS</a>
+            <a href="/tours" className="inline-block bg-[#0C3136] text-white px-12 py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#125D66] transition-all shadow-xl">VIEW ALL {TOURS_DATA.length} TOURS</a>
           </div>
         </div>
       </section>
@@ -570,7 +570,7 @@ const ToursPage = () => {
                   <p className="text-slate-500 text-sm leading-relaxed mb-8 flex-1 line-clamp-3">{tour.overview}</p>
                   <div className="flex justify-between items-center pt-6 border-t border-slate-100 mt-auto">
                      <div><span className="text-slate-400 text-[10px] font-black block uppercase tracking-widest">FROM</span><span className="text-2xl font-black text-[#0C3136]">CAD ${tour.price}</span></div>
-                     <a href={`#/tour/${tour.id}`} className="bg-[#D91E1E] hover:bg-[#b01818] text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all">VIEW DETAILS</a>
+                     <a href={`/tour/${tour.id}`} className="bg-[#D91E1E] hover:bg-[#b01818] text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all">VIEW DETAILS</a>
                   </div>
                </div>
             </div>
@@ -761,7 +761,7 @@ const TourDetailPage = ({ tourId }) => {
         </div>
         <div className="container mx-auto px-4 z-10">
            <div className="max-w-3xl">
-             <a href="#/tours" className="flex w-max items-center gap-2 text-[10px] font-black text-slate-300 uppercase tracking-widest mb-6 cursor-pointer hover:text-white transition-colors"><ChevronLeft className="w-3 h-3" /> Back to Tours</a>
+             <a href="/tours" className="flex w-max items-center gap-2 text-[10px] font-black text-slate-300 uppercase tracking-widest mb-6 cursor-pointer hover:text-white transition-colors"><ChevronLeft className="w-3 h-3" /> Back to Tours</a>
              <span className="bg-[#F8A41E] text-[#0C3136] text-[10px] font-black px-4 py-2 rounded-lg uppercase tracking-[0.2em] mb-4 inline-block shadow-lg">{tour.tag}</span>
              <h1 className="text-4xl lg:text-7xl font-black leading-tight tracking-tighter mb-4">{tour.title}</h1>
              <p className="text-xl text-slate-200 font-medium mb-8 leading-relaxed max-w-2xl border-l-4 border-[#F8A41E] pl-4">{tour.tagline || 'Experience the natural wonder of Niagara Falls with our premium, locally guided tours.'}</p>
@@ -1004,7 +1004,7 @@ const TourDetailPage = ({ tourId }) => {
                     </div>
 
                     {/* 13. FINAL CTA BUTTON */}
-                    <a href={`#/checkout/${tour.id}?date=${selectedDate ? encodeURIComponent(selectedDate) : encodeURIComponent(new Date().toLocaleDateString())}`} className="block w-full text-center bg-[#D91E1E] hover:bg-[#b01818] text-white py-4 rounded-xl font-black text-[11px] uppercase tracking-[0.3em] shadow-lg shadow-red-900/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0">CHECK AVAILABILITY</a>
+                    <a href={`/checkout/${tour.id}?date=${selectedDate ? encodeURIComponent(selectedDate) : encodeURIComponent(new Date().toLocaleDateString())}`} className="block w-full text-center bg-[#D91E1E] hover:bg-[#b01818] text-white py-4 rounded-xl font-black text-[11px] uppercase tracking-[0.3em] shadow-lg shadow-red-900/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0">CHECK AVAILABILITY</a>
                     
                     <div className="flex items-center justify-center gap-4 pt-1 border-t border-slate-50">
                        <div className="flex items-center gap-1 text-slate-400 text-[8px] font-black uppercase tracking-widest"><ShieldCheck className="w-3 h-3" /> Secure Payment</div>
@@ -1139,7 +1139,7 @@ const CheckoutPage = ({ tourId, initialDate, onBook }) => {
               </div>
            </div>
            <div className="flex justify-center">
-             <a href="#/" className="inline-block bg-[#0C3136] text-white px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#125D66] transition-all shadow-lg">
+             <a href="/" className="inline-block bg-[#0C3136] text-white px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#125D66] transition-all shadow-lg">
                RETURN HOME
              </a>
            </div>
@@ -1154,7 +1154,7 @@ const CheckoutPage = ({ tourId, initialDate, onBook }) => {
     <div className="animate-in fade-in duration-700 bg-slate-50 pb-20">
       <div className="bg-white border-b border-slate-200 py-6 mb-12">
         <div className="container mx-auto px-4 flex items-center justify-between">
-           <a href={`#/tour/${tourId}`} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#0C3136] hover:text-[#F8A41E] transition-all">
+           <a href={`/tour/${tourId}`} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#0C3136] hover:text-[#F8A41E] transition-all">
               <ChevronLeft className="w-4 h-4" /> Back to Tour
            </a>
            <h2 className="text-sm font-black uppercase tracking-[0.2em] text-[#0C3136]">Secure Checkout</h2>
@@ -1178,7 +1178,7 @@ const CheckoutPage = ({ tourId, initialDate, onBook }) => {
                        <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-1 block">Selected Date</label>
                        <p className="text-lg font-black text-[#0C3136]">{initialDate}</p>
                     </div>
-                    <a href={`#/tour/${tourId}`} className="text-[10px] font-black uppercase tracking-widest text-[#F8A41E] hover:underline">Change Date</a>
+                    <a href={`/tour/${tourId}`} className="text-[10px] font-black uppercase tracking-widest text-[#F8A41E] hover:underline">Change Date</a>
                  </div>
 
                  <div className="flex items-center justify-between py-2">
@@ -1526,7 +1526,7 @@ const ReviewsPage = () => {
            <div className="relative z-10 max-w-2xl mx-auto">
              <h2 className="text-3xl lg:text-5xl font-black text-white mb-6">Traveled With Us Recently?</h2>
              <p className="text-slate-300 font-medium text-lg mb-10">We would love to hear about your experience! Your feedback helps us continue to provide five-star service to all our guests.</p>
-             <a href="#/contact" className="inline-block bg-[#D91E1E] text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-white hover:text-[#D91E1E] transition-all">
+             <a href="/contact" className="inline-block bg-[#D91E1E] text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-white hover:text-[#D91E1E] transition-all">
                WRITE A REVIEW
              </a>
            </div>
@@ -1580,7 +1580,7 @@ const AdminLogin = () => {
           </button>
         </form>
         <div className="mt-8 text-center">
-          <a href="#/" className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-[#F8A41E] flex items-center justify-center gap-1">
+          <a href="/" className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-[#F8A41E] flex items-center justify-center gap-1">
             <ChevronLeft className="w-3 h-3" /> Return to Website
           </a>
         </div>
@@ -1620,7 +1620,7 @@ const AdminDashboard = ({ bookings, updateBookingStatus, deleteBooking, handleLo
         <nav className="p-4 flex-1">
           <ul className="space-y-2">
             <li>
-              <a href="#/admin" className="flex items-center gap-3 px-4 py-3 bg-white/10 rounded-xl text-sm font-bold text-white transition-all">
+              <a href="/admin" className="flex items-center gap-3 px-4 py-3 bg-white/10 rounded-xl text-sm font-bold text-white transition-all">
                 <Ticket className="w-4 h-4" /> Bookings Management
               </a>
             </li>
@@ -1628,7 +1628,7 @@ const AdminDashboard = ({ bookings, updateBookingStatus, deleteBooking, handleLo
         </nav>
         
         <div className="p-4 border-t border-white/10 space-y-2">
-           <a href="#/" className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl text-sm font-bold text-slate-400 hover:text-white transition-all">
+           <a href="/" className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl text-sm font-bold text-slate-400 hover:text-white transition-all">
              <Globe className="w-4 h-4" /> View Live Site
            </a>
            <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 hover:bg-red-500/10 rounded-xl text-sm font-bold text-red-400 hover:text-red-300 transition-all text-left">
@@ -1775,7 +1775,8 @@ const AdminDashboard = ({ bookings, updateBookingStatus, deleteBooking, handleLo
 /* --- MAIN APP CONTAINER --- */
 
 export default function App() {
-  const [currentHash, setCurrentHash] = useState(window.location.hash || '#/');
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  const [currentSearch, setCurrentSearch] = useState(window.location.search);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -1796,9 +1797,18 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
+  // Global Navigation Helper
+  const navigate = (url) => {
+    window.history.pushState({}, '', url);
+    const urlObj = new URL(url, window.location.origin);
+    setCurrentPath(urlObj.pathname);
+    setCurrentSearch(urlObj.search);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleLogout = async () => {
     await signOut(auth);
-    window.location.hash = '#/';
+    navigate('/');
   };
 
   // Sync Bookings with Firestore
@@ -1852,18 +1862,38 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll); 
   }, []);
   
+  // Listen to browser Back/Forward buttons
   useEffect(() => {
-    const handleHashChange = () => {
-      setCurrentHash(window.location.hash || '#/');
+    const handlePopState = () => {
+      setCurrentPath(window.location.pathname);
+      setCurrentSearch(window.location.search);
       setMobileMenuOpen(false);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  // Global Interceptor for <a> tags to enable SPA Clean URLs
+  useEffect(() => {
+    const handleLinkClick = (e) => {
+      const link = e.target.closest('a');
+      if (link) {
+        const href = link.getAttribute('href');
+        // Only intercept internal routing links
+        if (href && href.startsWith('/') && !href.startsWith('//')) {
+          e.preventDefault();
+          navigate(href);
+          setMobileMenuOpen(false);
+        }
+      }
+    };
+    document.addEventListener('click', handleLinkClick);
+    return () => document.removeEventListener('click', handleLinkClick);
   }, []);
 
   useEffect(() => {
-    const path = currentHash.replace('#', '');
+    const path = currentPath;
     let pageTitle = 'Niagara Travels | Premium Niagara Falls Experiences';
     let pageDescription = 'Discover the magic of Niagara Falls with our guided tours, from classic day escapes to private VIP experiences.';
 
@@ -1896,11 +1926,10 @@ export default function App() {
       document.head.appendChild(metaDescription);
     }
     metaDescription.content = pageDescription;
-  }, [currentHash]);
+  }, [currentPath]);
   
   // Render routing
-  const path = currentHash.replace('#', '');
-  const cleanPath = path.split('?')[0];
+  const cleanPath = currentPath;
 
   // Admin Route Protection
   if (cleanPath === '/admin') {
@@ -1914,7 +1943,7 @@ export default function App() {
   }
 
   const renderPage = () => { 
-    const urlParams = new URLSearchParams(path.split('?')[1]);
+    const urlParams = new URLSearchParams(currentSearch);
 
     if (cleanPath === '/' || cleanPath === '') return <HomePage />; 
     if (cleanPath === '/contact') return <ContactPage />; 
@@ -1938,24 +1967,24 @@ export default function App() {
       {/* Top Bar */}
       <div className="hidden lg:flex bg-[#0C3136] text-white px-8 py-2.5 justify-between items-center text-[10px] font-black tracking-[0.1em] uppercase">
         <div className="flex gap-10 items-center"><div className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-[#F8A41E]" /> Pickering, Ontario</div><div className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-[#F8A41E]" /> (416) 444-3000</div></div>
-        <div className="flex items-center gap-4"><span className="text-[10px] font-bold text-[#F8A41E] animate-pulse">(Open 24/7)</span><a href="#/tours" className="bg-[#D91E1E] text-white px-5 py-1.5 rounded-md font-black hover:bg-white hover:text-[#D91E1E] transition-all">BOOK NOW</a></div>
+        <div className="flex items-center gap-4"><span className="text-[10px] font-bold text-[#F8A41E] animate-pulse">(Open 24/7)</span><a href="/tours" className="bg-[#D91E1E] text-white px-5 py-1.5 rounded-md font-black hover:bg-white hover:text-[#D91E1E] transition-all">BOOK NOW</a></div>
       </div>
 
       {/* Header */}
       <header className={`sticky top-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-md py-2' : 'bg-white py-5'}`}>
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center relative">
-          <a href="#/" className="flex items-center gap-3 cursor-pointer">
+          <a href="/" className="flex items-center gap-3 cursor-pointer">
             <div className="w-56 h-21 overflow-hidden flex items-center justify-center">
               <ImageWithFallback src="/images/logo.png" size="300 x 100 px" isLogo alt="Niagara Travels" className="max-h-full max-w-full object-contain" />
             </div>
           </a>
           
           <nav className="hidden lg:flex items-center gap-10">
-            <NavItem label="Home" href="#/" active={currentHash === '#/' || currentHash === ''} />
-            <NavItem label="Tours" href="#/tours" active={currentHash.includes('/tours') || currentHash.includes('/tour/')} />
-            <NavItem label="Custom Itinerary" href="#/custom-itinerary" active={currentHash === '#/custom-itinerary'} />
-            <NavItem label="Reviews" href="#/reviews" active={currentHash === '#/reviews'} />
-            <NavItem label="Contact" href="#/contact" active={currentHash === '#/contact'} />
+            <NavItem label="Home" href="/" active={currentPath === '/' || currentPath === ''} />
+            <NavItem label="Tours" href="/tours" active={currentPath.includes('/tours') || currentPath.includes('/tour/')} />
+            <NavItem label="Custom Itinerary" href="/custom-itinerary" active={currentPath === '/custom-itinerary'} />
+            <NavItem label="Reviews" href="/reviews" active={currentPath === '/reviews'} />
+            <NavItem label="Contact" href="/contact" active={currentPath === '/contact'} />
           </nav>
           
           <button className="lg:hidden text-[#0C3136] p-2" aria-label="Toggle Menu" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
@@ -1973,14 +2002,13 @@ export default function App() {
                ].map(item => (
                  <a 
                    key={item.path} 
-                   href={`#${item.path}`} 
-                   onClick={() => setMobileMenuOpen(false)}
-                   className={`font-black block text-sm uppercase tracking-widest py-3 border-b border-slate-50 transition-colors ${currentHash === `#${item.path}` ? 'text-[#F8A41E]' : 'text-[#0C3136]'}`}
+                   href={item.path} 
+                   className={`font-black block text-sm uppercase tracking-widest py-3 border-b border-slate-50 transition-colors ${currentPath === item.path ? 'text-[#F8A41E]' : 'text-[#0C3136]'}`}
                  >
                    {item.label}
                  </a>
                ))}
-               <a href="#/tours" onClick={() => setMobileMenuOpen(false)} className="block text-center bg-[#D91E1E] text-white py-4 rounded-xl font-black text-xs uppercase tracking-widest shadow-lg">BOOK NOW</a>
+               <a href="/tours" className="block text-center bg-[#D91E1E] text-white py-4 rounded-xl font-black text-xs uppercase tracking-widest shadow-lg">BOOK NOW</a>
             </div>
           )}
         </div>
@@ -2010,21 +2038,21 @@ export default function App() {
             <div>
               <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-8 border-b border-white/10 pb-2">Quick Links</h4>
               <ul className="space-y-3 text-xs font-bold text-slate-400 uppercase tracking-widest flex flex-col">
-                <a href="#/" className="hover:text-[#F8A41E] transition-colors">Home</a>
-                <a href="#/tours" className="hover:text-[#F8A41E] transition-colors">Tours</a>
-                <a href="#/custom-itinerary" className="hover:text-[#F8A41E] transition-colors">Custom Itinerary</a>
-                <a href="#/reviews" className="hover:text-[#F8A41E] transition-colors">Reviews</a>
-                <a href="#/contact" className="hover:text-[#F8A41E] transition-colors">Contact Us</a>
+                <a href="/" className="hover:text-[#F8A41E] transition-colors">Home</a>
+                <a href="/tours" className="hover:text-[#F8A41E] transition-colors">Tours</a>
+                <a href="/custom-itinerary" className="hover:text-[#F8A41E] transition-colors">Custom Itinerary</a>
+                <a href="/reviews" className="hover:text-[#F8A41E] transition-colors">Reviews</a>
+                <a href="/contact" className="hover:text-[#F8A41E] transition-colors">Contact Us</a>
               </ul>
             </div>
             <div>
               <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-8 border-b border-white/10 pb-2">Top Tours</h4>
               <ul className="space-y-3 text-xs font-bold text-slate-400 uppercase tracking-widest flex flex-col">
-                <a href="#/tour/classic-day-escape" className="hover:text-[#F8A41E]">Niagara Day Tour</a>
-                <a href="#/tour/wine-country" className="hover:text-[#F8A41E]">Falls & Winery Escape</a>
-                <a href="#/tour/ultimate-adventure" className="hover:text-[#F8A41E]">Family Adventure Package</a>
-                <a href="#/tour/vip-experience" className="hover:text-[#F8A41E]">Private Tours</a>
-                <a href="#/custom-itinerary" className="hover:text-[#F8A41E]">Custom Packages</a>
+                <a href="/tour/classic-day-escape" className="hover:text-[#F8A41E]">Niagara Day Tour</a>
+                <a href="/tour/wine-country" className="hover:text-[#F8A41E]">Falls & Winery Escape</a>
+                <a href="/tour/ultimate-adventure" className="hover:text-[#F8A41E]">Family Adventure Package</a>
+                <a href="/tour/vip-experience" className="hover:text-[#F8A41E]">Private Tours</a>
+                <a href="/custom-itinerary" className="hover:text-[#F8A41E]">Custom Packages</a>
               </ul>
             </div>
             <div>
@@ -2049,9 +2077,9 @@ export default function App() {
             <div className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-2 md:order-1">© 2026 Niagara Travels. All Rights Reserved.</div>
             <div className="flex items-center justify-center order-1 md:order-2"><MapleLeafIcon className="w-6 h-6 text-red-600" /></div>
             <div className="flex items-center gap-6 text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-3">
-              <a href="#/privacy" className="hover:text-[#F8A41E]">Privacy Policy</a><span className="opacity-20">|</span>
-              <a href="#/terms" className="hover:text-[#F8A41E]">Terms & Conditions</a><span className="opacity-20">|</span>
-              <a href="#/admin" className="hover:text-[#F8A41E] flex items-center gap-1"><LayoutDashboard className="w-3 h-3" /> Admin Login</a>
+              <a href="/privacy" className="hover:text-[#F8A41E]">Privacy Policy</a><span className="opacity-20">|</span>
+              <a href="/terms" className="hover:text-[#F8A41E]">Terms & Conditions</a><span className="opacity-20">|</span>
+              <a href="/admin" className="hover:text-[#F8A41E] flex items-center gap-1"><LayoutDashboard className="w-3 h-3" /> Admin Login</a>
             </div>
           </div>
         </div>
