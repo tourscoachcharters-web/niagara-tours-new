@@ -94,6 +94,51 @@ const ImageWithFallback = ({ src, alt, className, size, isLogo }) => {
 
 const TOURS_DATA = [
   {
+    id: 'half-day-private',
+    title: 'Niagara Falls Half Day Private Tour',
+    tagline: 'A flexible, private escape to Niagara Falls for those with limited time.',
+    price: 795, // <-- UPDATE YOUR PRICE HERE
+    duration: '5 - 6 Hours',
+    img: '/images/tour-half-day.jpg', // <-- UPDATE IMAGE NAME HERE
+    tag: 'HALF DAY PRIVATE',
+    overview: 'Experience the beauty and excitement of Niagara Falls on a private half-day escape from Toronto. Perfect for couples, families, and small groups, this tour offers a comfortable and flexible way to discover one of Canada’s most iconic destinations.',
+    inclusions: [
+      'Private luxury transportation', 
+      'Professional driver/guide', 
+      'Hotel pickup and drop-off (Toronto & GTA)', 
+      'Flexible sightseeing itinerary', 
+      'Scenic Niagara Parkway drive', 
+      'Complimentary bottled water'
+    ],
+    exclusions: [
+      'Attraction Admission Tickets', 
+      'Optional Boat Cruise / Helicopter Ride', 
+      'Optional Winery Visit', 
+      'Lunch or Dinner Packages'
+    ],
+    itinerary: [
+      "Toronto Pickup: Your private driver-guide will pick you up from your hotel, residence, or preferred location.",
+      "Scenic Niagara Parkway Drive: Enjoy views of the Niagara River, vineyards, and charming towns.",
+      "Niagara Falls Experience: Explore Horseshoe Falls, Table Rock, Clifton Hill, and Queen Victoria Park.",
+      "Scenic Stops: Enjoy photo stops at Whirlpool Rapids, Floral Clock, and Niagara Gorge.",
+      "Optional Attractions: Enhance your trip with a Boat Cruise, Helicopter Tour, or Skylon Tower visit.",
+      "Return to Toronto: Relax on your comfortable drive back after an unforgettable experience."
+    ],
+    highlights: [
+      { t: 'Personalized Experience', d: 'Enjoy a stress-free tour with private luxury transportation and a professional local guide.', i: Users },
+      { t: 'Flexible Itinerary', d: 'Explore at your own pace, customize your stops, and balance sightseeing with free time.', i: Navigation },
+      { t: 'Breathtaking Stops', d: 'Visit the breathtaking Horseshoe Falls, Whirlpool Rapids, and the Floral Clock.', i: Camera }
+    ],
+    idealFor: 'Couples, families, small groups, corporate travelers, and visitors with limited time in Toronto.',
+    facts: [
+      { l: 'Duration', v: '5 - 6 Hours', i: Clock },
+      { l: 'Group Size', v: 'Private', i: Users },
+      { l: 'Pace', v: 'Flexible', i: Zap },
+      { l: 'Transport', v: 'Luxury Vehicle', i: Bus },
+      { l: 'Pickup', v: 'Toronto / GTA', i: MapPin }
+    ]
+  },
+  {
     id: 'classic-day-escape',
     title: 'Niagara Classic Day Escape',
     tagline: 'Feel the mist and hear the roar on our most comprehensive day tour.',
