@@ -2143,7 +2143,7 @@ export default function App() {
           background: 'transparent', 
           pointerEvents: 'auto'
         }}
-        allowtransparency="true"
+        allowTransparency={true}
         title="Customer Support Chat"
       ></iframe>
 
