@@ -2129,6 +2129,24 @@ export default function App() {
           </div>
         </div>
       </footer>
+{/* --- CHAT WIDGET --- */}
+      <iframe 
+        src="https://multi-agent-chat-rho.vercel.app/?mode=embed" 
+        style={{
+          position: 'fixed', 
+          bottom: 0, 
+          right: 0, 
+          width: '400px', 
+          height: '600px', 
+          border: 'none', 
+          zIndex: 999999, 
+          background: 'transparent', 
+          pointerEvents: 'auto'
+        }}
+        allowtransparency="true"
+        title="Customer Support Chat"
+      ></iframe>
+
     </div>
   );
 }
