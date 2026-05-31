@@ -2015,11 +2015,11 @@ export default function App() {
         <div className="flex items-center gap-4"><span className="text-[10px] font-bold text-[#F8A41E] animate-pulse">(Open 24/7)</span><a href="/tours" className="bg-[#D91E1E] text-white px-5 py-1.5 rounded-md font-black hover:bg-white hover:text-[#D91E1E] transition-all">BOOK NOW</a></div>
       </div>
 
-      {/* Header */}
-      <header className={`sticky top-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-md py-2' : 'bg-white py-5'}`}>
+{/* Header */}
+      <header className={`sticky top-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-md py-1' : 'bg-white py-2'}`}>
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center relative">
           <a href="/" className="flex items-center gap-3 cursor-pointer">
-            <div className="w-56 h-21 overflow-hidden flex items-center justify-center">
+            <div className="w-52 h-16 overflow-hidden flex items-center justify-center">
               <ImageWithFallback src="/images/logo.png" size="300 x 100 px" isLogo alt="Niagara Travels" className="max-h-full max-w-full object-contain" />
             </div>
           </a>
