@@ -2016,7 +2016,7 @@ export default function App() {
       </div>
 
 {/* Header */}
-      <header className={`sticky top-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-md py-1' : 'bg-white py-2'}`}>
+      <header className={`sticky top-0 z-[1000000] transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-md py-1' : 'bg-white py-2'}`}>
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center relative">
           <a href="/" className="flex items-center gap-3 cursor-pointer">
             <div className="w-52 h-16 overflow-hidden flex items-center justify-center">
