@@ -2121,7 +2121,7 @@ export default function App() {
           <div className="pt-8 pb-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-2 md:order-1">© 2026 Niagara Travels. All Rights Reserved.</div>
             <div className="flex items-center justify-center order-1 md:order-2"><MapleLeafIcon className="w-6 h-6 text-red-600" /></div>
-            <div className="flex items-center gap-6 text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-3">
+            <div className="flex items-center gap-6 text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-3 relative z-[1000000] pr-20 lg:pr-24">
               <a href="/privacy" className="hover:text-[#F8A41E]">Privacy Policy</a><span className="opacity-20">|</span>
               <a href="/terms" className="hover:text-[#F8A41E]">Terms & Conditions</a><span className="opacity-20">|</span>
               <a href="/admin" className="hover:text-[#F8A41E] flex items-center gap-1"><LayoutDashboard className="w-3 h-3" /> Admin Login</a>
