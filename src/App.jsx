@@ -2066,8 +2066,12 @@ export default function App() {
       {/* Footer */}
       <footer className="bg-[#0C3136] text-white pt-20 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
-            <div className="lg:col-span-1">
+          
+          {/* Re-engineered 4-column Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-16 relative z-10">
+            
+            {/* Column 1: Logo & Socials */}
+            <div>
               <div className="flex items-center gap-3 mb-6">
                 <ImageWithFallback src="/images/logo.png" size="300 x 100 px" isLogo alt="Logo" className="w-56 h-20 object-contain" />
               </div>
@@ -2080,45 +2084,55 @@ export default function App() {
                 <div className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform"><YoutubeIcon className="w-4 h-4 text-white" /></div>
               </div>
             </div>
-            <div>
-              <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-8 border-b border-white/10 pb-2">Quick Links</h4>
-              <ul className="space-y-3 text-xs font-bold text-slate-400 uppercase tracking-widest flex flex-col">
-                <a href="/" className="hover:text-[#F8A41E] transition-colors">Home</a>
-                <a href="/tours" className="hover:text-[#F8A41E] transition-colors">Tours</a>
-                <a href="/custom-itinerary" className="hover:text-[#F8A41E] transition-colors">Custom Itinerary</a>
-                <a href="/reviews" className="hover:text-[#F8A41E] transition-colors">Reviews</a>
-                <a href="/contact" className="hover:text-[#F8A41E] transition-colors">Contact Us</a>
-              </ul>
+
+            {/* Column 2: Quick Links & Top Tours */}
+            <div className="flex flex-col sm:flex-row lg:flex-col gap-10 lg:gap-8">
+              <div className="flex-1">
+                <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-6 border-b border-white/10 pb-2">Quick Links</h4>
+                <ul className="space-y-3 text-xs font-bold text-slate-400 uppercase tracking-widest flex flex-col">
+                  <a href="/" className="hover:text-[#F8A41E] transition-colors">Home</a>
+                  <a href="/tours" className="hover:text-[#F8A41E] transition-colors">Tours</a>
+                  <a href="/custom-itinerary" className="hover:text-[#F8A41E] transition-colors">Custom Itinerary</a>
+                  <a href="/reviews" className="hover:text-[#F8A41E] transition-colors">Reviews</a>
+                  <a href="/contact" className="hover:text-[#F8A41E] transition-colors">Contact Us</a>
+                </ul>
+              </div>
+              <div className="flex-1">
+                <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-6 border-b border-white/10 pb-2">Top Tours</h4>
+                <ul className="space-y-3 text-xs font-bold text-slate-400 uppercase tracking-widest flex flex-col">
+                  <a href="/tour/classic-day-escape" className="hover:text-[#F8A41E]">Niagara Day Tour</a>
+                  <a href="/tour/wine-country" className="hover:text-[#F8A41E]">Falls & Winery Escape</a>
+                  <a href="/tour/ultimate-adventure" className="hover:text-[#F8A41E]">Family Adventure Package</a>
+                </ul>
+              </div>
             </div>
+
+            {/* Column 3: Contact Us & Newsletter */}
             <div>
-              <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-8 border-b border-white/10 pb-2">Top Tours</h4>
-              <ul className="space-y-3 text-xs font-bold text-slate-400 uppercase tracking-widest flex flex-col">
-                <a href="/tour/classic-day-escape" className="hover:text-[#F8A41E]">Niagara Day Tour</a>
-                <a href="/tour/wine-country" className="hover:text-[#F8A41E]">Falls & Winery Escape</a>
-                <a href="/tour/ultimate-adventure" className="hover:text-[#F8A41E]">Family Adventure Package</a>
-                <a href="/tour/vip-experience" className="hover:text-[#F8A41E]">Private Tours</a>
-                <a href="/custom-itinerary" className="hover:text-[#F8A41E]">Custom Packages</a>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-8 border-b border-white/10 pb-2">Contact Us</h4>
-              <ul className="space-y-4 text-xs font-medium text-slate-400">
+              <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-6 border-b border-white/10 pb-2">Contact Us</h4>
+              <ul className="space-y-4 text-xs font-medium text-slate-400 mb-10">
                 <li className="flex items-start gap-3"><MapPin className="w-4 h-4 text-[#F8A41E] shrink-0" /><span>1315 Pickering Parkway,<br />Suite 300, Pickering, ON L1V 7G5</span></li>
                 <li className="flex items-center gap-3"><Phone className="w-4 h-4 text-[#F8A41E] shrink-0" /><span>(416) 444-3000</span></li>
                 <li className="flex items-center gap-3"><Mail className="w-4 h-4 text-[#F8A41E] shrink-0" /><span>info@niagaratravels.ca</span></li>
-                <li className="flex items-center gap-3"><Clock className="w-4 h-4 text-[#F8A41E] shrink-0" /><span>Open Daily 8:00 AM – 8:00 PM</span></li>
               </ul>
-            </div>
-            <div className="relative z-[1000000]">
-              <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-8 border-b border-white/10 pb-2">Newsletter</h4>
-              <p className="text-xs text-slate-400 font-medium mb-6">Subscribe for exclusive offers, travel tips and the latest updates.</p>
-              <div className="flex items-stretch gap-0 overflow-hidden rounded-lg">
+
+              <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-6 border-b border-white/10 pb-2">Newsletter</h4>
+              <p className="text-xs text-slate-400 font-medium mb-4">Subscribe for exclusive offers and updates.</p>
+              <div className="flex items-stretch gap-0 overflow-hidden rounded-lg shadow-lg relative z-20 pointer-events-auto">
                 <input type="email" placeholder="Enter your email" aria-label="Email address" className="bg-white px-4 py-3 text-xs w-full text-slate-800 focus:outline-none" />
                 <button className="bg-[#D91E1E] text-white px-4 font-black text-[10px] uppercase tracking-widest hover:bg-white hover:text-[#D91E1E] transition-all">Subscribe</button>
               </div>
             </div>
+
+            {/* Column 4: Invisible Docking Bay for Chat Widget */}
+            <div className="hidden lg:block relative pointer-events-none">
+                {/* This column is intentionally left completely blank. 
+                    It forces the grid to reserve the far-right 25% of the screen, 
+                    ensuring the 400px chat iframe never overlaps your inputs! */}
+            </div>
           </div>
-<div className="pt-8 pb-10 border-t border-white/5 flex flex-col lg:flex-row justify-between items-center gap-6 relative z-10">
+
+          <div className="pt-8 pb-10 border-t border-white/5 flex flex-col lg:flex-row justify-between items-center gap-6 relative z-10">
             {/* Clickable Links moved to the FAR LEFT side safely away from the chat widget */}
             <div className="flex items-center gap-4 md:gap-6 text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-2 lg:order-1">
               <a href="/privacy" className="hover:text-[#F8A41E] transition-colors relative z-20">Privacy Policy</a><span className="opacity-20">|</span>
@@ -2136,7 +2150,8 @@ export default function App() {
           </div>
         </div>
       </footer>
-{/* --- CHAT WIDGET --- */}
+      
+      {/* --- CHAT WIDGET --- */}
       <iframe 
         src="https://multi-agent-chat-rho.vercel.app/?mode=embed" 
         style={{
