@@ -2109,7 +2109,7 @@ export default function App() {
                 <li className="flex items-center gap-3"><Clock className="w-4 h-4 text-[#F8A41E] shrink-0" /><span>Open Daily 8:00 AM – 8:00 PM</span></li>
               </ul>
             </div>
-            <div>
+            <div className="relative z-[1000000]">
               <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-white mb-8 border-b border-white/10 pb-2">Newsletter</h4>
               <p className="text-xs text-slate-400 font-medium mb-6">Subscribe for exclusive offers, travel tips and the latest updates.</p>
               <div className="flex items-stretch gap-0 overflow-hidden rounded-lg">
