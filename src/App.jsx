@@ -2118,13 +2118,20 @@ export default function App() {
               </div>
             </div>
           </div>
-          <div className="pt-8 pb-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-2 md:order-1">© 2026 Niagara Travels. All Rights Reserved.</div>
-            <div className="flex items-center justify-center order-1 md:order-2"><MapleLeafIcon className="w-6 h-6 text-red-600" /></div>
-            <div className="flex items-center gap-6 text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-3 relative z-[1000000] pr-20 lg:pr-24">
-              <a href="/privacy" className="hover:text-[#F8A41E]">Privacy Policy</a><span className="opacity-20">|</span>
-              <a href="/terms" className="hover:text-[#F8A41E]">Terms & Conditions</a><span className="opacity-20">|</span>
-              <a href="/admin" className="hover:text-[#F8A41E] flex items-center gap-1"><LayoutDashboard className="w-3 h-3" /> Admin Login</a>
+<div className="pt-8 pb-10 border-t border-white/5 flex flex-col lg:flex-row justify-between items-center gap-6 relative z-10">
+            {/* Clickable Links moved to the FAR LEFT side safely away from the chat widget */}
+            <div className="flex items-center gap-4 md:gap-6 text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-2 lg:order-1">
+              <a href="/privacy" className="hover:text-[#F8A41E] transition-colors relative z-20">Privacy Policy</a><span className="opacity-20">|</span>
+              <a href="/terms" className="hover:text-[#F8A41E] transition-colors relative z-20">Terms & Conditions</a><span className="opacity-20">|</span>
+              <a href="/admin" className="hover:text-[#F8A41E] flex items-center gap-1 transition-colors relative z-20"><LayoutDashboard className="w-3 h-3" /> Admin Login</a>
+            </div>
+            
+            {/* Logo in the middle */}
+            <div className="flex items-center justify-center order-1 lg:order-2"><MapleLeafIcon className="w-6 h-6 text-red-600" /></div>
+            
+            {/* Plain text copyright moved to the RIGHT side (Under the chat widget) */}
+            <div className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase order-3 lg:pr-[80px] xl:pr-0">
+              © 2026 Niagara Travels. All Rights Reserved.
             </div>
           </div>
         </div>
