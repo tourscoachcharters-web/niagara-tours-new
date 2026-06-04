@@ -1,3 +1,8 @@
+Here is the complete, fully integrated `App.jsx` file with the newly reduced hero section height, the premium tour card designs, the interactive map, the custom footer with the chat widget docking bay, and the correct Niagara Travels branding.
+
+You can copy this entire block and use it to replace the contents of your `src/App.jsx` file:
+
+```jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
@@ -557,13 +562,13 @@ const WhyTravelersLoveSection = () => (
 const HomePage = () => {
   return (
     <div className="animate-in fade-in duration-700">
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+      <section className="relative min-h-[70vh] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <ImageWithFallback src="/images/hero-home.jpg" size="1920 x 1080 px" alt="Niagara Falls Background" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0C3136]/90 via-[#0C3136]/30 to-transparent"></div>
         </div>
 
-        <div className="container mx-auto px-4 z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 pt-10 pb-20 items-center">
+        <div className="container mx-auto px-4 z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 pt-10 pb-10 items-center">
           <div className="text-white">
             <div className="flex items-center gap-2 mb-6">
               <span className="bg-[#D91E1E] p-1.5 rounded-full shadow-lg"><Star className="w-3.5 h-3.5 text-white fill-current" /></span>
@@ -2231,3 +2236,5 @@ export default function App() {
     </div>
   );
 }
+
+```
