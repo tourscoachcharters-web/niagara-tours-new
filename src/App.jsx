@@ -1,3 +1,10 @@
+Here is the complete, fully updated `App.jsx` file.
+
+I have applied the new premium card design to both the **Home Page** (Featured Tours) and the **Tours Page** (All Tours). All of your previous features—the interactive map, the custom footer, the chat widget, and the Vercel/Resend backend connection—are perfectly preserved.
+
+Copy this entire block and use it to replace the contents of your `src/App.jsx` file:
+
+```jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
@@ -554,21 +561,46 @@ const HomePage = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {TOURS_DATA.slice(0, 3).map((tour, i) => (
-              <div key={i} className="bg-white rounded-[2.5rem] border border-slate-100 shadow-lg overflow-hidden group flex flex-col h-full">
-                 <div className="h-64 relative overflow-hidden">
+              <div key={i} className="bg-white rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden group flex flex-col h-full hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 transition-all duration-300">
+                 {/* Image Header with Gradient Overlay */}
+                 <div className="h-60 relative overflow-hidden">
                     <ImageWithFallback src={tour.img} size="800 x 600 px" alt={tour.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                    <span className="absolute top-4 left-4 bg-[#125D66] text-white text-[9px] font-black px-3 py-1 rounded-md uppercase tracking-widest">{tour.tag}</span>
+                    {/* Dark gradient at the bottom of the image for depth */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    
+                    {/* Sleeker Pill-shaped Badge */}
+                    <span className="absolute top-5 left-5 bg-[#125D66]/95 backdrop-blur-sm text-white text-[9px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
+                      {tour.tag}
+                    </span>
                  </div>
+                 
+                 {/* Card Content */}
                  <div className="p-8 flex-1 flex flex-col">
-                    <h3 className="text-xl font-black text-[#0C3136] mb-2">{tour.title}</h3>
-                    <div className="flex items-center gap-4 text-[11px] font-black text-slate-400 mb-6">
-                       <div className="flex items-center gap-1 text-yellow-500"><Star className="w-3.5 h-3.5 fill-current" /> 4.8</div>
-                       <div className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {tour.duration}</div>
+                    <h3 className="text-xl lg:text-2xl font-black text-[#0C3136] mb-3 leading-tight tracking-tight group-hover:text-[#F8A41E] transition-colors">{tour.title}</h3>
+                    
+                    <div className="flex items-center gap-4 text-[11px] font-bold text-slate-500 mb-5">
+                       <div className="flex items-center gap-1.5 text-yellow-500 bg-yellow-50 px-2 py-1 rounded-md">
+                         <Star className="w-3.5 h-3.5 fill-current" /> 4.8
+                       </div>
+                       <div className="flex items-center gap-1.5 bg-slate-50 px-2 py-1 rounded-md">
+                         <Clock className="w-3.5 h-3.5 text-[#125D66]" /> {tour.duration}
+                       </div>
                     </div>
-                    <p className="text-slate-500 text-sm leading-relaxed mb-8 flex-1 line-clamp-3">{tour.overview}</p>
-                    <div className="flex justify-between items-center pt-6 border-t border-slate-100 mt-auto">
-                       <div><span className="text-slate-400 text-[10px] font-black block uppercase tracking-widest">FROM</span><span className="text-2xl font-black text-[#0C3136]">CAD ${tour.price}</span></div>
-                       <a href={`/tour/${tour.id}`} className="bg-[#D91E1E] hover:bg-[#b01818] text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all block text-center">VIEW TOUR</a>
+                    
+                    <p className="text-slate-600 text-sm leading-relaxed mb-8 flex-1 line-clamp-3">{tour.overview}</p>
+                    
+                    {/* Footer / CTA Area */}
+                    <div className="flex justify-between items-end pt-6 border-t border-slate-100 mt-auto">
+                       <div>
+                         <span className="text-slate-400 text-[10px] font-black block uppercase tracking-widest mb-0.5">From</span>
+                         <span className="text-2xl font-black text-[#0C3136]">CAD ${tour.price}</span>
+                       </div>
+                       
+                       {/* Animated Premium Button */}
+                       <a href={`/tour/${tour.id}`} className="flex items-center gap-2 bg-[#D91E1E] hover:bg-[#b01818] text-white px-6 py-3.5 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-red-900/20 active:scale-95 group/btn">
+                         VIEW DETAILS
+                         <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                       </a>
                     </div>
                  </div>
               </div>
@@ -601,21 +633,46 @@ const ToursPage = () => {
       <main className="container mx-auto px-4 py-24">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
           {TOURS_DATA.map((tour, i) => (
-            <div key={i} className="bg-white rounded-[2.5rem] border border-slate-100 shadow-lg overflow-hidden group flex flex-col h-full hover:shadow-2xl transition-all">
-               <div className="h-64 relative overflow-hidden">
+            <div key={i} className="bg-white rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden group flex flex-col h-full hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 transition-all duration-300">
+               {/* Image Header with Gradient Overlay */}
+               <div className="h-60 relative overflow-hidden">
                   <ImageWithFallback src={tour.img} size="800 x 600 px" alt={tour.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                  <span className="absolute top-4 left-4 bg-[#125D66] text-white text-[9px] font-black px-3 py-1 rounded-md uppercase tracking-widest">{tour.tag}</span>
+                  {/* Dark gradient at the bottom of the image for depth */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  
+                  {/* Sleeker Pill-shaped Badge */}
+                  <span className="absolute top-5 left-5 bg-[#125D66]/95 backdrop-blur-sm text-white text-[9px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
+                    {tour.tag}
+                  </span>
                </div>
+               
+               {/* Card Content */}
                <div className="p-8 flex-1 flex flex-col">
-                  <h3 className="text-xl font-black text-[#0C3136] mb-2">{tour.title}</h3>
-                  <div className="flex items-center gap-4 text-[11px] font-black text-slate-400 mb-6">
-                     <div className="flex items-center gap-1 text-yellow-500"><Star className="w-3.5 h-3.5 fill-current" /> 4.8 (1,245)</div>
-                     <div className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {tour.duration}</div>
+                  <h3 className="text-xl lg:text-2xl font-black text-[#0C3136] mb-3 leading-tight tracking-tight group-hover:text-[#F8A41E] transition-colors">{tour.title}</h3>
+                  
+                  <div className="flex items-center gap-4 text-[11px] font-bold text-slate-500 mb-5">
+                     <div className="flex items-center gap-1.5 text-yellow-500 bg-yellow-50 px-2 py-1 rounded-md">
+                       <Star className="w-3.5 h-3.5 fill-current" /> 4.8
+                     </div>
+                     <div className="flex items-center gap-1.5 bg-slate-50 px-2 py-1 rounded-md">
+                       <Clock className="w-3.5 h-3.5 text-[#125D66]" /> {tour.duration}
+                     </div>
                   </div>
-                  <p className="text-slate-500 text-sm leading-relaxed mb-8 flex-1 line-clamp-3">{tour.overview}</p>
-                  <div className="flex justify-between items-center pt-6 border-t border-slate-100 mt-auto">
-                     <div><span className="text-slate-400 text-[10px] font-black block uppercase tracking-widest">FROM</span><span className="text-2xl font-black text-[#0C3136]">CAD ${tour.price}</span></div>
-                     <a href={`/tour/${tour.id}`} className="bg-[#D91E1E] hover:bg-[#b01818] text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all">VIEW DETAILS</a>
+                  
+                  <p className="text-slate-600 text-sm leading-relaxed mb-8 flex-1 line-clamp-3">{tour.overview}</p>
+                  
+                  {/* Footer / CTA Area */}
+                  <div className="flex justify-between items-end pt-6 border-t border-slate-100 mt-auto">
+                     <div>
+                       <span className="text-slate-400 text-[10px] font-black block uppercase tracking-widest mb-0.5">From</span>
+                       <span className="text-2xl font-black text-[#0C3136]">CAD ${tour.price}</span>
+                     </div>
+                     
+                     {/* Animated Premium Button */}
+                     <a href={`/tour/${tour.id}`} className="flex items-center gap-2 bg-[#D91E1E] hover:bg-[#b01818] text-white px-6 py-3.5 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-red-900/20 active:scale-95 group/btn">
+                       VIEW DETAILS
+                       <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                     </a>
                   </div>
                </div>
             </div>
@@ -2172,3 +2229,5 @@ export default function App() {
     </div>
   );
 }
+
+```
