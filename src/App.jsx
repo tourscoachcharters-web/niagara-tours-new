@@ -562,14 +562,13 @@ const WhyTravelersLoveSection = () => (
 const HomePage = () => {
   return (
     <div className="animate-in fade-in duration-700">
-      <section className="relative min-h-[70vh] flex items-center overflow-hidden">
+      <section className="relative min-h-[50vh] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <ImageWithFallback src="/images/hero-home.jpg" size="1920 x 1080 px" alt="Niagara Falls Background" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0C3136]/90 via-[#0C3136]/30 to-transparent"></div>
         </div>
 
-        <div className="container mx-auto px-4 z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 pt-10 pb-10 items-center">
-          <div className="text-white">
+        <div className="container mx-auto px-4 z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 pt-10 pb-10 items-center">          <div className="text-white">
             <div className="flex items-center gap-2 mb-6">
               <span className="bg-[#D91E1E] p-1.5 rounded-full shadow-lg"><Star className="w-3.5 h-3.5 text-white fill-current" /></span>
               <span className="uppercase text-[11px] font-black tracking-[0.2em]">PROUDLY CANADIAN</span>
