@@ -1,10 +1,3 @@
-Here is the complete, fully updated `App.jsx` file.
-
-I have applied the new premium card design to both the **Home Page** (Featured Tours) and the **Tours Page** (All Tours). All of your previous features—the interactive map, the custom footer, the chat widget, and the Vercel/Resend backend connection—are perfectly preserved.
-
-Copy this entire block and use it to replace the contents of your `src/App.jsx` file:
-
-```jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
@@ -56,7 +49,15 @@ import {
   Ban,
   Sun,
   FileText,
-  Baby
+  Baby,
+  ArrowRight,
+  Trophy,
+  Flame,
+  LifeBuoy,
+  Car,
+  Ship,
+  Award,
+  Sparkles
 } from 'lucide-react';
 
 // --- LEAFLET MARKER FIX ---
@@ -108,7 +109,7 @@ const TOURS_DATA = [
     duration: '5 - 6 Hours',
     img: '/images/tour-half-day.jpg',
     tag: 'HALF DAY PRIVATE',
-    overview: 'Experience the beauty and excitement of Niagara Falls on a private half-day escape from Toronto. Perfect for couples, families, and small groups, this tour offers a comfortable and flexible way to discover one of Canada’s most iconic destinations.',
+    overview: 'Experience the beauty and excitement of Niagara Falls on a private half-day escape from Toronto. Perfect for couples, families, and small groups, this tour is personalized just for you.',
     inclusions: [
       'Private luxury transportation', 
       'Professional driver/guide', 
@@ -153,7 +154,7 @@ const TOURS_DATA = [
     duration: '9-10 Hours',
     img: '/images/tour-classic.jpg', 
     tag: 'BEST VALUE',
-    overview: 'The Niagara Classic Day Escape is perfect for first-time visitors to Niagara Falls. Whether you\'re traveling solo, with friends, or with family, this affordable day tour offers a comprehensive Niagara Falls experience. Feel the immense power of the water on the breathtaking boat ride, explore stunning viewpoints, and enjoy a sweet taste of Canada at a local maple syrup farm.',
+    overview: 'The Niagara Classic Day Escape is perfect for first-time visitors to Niagara Falls. Whether you\'re traveling solo, with friends, or with family, this affordable day tour offers a comprehensive Niagara experience.',
     inclusions: ['Round-trip Transport from Toronto', 'Niagara Falls Sightseeing', 'Niagara City Cruises (Seasonal)', 'Photo Stops at iconic locations', 'Free Time for exploration', 'Maple Syrup Tasting'],
     exclusions: ['Gratuities (Optional)', 'Meals and drinks', 'Pickup outside downtown Toronto'],
     itinerary: [
@@ -186,7 +187,7 @@ const TOURS_DATA = [
     duration: '9 Hours',
     img: '/images/tour-adventure.jpg',
     tag: 'MOST POPULAR',
-    overview: 'The Ultimate Niagara Adventure is the complete Niagara Falls experience. Perfect for visitors who want to see it all, this tour includes premium access to iconic attractions like Journey Behind the Falls, Niagara City Cruises, and the Skylon Tower observation deck, all seamlessly guided in one action-packed day.',
+    overview: 'The Ultimate Niagara Adventure is the complete Niagara Falls experience. Perfect for visitors who want to see it all, this tour includes premium access to iconic attractions like Journey Behind the Falls, boat cruise, and more!',
     inclusions: ['Niagara City Cruises Boat Ride', 'Journey Behind the Falls Admission', 'Skylon Tower Observation Deck', 'Scenic Photo Stops', 'Maple Syrup & Chocolate Tasting'],
     exclusions: ['Gratuities for guide/driver', 'Personal purchases', 'Transport to non-listed hotels'],
     itinerary: [
@@ -442,6 +443,91 @@ const NavItem = ({ label, href, active, onClick }) => (
   </a>
 );
 
+// --- REUSABLE PREMIUM TOUR CARD COMPONENT ---
+const TourCard = ({ tour }) => {
+  // Determine card theme/colors based on the tour tag
+  let theme = {
+    badgeBg: 'bg-[#125D66]', badgeIcon: Compass, footerBg: 'bg-slate-50', textColor: 'text-[#125D66]', btnBg: 'bg-[#D91E1E]',
+    features: [{ icon: Star, label: 'Top Rated' }, { icon: Bus, label: 'Transport' }, { icon: ShieldCheck, label: 'Secure' }]
+  };
+  
+  if (tour.tag === 'HALF DAY PRIVATE') {
+    theme = { badgeBg: 'bg-[#D97706]', badgeIcon: LifeBuoy, footerBg: 'bg-[#FFFBEB]', textColor: 'text-[#B45309]', btnBg: 'bg-[#D91E1E]', features: [{ icon: Users, label: 'Private Tour' }, { icon: Car, label: 'Hotel Pickup' }, { icon: Camera, label: 'Scenic Stops' }] };
+  } else if (tour.tag === 'BEST VALUE') {
+    theme = { badgeBg: 'bg-[#0D9488]', badgeIcon: Trophy, footerBg: 'bg-[#F0FDFA]', textColor: 'text-[#0F766E]', btnBg: 'bg-[#0D9488]', features: [{ icon: Sparkles, label: 'Top Attractions' }, { icon: Ship, label: 'Boat Cruise' }, { icon: Users, label: 'Expert Guide' }] };
+  } else if (tour.tag === 'MOST POPULAR') {
+    theme = { badgeBg: 'bg-[#6D28D9]', badgeIcon: Flame, footerBg: 'bg-[#F5F3FF]', textColor: 'text-[#5B21B6]', btnBg: 'bg-[#6D28D9]', features: [{ icon: Award, label: 'Premium Access' }, { icon: Sparkles, label: 'Top Attractions' }, { icon: ShieldCheck, label: 'Unforgettable' }] };
+  } else if (tour.tag === 'ROMANTIC') {
+    theme = { badgeBg: 'bg-[#BE123C]', badgeIcon: Star, footerBg: 'bg-[#FFF1F2]', textColor: 'text-[#BE123C]', btnBg: 'bg-[#BE123C]', features: [{ icon: Zap, label: 'Illumination' }, { icon: Star, label: 'Fireworks' }, { icon: Camera, label: 'Scenic Stops' }] };
+  } else if (tour.tag === 'WINE LOVERS') {
+    theme = { badgeBg: 'bg-[#9D174D]', badgeIcon: Grape, footerBg: 'bg-[#FDF2F8]', textColor: 'text-[#9D174D]', btnBg: 'bg-[#9D174D]', features: [{ icon: Grape, label: 'Wine Tasting' }, { icon: Bus, label: 'Transport' }, { icon: Compass, label: 'Scenic Route' }] };
+  } else if (tour.tag === 'PRIVATE / VIP') {
+    theme = { badgeBg: 'bg-[#1E293B]', badgeIcon: ShieldCheck, footerBg: 'bg-[#F8FAFC]', textColor: 'text-[#334155]', btnBg: 'bg-[#0F172A]', features: [{ icon: Users, label: 'Private Group' }, { icon: Settings, label: 'Custom Route' }, { icon: Star, label: 'VIP Access' }] };
+  } else if (tour.tag === 'MULTI-CITY') {
+    theme = { badgeBg: 'bg-[#0369A1]', badgeIcon: MapIcon, footerBg: 'bg-[#F0F9FF]', textColor: 'text-[#0369A1]', btnBg: 'bg-[#0369A1]', features: [{ icon: Globe, label: 'Multi-City' }, { icon: Wind, label: 'Cruise' }, { icon: Users, label: 'Expert Guide' }] };
+  }
+
+  // Format the tag to support multi-line breaks for long badges
+  const words = tour.tag.split(' ');
+  const mid = Math.ceil(words.length / 2);
+  const formattedTag = words.length > 1 ? `${words.slice(0, mid).join(' ')}\n${words.slice(mid).join(' ')}` : tour.tag;
+
+  return (
+    <div className="bg-white rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden flex flex-col h-full hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 transition-all duration-300">
+       {/* Image Header */}
+       <div className="h-56 relative overflow-hidden group">
+          <ImageWithFallback src={tour.img} size="800 x 600 px" alt={tour.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          
+          <div className={`absolute top-4 left-4 ${theme.badgeBg} text-white pl-3 pr-4 py-2 rounded-xl flex items-center gap-3 shadow-lg`}>
+             <theme.badgeIcon className="w-6 h-6" />
+             <span className="text-[9px] font-black leading-tight uppercase tracking-widest text-left whitespace-pre-line">
+               {formattedTag}
+             </span>
+          </div>
+       </div>
+       
+       {/* Card Content */}
+       <div className="p-6 pb-2 flex-1 flex flex-col">
+          <h3 className="text-xl font-black text-[#0C3136] mb-3 leading-tight tracking-tight hover:text-[#F8A41E] transition-colors line-clamp-2">{tour.title}</h3>
+          
+          <div className="flex items-center gap-4 text-[11px] font-bold text-slate-500 mb-4">
+             <div className="flex items-center gap-1.5 text-yellow-500 bg-yellow-50 px-2 py-1 rounded-md">
+               <Star className="w-3.5 h-3.5 fill-current" /> 4.8
+             </div>
+             <div className="flex items-center gap-1.5 bg-slate-50 px-2 py-1 rounded-md">
+               <Clock className="w-3.5 h-3.5 text-[#125D66]" /> {tour.duration}
+             </div>
+          </div>
+          
+          <p className="text-slate-500 text-sm leading-relaxed mb-4 flex-1 line-clamp-3">{tour.overview}</p>
+       </div>
+
+       {/* Price & Action Block */}
+       <div className={`${theme.footerBg} p-5 mx-6 mb-5 rounded-2xl flex justify-between items-center`}>
+          <div>
+            <span className="text-slate-500 text-[9px] font-black block uppercase tracking-widest mb-0.5">From</span>
+            <span className="text-2xl font-black text-[#0C3136]">CAD ${tour.price}</span>
+          </div>
+          <a href={`/tour/${tour.id}`} className={`${theme.btnBg} hover:opacity-90 text-white px-5 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-md active:scale-95 flex items-center gap-1.5 group/btn`}>
+            VIEW TOUR
+            <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
+          </a>
+       </div>
+
+       {/* Bottom Features Bar */}
+       <div className="flex justify-between items-center px-6 py-4 border-t border-slate-100 bg-white mt-auto">
+          {theme.features.map((feat, idx) => (
+             <div key={idx} className="flex flex-col items-center gap-1.5 w-1/3">
+                <feat.icon className={`w-5 h-5 ${theme.textColor}`} />
+                <span className={`text-[8px] font-black uppercase tracking-wider text-center leading-tight ${theme.textColor}`}>{feat.label}</span>
+             </div>
+          ))}
+       </div>
+    </div>
+  );
+};
+
 const WhyTravelersLoveSection = () => (
   <section className="py-20 bg-slate-50/50 border-t border-slate-100">
     <div className="container mx-auto px-4">
@@ -561,49 +647,7 @@ const HomePage = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {TOURS_DATA.slice(0, 3).map((tour, i) => (
-              <div key={i} className="bg-white rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden group flex flex-col h-full hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 transition-all duration-300">
-                 {/* Image Header with Gradient Overlay */}
-                 <div className="h-60 relative overflow-hidden">
-                    <ImageWithFallback src={tour.img} size="800 x 600 px" alt={tour.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                    {/* Dark gradient at the bottom of the image for depth */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    
-                    {/* Sleeker Pill-shaped Badge */}
-                    <span className="absolute top-5 left-5 bg-[#125D66]/95 backdrop-blur-sm text-white text-[9px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
-                      {tour.tag}
-                    </span>
-                 </div>
-                 
-                 {/* Card Content */}
-                 <div className="p-8 flex-1 flex flex-col">
-                    <h3 className="text-xl lg:text-2xl font-black text-[#0C3136] mb-3 leading-tight tracking-tight group-hover:text-[#F8A41E] transition-colors">{tour.title}</h3>
-                    
-                    <div className="flex items-center gap-4 text-[11px] font-bold text-slate-500 mb-5">
-                       <div className="flex items-center gap-1.5 text-yellow-500 bg-yellow-50 px-2 py-1 rounded-md">
-                         <Star className="w-3.5 h-3.5 fill-current" /> 4.8
-                       </div>
-                       <div className="flex items-center gap-1.5 bg-slate-50 px-2 py-1 rounded-md">
-                         <Clock className="w-3.5 h-3.5 text-[#125D66]" /> {tour.duration}
-                       </div>
-                    </div>
-                    
-                    <p className="text-slate-600 text-sm leading-relaxed mb-8 flex-1 line-clamp-3">{tour.overview}</p>
-                    
-                    {/* Footer / CTA Area */}
-                    <div className="flex justify-between items-end pt-6 border-t border-slate-100 mt-auto">
-                       <div>
-                         <span className="text-slate-400 text-[10px] font-black block uppercase tracking-widest mb-0.5">From</span>
-                         <span className="text-2xl font-black text-[#0C3136]">CAD ${tour.price}</span>
-                       </div>
-                       
-                       {/* Animated Premium Button */}
-                       <a href={`/tour/${tour.id}`} className="flex items-center gap-2 bg-[#D91E1E] hover:bg-[#b01818] text-white px-6 py-3.5 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-red-900/20 active:scale-95 group/btn">
-                         VIEW DETAILS
-                         <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                       </a>
-                    </div>
-                 </div>
-              </div>
+              <TourCard key={i} tour={tour} />
             ))}
           </div>
           <div className="mt-16 text-center">
@@ -633,49 +677,7 @@ const ToursPage = () => {
       <main className="container mx-auto px-4 py-24">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
           {TOURS_DATA.map((tour, i) => (
-            <div key={i} className="bg-white rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden group flex flex-col h-full hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 transition-all duration-300">
-               {/* Image Header with Gradient Overlay */}
-               <div className="h-60 relative overflow-hidden">
-                  <ImageWithFallback src={tour.img} size="800 x 600 px" alt={tour.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                  {/* Dark gradient at the bottom of the image for depth */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  
-                  {/* Sleeker Pill-shaped Badge */}
-                  <span className="absolute top-5 left-5 bg-[#125D66]/95 backdrop-blur-sm text-white text-[9px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
-                    {tour.tag}
-                  </span>
-               </div>
-               
-               {/* Card Content */}
-               <div className="p-8 flex-1 flex flex-col">
-                  <h3 className="text-xl lg:text-2xl font-black text-[#0C3136] mb-3 leading-tight tracking-tight group-hover:text-[#F8A41E] transition-colors">{tour.title}</h3>
-                  
-                  <div className="flex items-center gap-4 text-[11px] font-bold text-slate-500 mb-5">
-                     <div className="flex items-center gap-1.5 text-yellow-500 bg-yellow-50 px-2 py-1 rounded-md">
-                       <Star className="w-3.5 h-3.5 fill-current" /> 4.8
-                     </div>
-                     <div className="flex items-center gap-1.5 bg-slate-50 px-2 py-1 rounded-md">
-                       <Clock className="w-3.5 h-3.5 text-[#125D66]" /> {tour.duration}
-                     </div>
-                  </div>
-                  
-                  <p className="text-slate-600 text-sm leading-relaxed mb-8 flex-1 line-clamp-3">{tour.overview}</p>
-                  
-                  {/* Footer / CTA Area */}
-                  <div className="flex justify-between items-end pt-6 border-t border-slate-100 mt-auto">
-                     <div>
-                       <span className="text-slate-400 text-[10px] font-black block uppercase tracking-widest mb-0.5">From</span>
-                       <span className="text-2xl font-black text-[#0C3136]">CAD ${tour.price}</span>
-                     </div>
-                     
-                     {/* Animated Premium Button */}
-                     <a href={`/tour/${tour.id}`} className="flex items-center gap-2 bg-[#D91E1E] hover:bg-[#b01818] text-white px-6 py-3.5 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-red-900/20 active:scale-95 group/btn">
-                       VIEW DETAILS
-                       <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                     </a>
-                  </div>
-               </div>
-            </div>
+            <TourCard key={i} tour={tour} />
           ))}
         </div>
       </main>
@@ -2229,5 +2231,3 @@ export default function App() {
     </div>
   );
 }
-
-```
