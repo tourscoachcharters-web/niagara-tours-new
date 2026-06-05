@@ -563,7 +563,8 @@ const HomePage = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-[#0C3136]/90 via-[#0C3136]/30 to-transparent"></div>
         </div>
 
-        <div className="container mx-auto px-4 z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 pt-10 pb-10 items-center">
+        {/* Added pb-16 here to give more clearance at the bottom of the container */}
+        <div className="container mx-auto px-4 z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 pt-10 pb-16 items-center">
           <div className="text-white">
             <div className="flex items-center gap-2 mb-6">
               <span className="bg-[#D91E1E] p-1.5 rounded-full shadow-lg"><Star className="w-3.5 h-3.5 text-white fill-current" /></span>
@@ -573,7 +574,9 @@ const HomePage = () => {
               Discover the <br /> Magic of <br /><span className="text-[#F8A41E] italic">Niagara Falls</span>
             </h2>
             <p className="text-lg text-slate-200 mb-10 max-w-xl leading-relaxed font-medium">Unforgettable experiences. Breathtaking views. Memories that last a lifetime.</p>
-            <div className="flex flex-wrap gap-4">
+            
+            {/* Added pb-8 to this specific div to push the overlapping white box away from the buttons */}
+            <div className="flex flex-wrap gap-4 pb-8">
               <a href="/tour/classic-day-escape" className="bg-[#D91E1E] hover:bg-[#b01818] text-white px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-red-900/30 flex items-center gap-3">
                 EXPLORE TOURS <ChevronRight className="w-4 h-4" />
               </a>
