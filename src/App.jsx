@@ -557,30 +557,32 @@ const WhyTravelersLoveSection = () => (
 const HomePage = () => {
   return (
     <div className="animate-in fade-in duration-700">
-      <section className="relative min-h-[50vh] flex items-center overflow-hidden">
+      {/* 1. Removed min-h-[50vh] and replaced with tight vertical padding (py-12) */}
+      <section className="relative pt-8 pb-20 lg:pt-12 lg:pb-24 flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <ImageWithFallback src="/images/hero-home.jpg" size="1920 x 1080 px" alt="Niagara Falls Background" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0C3136]/90 via-[#0C3136]/30 to-transparent"></div>
         </div>
 
-        {/* Added pb-16 here to give more clearance at the bottom of the container */}
-        <div className="container mx-auto px-4 z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 pt-10 pb-16 items-center">
+        <div className="container mx-auto px-4 z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           <div className="text-white">
-            <div className="flex items-center gap-2 mb-6">
+            <div className="flex items-center gap-2 mb-4">
               <span className="bg-[#D91E1E] p-1.5 rounded-full shadow-lg"><Star className="w-3.5 h-3.5 text-white fill-current" /></span>
               <span className="uppercase text-[11px] font-black tracking-[0.2em]">PROUDLY CANADIAN</span>
             </div>
-            <h2 className="text-5xl lg:text-7xl font-black mb-6 leading-[1.1] tracking-tight">
+            
+            {/* 2. Slightly reduced text size from 7xl to 6xl for a tighter fit */}
+            <h2 className="text-4xl lg:text-6xl font-black mb-4 leading-[1.1] tracking-tight">
               Discover the <br /> Magic of <br /><span className="text-[#F8A41E] italic">Niagara Falls</span>
             </h2>
-            <p className="text-lg text-slate-200 mb-10 max-w-xl leading-relaxed font-medium">Unforgettable experiences. Breathtaking views. Memories that last a lifetime.</p>
+            <p className="text-base lg:text-lg text-slate-200 mb-8 max-w-xl leading-relaxed font-medium">Unforgettable experiences. Breathtaking views. Memories that last a lifetime.</p>
             
-            {/* Added pb-8 to this specific div to push the overlapping white box away from the buttons */}
-            <div className="flex flex-wrap gap-4 pb-8">
-              <a href="/tour/classic-day-escape" className="bg-[#D91E1E] hover:bg-[#b01818] text-white px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-red-900/30 flex items-center gap-3">
+            {/* 3. Slightly slimmer buttons */}
+            <div className="flex flex-wrap gap-4">
+              <a href="/tour/classic-day-escape" className="bg-[#D91E1E] hover:bg-[#b01818] text-white px-8 py-3.5 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-red-900/30 flex items-center gap-3">
                 EXPLORE TOURS <ChevronRight className="w-4 h-4" />
               </a>
-              <a href="/custom-itinerary" className="bg-white hover:bg-slate-50 text-[#0C3136] px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-lg flex items-center gap-3">
+              <a href="/custom-itinerary" className="bg-white hover:bg-slate-50 text-[#0C3136] px-8 py-3.5 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-lg flex items-center gap-3">
                 <Settings className="w-4 h-4 text-[#F8A41E]" /> CUSTOM PACKAGE
               </a>
             </div>
@@ -588,7 +590,8 @@ const HomePage = () => {
         </div>
       </section>
 
-      <section className="container mx-auto px-4 -mt-10 relative z-20">
+      {/* 4. Increased negative margin to pull the box higher into the image */}
+      <section className="container mx-auto px-4 -mt-12 lg:-mt-16 relative z-20">
         <div className="bg-white rounded-3xl shadow-xl border border-slate-100 p-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
           {[
             { icon: Compass, title: "Local Guides", desc: "Born and raised experts" },
