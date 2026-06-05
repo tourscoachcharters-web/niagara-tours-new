@@ -1,8 +1,3 @@
-Here is the complete, fully integrated `App.jsx` file with the newly reduced hero section height, the premium tour card designs, the interactive map, the custom footer with the chat widget docking bay, and the correct Niagara Travels branding.
-
-You can copy this entire block and use it to replace the contents of your `src/App.jsx` file:
-
-```jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
@@ -568,7 +563,8 @@ const HomePage = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-[#0C3136]/90 via-[#0C3136]/30 to-transparent"></div>
         </div>
 
-        <div className="container mx-auto px-4 z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 pt-10 pb-10 items-center">          <div className="text-white">
+        <div className="container mx-auto px-4 z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 pt-10 pb-10 items-center">
+          <div className="text-white">
             <div className="flex items-center gap-2 mb-6">
               <span className="bg-[#D91E1E] p-1.5 rounded-full shadow-lg"><Star className="w-3.5 h-3.5 text-white fill-current" /></span>
               <span className="uppercase text-[11px] font-black tracking-[0.2em]">PROUDLY CANADIAN</span>
@@ -2235,5 +2231,3 @@ export default function App() {
     </div>
   );
 }
-
-```
