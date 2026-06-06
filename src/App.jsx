@@ -2218,8 +2218,10 @@ export default function App() {
       
       {/* --- CHAT WIDGET --- */}
       <iframe 
-        src="https://multi-agent-chat-rho.vercel.app/?mode=embed" 
-        style={{
+src="https://multi-agent-chat-rho.vercel.app/?mode=embed&site=Niagara+Travels" 
+      title="Live Support"
+      allowTransparency={true}
+      style={{
           position: 'fixed', 
           bottom: 0, 
           right: 0, 
