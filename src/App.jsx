@@ -2217,25 +2217,21 @@ export default function App() {
       </footer>
       
       {/* --- CHAT WIDGET --- */}
-      <iframe 
-src="https://multi-agent-chat-rho.vercel.app/?mode=embed&site=Niagara+Travels" 
+     <iframe 
+      src="https://multi-agent-chat-rho.vercel.app/?mode=embed&site=Niagara+Travels" 
       title="Live Support"
       allowTransparency={true}
       style={{
-          position: 'fixed', 
-          bottom: 0, 
-          right: 0, 
-          width: '400px', 
-          height: '600px', 
-          border: 'none', 
-          zIndex: 999999, 
-          background: 'transparent', 
-          pointerEvents: 'auto'
-        }}
-        allowTransparency={true}
-        title="Customer Support Chat"
-      ></iframe>
-
-    </div>
+        position: 'fixed', 
+        bottom: '0', 
+        right: '0', 
+        width: '400px', 
+        height: '600px', 
+        border: 'none', 
+        zIndex: 999999, 
+        background: 'transparent', 
+        pointerEvents: 'auto'
+      }}
+    />
   );
 }
