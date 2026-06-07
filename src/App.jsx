@@ -399,7 +399,7 @@ const CalendarDropdown = ({ onSelectDate }) => {
   const handleNextMonth = (e) => { e.stopPropagation(); setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1)); };
 
   return (
-    <div className="absolute top-full left-0 right-0 mt-3 bg-white rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 z-[100] p-6 animate-in zoom-in-95 duration-200 origin-top">
+    <div className="absolute bottom-full left-0 right-0 mb-3 bg-white rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 z-[100] p-6 animate-in zoom-in-95 duration-200 origin-bottom">
       <div className="flex justify-between items-center mb-6">
         <button onClick={handlePrevMonth} className="p-2 hover:bg-slate-50 rounded-full text-slate-400 transition-all"><ChevronLeft size={18} /></button>
         <div className="font-black text-[#0C3136] text-[11px] uppercase tracking-[0.2em]">{months[viewDate.getMonth()]} {viewDate.getFullYear()}</div>
