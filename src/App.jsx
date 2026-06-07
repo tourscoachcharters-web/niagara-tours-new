@@ -5,59 +5,12 @@ import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, deleteDoc
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import { 
-  Phone, 
-  Mail, 
-  Clock, 
-  MapPin, 
-  Calendar, 
-  Users, 
-  Search, 
-  Star, 
-  ChevronRight, 
-  ChevronLeft,
-  Navigation, 
-  ShieldCheck, 
-  Zap, 
-  Globe, 
-  Menu, 
-  X, 
-  Compass, 
-  Send, 
-  MessageSquare, 
-  Map as MapIcon, 
-  Camera, 
-  CheckCircle2, 
-  Settings, 
-  Plane,
-  Ticket,
-  Loader2,
-  Quote,
-  ThumbsUp,
-  LayoutDashboard,
-  CheckCircle,
-  XCircle,
-  Trash2,
-  DollarSign,
-  Bus,
-  Wind,
-  Grape,
-  Utensils,
-  LogOut,
-  Plus,
-  Minus,
-  AlertCircle,
-  Ban,
-  Sun,
-  FileText,
-  Baby,
-  ArrowRight,
-  Trophy,
-  Flame,
-  LifeBuoy,
-  Car,
-  Ship,
-  Award,
-  Sparkles
+  Phone, Mail, Clock, MapPin, Calendar, Users, Search, Star, ChevronRight, ChevronLeft,
+  Navigation, ShieldCheck, Zap, Globe, Menu, X, Compass, Send, MessageSquare, Map as MapIcon, 
+  Camera, CheckCircle2, Settings, Plane, Ticket, Loader2, Quote, ThumbsUp, LayoutDashboard, 
+  CheckCircle, XCircle, Trash2, DollarSign, Bus, Wind, Grape, Utensils, LogOut, Plus, Minus, 
+  AlertCircle, Ban, Sun, FileText, Baby, ArrowRight, Trophy, Flame, LifeBuoy, Car, Ship, 
+  Award, Sparkles
 } from 'lucide-react';
 
 // --- LEAFLET MARKER FIX ---
@@ -84,13 +37,10 @@ const db = getFirestore(app);
 
 const ImageWithFallback = ({ src, alt, className, size, isLogo }) => {
   const [error, setError] = useState(false);
-  
   if (error || !src) {
     return (
       <div className={`${className} bg-slate-100 flex flex-col items-center justify-center text-slate-400 p-2 text-center border border-dashed border-slate-200 rounded-lg`}>
-        <div className="bg-white p-2 rounded-full mb-1">
-          <Camera className="w-4 h-4 text-slate-300" />
-        </div>
+        <div className="bg-white p-2 rounded-full mb-1"><Camera className="w-4 h-4 text-slate-300" /></div>
         <p className="text-[8px] font-black uppercase tracking-tight text-[#0C3136]">{isLogo ? 'Logo' : 'Image'}</p>
         <p className="text-[7px] font-bold text-slate-400">Filename: {src.split('/').pop()}</p>
         <p className="text-[8px] font-black text-[#F8A41E]">{size}</p>
@@ -100,6 +50,45 @@ const ImageWithFallback = ({ src, alt, className, size, isLogo }) => {
   return <img src={src} alt={alt} className={className} onError={() => setError(true)} />;
 };
 
+// --- DYNAMIC CHAT WIDGET ---
+const ChatWidget = () => {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
+  useEffect(() => {
+    const handleMessage = (event) => {
+      // Listen for the broadcast from your Vercel Chat App
+      if (event.data && event.data.type === 'CHAT_WIDGET_STATE') {
+        setIsChatOpen(event.data.isOpen);
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
+  return (
+    <iframe 
+      src="https://multi-agent-chat-rho.vercel.app/?mode=embed&site=Niagara+Travels" 
+      title="Live Support"
+      allowTransparency={true}
+      style={{
+        position: 'fixed', 
+        bottom: '0', 
+        right: '0', 
+        // Dynamically resizes based on state to prevent dead zones
+        width: isChatOpen ? '400px' : '100px', 
+        height: isChatOpen ? '600px' : '100px', 
+        border: 'none', 
+        zIndex: 999999, 
+        background: 'transparent', 
+        pointerEvents: 'auto',
+        transition: 'all 0.3s ease-in-out'
+      }}
+    />
+  );
+};
+
+// --- DATA & CONTENT ---
 const TOURS_DATA = [
   {
     id: 'half-day-private',
@@ -445,36 +434,21 @@ const NavItem = ({ label, href, active, onClick }) => (
 
 // --- REUSABLE PREMIUM TOUR CARD COMPONENT ---
 const TourCard = ({ tour }) => {
-  // Determine card theme/colors based on the tour tag
-  let theme = {
-    badgeBg: 'bg-[#125D66]', badgeIcon: Compass, footerBg: 'bg-slate-50', textColor: 'text-[#125D66]', btnBg: 'bg-[#D91E1E]',
-    features: [{ icon: Star, label: 'Top Rated' }, { icon: Bus, label: 'Transport' }, { icon: ShieldCheck, label: 'Secure' }]
-  };
-  
-  if (tour.tag === 'HALF DAY PRIVATE') {
-    theme = { badgeBg: 'bg-[#D97706]', badgeIcon: LifeBuoy, footerBg: 'bg-[#FFFBEB]', textColor: 'text-[#B45309]', btnBg: 'bg-[#D91E1E]', features: [{ icon: Users, label: 'Private Tour' }, { icon: Car, label: 'Hotel Pickup' }, { icon: Camera, label: 'Scenic Stops' }] };
-  } else if (tour.tag === 'BEST VALUE') {
-    theme = { badgeBg: 'bg-[#0D9488]', badgeIcon: Trophy, footerBg: 'bg-[#F0FDFA]', textColor: 'text-[#0F766E]', btnBg: 'bg-[#0D9488]', features: [{ icon: Sparkles, label: 'Top Attractions' }, { icon: Ship, label: 'Boat Cruise' }, { icon: Users, label: 'Expert Guide' }] };
-  } else if (tour.tag === 'MOST POPULAR') {
-    theme = { badgeBg: 'bg-[#6D28D9]', badgeIcon: Flame, footerBg: 'bg-[#F5F3FF]', textColor: 'text-[#5B21B6]', btnBg: 'bg-[#6D28D9]', features: [{ icon: Award, label: 'Premium Access' }, { icon: Sparkles, label: 'Top Attractions' }, { icon: ShieldCheck, label: 'Unforgettable' }] };
-  } else if (tour.tag === 'ROMANTIC') {
-    theme = { badgeBg: 'bg-[#BE123C]', badgeIcon: Star, footerBg: 'bg-[#FFF1F2]', textColor: 'text-[#BE123C]', btnBg: 'bg-[#BE123C]', features: [{ icon: Zap, label: 'Illumination' }, { icon: Star, label: 'Fireworks' }, { icon: Camera, label: 'Scenic Stops' }] };
-  } else if (tour.tag === 'WINE LOVERS') {
-    theme = { badgeBg: 'bg-[#9D174D]', badgeIcon: Grape, footerBg: 'bg-[#FDF2F8]', textColor: 'text-[#9D174D]', btnBg: 'bg-[#9D174D]', features: [{ icon: Grape, label: 'Wine Tasting' }, { icon: Bus, label: 'Transport' }, { icon: Compass, label: 'Scenic Route' }] };
-  } else if (tour.tag === 'PRIVATE / VIP') {
-    theme = { badgeBg: 'bg-[#1E293B]', badgeIcon: ShieldCheck, footerBg: 'bg-[#F8FAFC]', textColor: 'text-[#334155]', btnBg: 'bg-[#0F172A]', features: [{ icon: Users, label: 'Private Group' }, { icon: Settings, label: 'Custom Route' }, { icon: Star, label: 'VIP Access' }] };
-  } else if (tour.tag === 'MULTI-CITY') {
-    theme = { badgeBg: 'bg-[#0369A1]', badgeIcon: MapIcon, footerBg: 'bg-[#F0F9FF]', textColor: 'text-[#0369A1]', btnBg: 'bg-[#0369A1]', features: [{ icon: Globe, label: 'Multi-City' }, { icon: Wind, label: 'Cruise' }, { icon: Users, label: 'Expert Guide' }] };
-  }
+  let theme = { badgeBg: 'bg-[#125D66]', badgeIcon: Compass, footerBg: 'bg-slate-50', textColor: 'text-[#125D66]', btnBg: 'bg-[#D91E1E]', features: [{ icon: Star, label: 'Top Rated' }, { icon: Bus, label: 'Transport' }, { icon: ShieldCheck, label: 'Secure' }] };
+  if (tour.tag === 'HALF DAY PRIVATE') theme = { badgeBg: 'bg-[#D97706]', badgeIcon: LifeBuoy, footerBg: 'bg-[#FFFBEB]', textColor: 'text-[#B45309]', btnBg: 'bg-[#D91E1E]', features: [{ icon: Users, label: 'Private Tour' }, { icon: Car, label: 'Hotel Pickup' }, { icon: Camera, label: 'Scenic Stops' }] };
+  else if (tour.tag === 'BEST VALUE') theme = { badgeBg: 'bg-[#0D9488]', badgeIcon: Trophy, footerBg: 'bg-[#F0FDFA]', textColor: 'text-[#0F766E]', btnBg: 'bg-[#0D9488]', features: [{ icon: Sparkles, label: 'Top Attractions' }, { icon: Ship, label: 'Boat Cruise' }, { icon: Users, label: 'Expert Guide' }] };
+  else if (tour.tag === 'MOST POPULAR') theme = { badgeBg: 'bg-[#6D28D9]', badgeIcon: Flame, footerBg: 'bg-[#F5F3FF]', textColor: 'text-[#5B21B6]', btnBg: 'bg-[#6D28D9]', features: [{ icon: Award, label: 'Premium Access' }, { icon: Sparkles, label: 'Top Attractions' }, { icon: ShieldCheck, label: 'Unforgettable' }] };
+  else if (tour.tag === 'ROMANTIC') theme = { badgeBg: 'bg-[#BE123C]', badgeIcon: Star, footerBg: 'bg-[#FFF1F2]', textColor: 'text-[#BE123C]', btnBg: 'bg-[#BE123C]', features: [{ icon: Zap, label: 'Illumination' }, { icon: Star, label: 'Fireworks' }, { icon: Camera, label: 'Scenic Stops' }] };
+  else if (tour.tag === 'WINE LOVERS') theme = { badgeBg: 'bg-[#9D174D]', badgeIcon: Grape, footerBg: 'bg-[#FDF2F8]', textColor: 'text-[#9D174D]', btnBg: 'bg-[#9D174D]', features: [{ icon: Grape, label: 'Wine Tasting' }, { icon: Bus, label: 'Transport' }, { icon: Compass, label: 'Scenic Route' }] };
+  else if (tour.tag === 'PRIVATE / VIP') theme = { badgeBg: 'bg-[#1E293B]', badgeIcon: ShieldCheck, footerBg: 'bg-[#F8FAFC]', textColor: 'text-[#334155]', btnBg: 'bg-[#0F172A]', features: [{ icon: Users, label: 'Private Group' }, { icon: Settings, label: 'Custom Route' }, { icon: Star, label: 'VIP Access' }] };
+  else if (tour.tag === 'MULTI-CITY') theme = { badgeBg: 'bg-[#0369A1]', badgeIcon: MapIcon, footerBg: 'bg-[#F0F9FF]', textColor: 'text-[#0369A1]', btnBg: 'bg-[#0369A1]', features: [{ icon: Globe, label: 'Multi-City' }, { icon: Wind, label: 'Cruise' }, { icon: Users, label: 'Expert Guide' }] };
 
-  // Format the tag to support multi-line breaks for long badges
   const words = tour.tag.split(' ');
   const mid = Math.ceil(words.length / 2);
   const formattedTag = words.length > 1 ? `${words.slice(0, mid).join(' ')}\n${words.slice(mid).join(' ')}` : tour.tag;
 
   return (
     <div className="bg-white rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden flex flex-col h-full hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 transition-all duration-300">
-       {/* Image Header */}
        <div className="h-56 relative overflow-hidden group">
           <ImageWithFallback src={tour.img} size="800 x 600 px" alt={tour.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -487,7 +461,6 @@ const TourCard = ({ tour }) => {
           </div>
        </div>
        
-       {/* Card Content */}
        <div className="p-6 pb-2 flex-1 flex flex-col">
           <h3 className="text-xl font-black text-[#0C3136] mb-3 leading-tight tracking-tight hover:text-[#F8A41E] transition-colors line-clamp-2">{tour.title}</h3>
           
@@ -503,7 +476,6 @@ const TourCard = ({ tour }) => {
           <p className="text-slate-500 text-sm leading-relaxed mb-4 flex-1 line-clamp-3">{tour.overview}</p>
        </div>
 
-       {/* Price & Action Block */}
        <div className={`${theme.footerBg} p-5 mx-6 mb-5 rounded-2xl flex justify-between items-center`}>
           <div>
             <span className="text-slate-500 text-[9px] font-black block uppercase tracking-widest mb-0.5">From</span>
@@ -515,7 +487,6 @@ const TourCard = ({ tour }) => {
           </a>
        </div>
 
-       {/* Bottom Features Bar */}
        <div className="flex justify-between items-center px-6 py-4 border-t border-slate-100 bg-white mt-auto">
           {theme.features.map((feat, idx) => (
              <div key={idx} className="flex flex-col items-center gap-1.5 w-1/3">
@@ -557,7 +528,6 @@ const WhyTravelersLoveSection = () => (
 const HomePage = () => {
   return (
     <div className="animate-in fade-in duration-700">
-      {/* 1. Removed min-h-[50vh] and replaced with tight vertical padding (py-12) */}
       <section className="relative pt-8 pb-20 lg:pt-12 lg:pb-24 flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <ImageWithFallback src="/images/hero-home.jpg" size="1920 x 1080 px" alt="Niagara Falls Background" className="w-full h-full object-cover" />
@@ -571,13 +541,11 @@ const HomePage = () => {
               <span className="uppercase text-[11px] font-black tracking-[0.2em]">PROUDLY CANADIAN</span>
             </div>
             
-            {/* 2. Slightly reduced text size from 7xl to 6xl for a tighter fit */}
             <h2 className="text-4xl lg:text-6xl font-black mb-4 leading-[1.1] tracking-tight">
               Discover the <br /> Magic of <br /><span className="text-[#F8A41E] italic">Niagara Falls</span>
             </h2>
             <p className="text-base lg:text-lg text-slate-200 mb-8 max-w-xl leading-relaxed font-medium">Unforgettable experiences. Breathtaking views. Memories that last a lifetime.</p>
             
-            {/* 3. Slightly slimmer buttons */}
             <div className="flex flex-wrap gap-4">
               <a href="/tour/classic-day-escape" className="bg-[#D91E1E] hover:bg-[#b01818] text-white px-8 py-3.5 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-red-900/30 flex items-center gap-3">
                 EXPLORE TOURS <ChevronRight className="w-4 h-4" />
@@ -590,7 +558,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* 4. Increased negative margin to pull the box higher into the image */}
       <section className="container mx-auto px-4 -mt-12 lg:-mt-16 relative z-20">
         <div className="bg-white rounded-3xl shadow-xl border border-slate-100 p-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
           {[
@@ -2216,22 +2183,9 @@ export default function App() {
         </div>
       </footer>
       
-      {/* --- CHAT WIDGET --- */}
-     <iframe 
-      src="https://multi-agent-chat-rho.vercel.app/?mode=embed&site=Niagara+Travels" 
-      title="Live Support"
-      allowTransparency={true}
-      style={{
-        position: 'fixed', 
-        bottom: '0', 
-        right: '0', 
-        width: '400px', 
-        height: '600px', 
-        border: 'none', 
-        zIndex: 999999, 
-        background: 'transparent', 
-        pointerEvents: 'auto'
-      }}
-    />
+      {/* --- DYNAMIC CHAT WIDGET --- */}
+      <ChatWidget />
+
+    </div>
   );
 }
