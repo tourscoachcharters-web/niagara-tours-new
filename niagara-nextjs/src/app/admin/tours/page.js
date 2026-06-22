@@ -15,8 +15,10 @@ export default function TourManager() {
   const [currentId, setCurrentId] = useState(null);
   const [formData, setFormData] = useState({
     title: '', id: '', tag: '', tagline: '', price: '', duration: '',
-    overview: '', inclusions: '', exclusions: '', itinerary: ''
+    overview: '', img: '', inclusions: '', exclusions: '', itinerary: '' // Added 'img' here
   });
+
+  const [imageFile, setImageFile] = useState(null);
 
   const fetchTours = async () => {
     setIsLoading(true);
@@ -43,13 +45,14 @@ export default function TourManager() {
     if (tour) {
       setCurrentId(tour.firebaseId);
       setFormData({
-        title: tour.title,
-        id: tour.id,
+        title: tour.title || '',
+        id: tour.id || '',
         tag: tour.tag || '',
         tagline: tour.tagline || '',
         price: tour.price || '',
         duration: tour.duration || '',
         overview: tour.overview || '',
+        img: tour.img || '', // Keep track of existing image
         // Convert arrays back to comma-separated strings for easy editing
         inclusions: tour.inclusions?.join('\n') || '',
         exclusions: tour.exclusions?.join('\n') || '',
@@ -57,8 +60,9 @@ export default function TourManager() {
       });
     } else {
       setCurrentId(null);
-      setFormData({ title: '', id: '', tag: '', tagline: '', price: '', duration: '', overview: '', inclusions: '', exclusions: '', itinerary: '' });
+      setFormData({ title: '', id: '', tag: '', tagline: '', price: '', duration: '', overview: '', img: '', inclusions: '', exclusions: '', itinerary: '' });
     }
+    setImageFile(null); // Reset the file picker
     setIsModalOpen(true);
   };
 
@@ -66,15 +70,39 @@ export default function TourManager() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Format the data: split multiline strings into arrays for the frontend
+    let finalImageUrl = formData.img || '';
+
+    // 1. Upload to Vercel Blob if a new image was selected
+    if (imageFile) {
+      try {
+        const response = await fetch(`/api/upload?filename=${encodeURIComponent(imageFile.name)}`, {
+          method: 'POST',
+          body: imageFile,
+        });
+        
+        if (!response.ok) throw new Error("Upload failed");
+        
+        const blob = await response.json();
+        finalImageUrl = blob.url; // Get the live Vercel CDN URL
+      } catch (err) {
+        console.error("Image upload failed:", err);
+        alert("Failed to upload image. Please check your Vercel Blob setup.");
+        setIsSubmitting(false);
+        return;
+      }
+    }
+
+    // 2. Format the data: split multiline strings into arrays for the frontend
     const formattedData = {
       ...formData,
+      img: finalImageUrl, // Attach the new (or existing) image URL
       price: Number(formData.price),
       inclusions: formData.inclusions.split('\n').filter(item => item.trim() !== ''),
       exclusions: formData.exclusions.split('\n').filter(item => item.trim() !== ''),
       itinerary: formData.itinerary.split('\n').filter(item => item.trim() !== '')
     };
 
+    // 3. Save to Firebase
     try {
       if (currentId) {
         await updateDoc(doc(db, 'tours', currentId), formattedData);
@@ -130,7 +158,12 @@ export default function TourManager() {
             <tbody>
               {tours.map((tour) => (
                 <tr key={tour.firebaseId} className="hover:bg-slate-50 transition-colors">
-                  <td className="p-4 border-b font-bold text-[#0C3136]">{tour.title}</td>
+                  <td className="p-4 border-b font-bold text-[#0C3136]">
+                    <div className="flex items-center gap-3">
+                      {tour.img && <img src={tour.img} alt="" className="w-8 h-8 rounded object-cover" />}
+                      {tour.title}
+                    </div>
+                  </td>
                   <td className="p-4 border-b text-slate-600">CAD ${tour.price}</td>
                   <td className="p-4 border-b text-slate-600">{tour.duration}</td>
                   <td className="p-4 border-b"><span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-black">{tour.tag}</span></td>
@@ -166,6 +199,21 @@ export default function TourManager() {
                 <label className="text-xs font-black uppercase text-slate-400">URL Slug (ID)</label>
                 <input required name="id" value={formData.id} onChange={handleInputChange} className="w-full p-4 bg-slate-50 border rounded-xl font-bold" placeholder="premium-wine-falls" />
               </div>
+              
+              {/* IMAGE UPLOAD FIELD */}
+              <div className="space-y-2">
+                <label className="text-xs font-black uppercase text-slate-400">Tour Image</label>
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={(e) => setImageFile(e.target.files[0])} 
+                  className="w-full p-3 bg-slate-50 border rounded-xl font-bold text-sm" 
+                />
+                {formData.img && !imageFile && (
+                  <p className="text-[10px] text-emerald-600 font-bold mt-1">✓ Current image active (Leave empty to keep)</p>
+                )}
+              </div>
+
               <div className="space-y-2">
                 <label className="text-xs font-black uppercase text-slate-400">Price (CAD)</label>
                 <input required type="number" name="price" value={formData.price} onChange={handleInputChange} className="w-full p-4 bg-slate-50 border rounded-xl font-bold" placeholder="149" />
@@ -178,11 +226,11 @@ export default function TourManager() {
                 <label className="text-xs font-black uppercase text-slate-400">Tag (Badge)</label>
                 <input name="tag" value={formData.tag} onChange={handleInputChange} className="w-full p-4 bg-slate-50 border rounded-xl font-bold" placeholder="TOP RATED" />
               </div>
-              <div className="space-y-2">
+
+              <div className="md:col-span-2 space-y-2">
                 <label className="text-xs font-black uppercase text-slate-400">Tagline / Short Desc</label>
                 <input name="tagline" value={formData.tagline} onChange={handleInputChange} className="w-full p-4 bg-slate-50 border rounded-xl font-bold" placeholder="Savor the finest local wines..." />
               </div>
-
               <div className="md:col-span-2 space-y-2">
                 <label className="text-xs font-black uppercase text-slate-400">Full Overview</label>
                 <textarea rows="3" name="overview" value={formData.overview} onChange={handleInputChange} className="w-full p-4 bg-slate-50 border rounded-xl font-medium" />
