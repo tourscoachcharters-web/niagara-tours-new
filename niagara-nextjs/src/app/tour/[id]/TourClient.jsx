@@ -4,9 +4,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import { db } from '@/lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
 import CalendarDropdown from "@/components/CalendarDropdown";
+// Make sure this import is here so your Pickup Points map doesn't crash!
+import { PICKUP_POINTS, REVIEWS_DATA } from "@/data/tours"; 
 import { 
   ChevronLeft, Clock, Sun, MapPin, ShieldCheck, Compass, CheckCircle2, 
   CheckCircle, XCircle, Ban, Navigation, Ticket, Users, Baby, Calendar, Star, Zap 
@@ -17,44 +17,21 @@ const StaticPointsMap = dynamic(
   { ssr: false, loading: () => <div className="w-full h-full bg-slate-100 animate-pulse flex items-center justify-center font-bold text-slate-400">Loading Map...</div> }
 );
 
-export default function TourClient({ tourId }) {
-  const [tour, setTour] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // 1. Fetch tour data directly from Firebase using the tourId
-  useEffect(() => {
-    const fetchTour = async () => {
-      try {
-        const tourRef = doc(db, 'tours', tourId); // Ensure your Firestore docs use tourId as the document ID, or use a query
-        const docSnap = await getDoc(tourRef);
-        
-        if (docSnap.exists()) {
-          setTour(docSnap.data());
-        }
-      } catch (error) {
-        console.error("Error fetching tour:", error);
-      }
-      setLoading(false);
-    };
-    fetchTour();
-  }, [tourId]);
-
-  // --- Keep your existing UI state logic here ---
+// 1. ACCEPT THE 'tour' PROP DIRECTLY
+export default function TourClient({ tour }) {
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const calendarRef = useRef(null);
   
-  if (loading) return <div className="min-h-screen flex items-center justify-center font-black text-2xl">Loading Tour...</div>;
-  if (!tour) return <div className="p-20 text-center font-black text-2xl">Tour not found.</div>;
-
   const [bookingCount] = useState(Math.floor(Math.random() * (24 - 7 + 1)) + 7);
   
-  const tourReviews = REVIEWS_DATA.filter(r => r.tour === tour?.title);
-  
-  // ... Keep the rest of your file exactly the same!
+  // Safeguard in case REVIEWS_DATA is missing
+  const tourReviews = REVIEWS_DATA ? REVIEWS_DATA.filter(r => r.tour === tour?.title) : [];
   
   useEffect(() => {
-    const handleClickOutside = (event) => { if (calendarRef.current && !calendarRef.current.contains(event.target)) setShowCalendar(false); };
+    const handleClickOutside = (event) => { 
+      if (calendarRef.current && !calendarRef.current.contains(event.target)) setShowCalendar(false); 
+    };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
@@ -64,20 +41,24 @@ export default function TourClient({ tourId }) {
     document.getElementById('booking-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  // If somehow the tour is still null, don't crash
+  if (!tour) return null;
+
   return (
     <div className="animate-in fade-in duration-700 bg-[#F8FAFC]">
       {/* 1. HERO SECTION */}
       <section className="relative h-[550px] flex items-center text-white overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <Image src={tour.img} alt={tour.title} fill priority className="object-cover" />
+          {/* Safeguard: Fallback image if the admin dashboard tour doesn't have an img URL yet */}
+          <Image src={tour.img || '/images/hero-home.jpg'} alt={tour.title || "Tour"} fill priority className="object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0C3136]/95 via-[#0C3136]/60 to-transparent"></div>
         </div>
         <div className="container mx-auto px-4 z-10">
            <div className="max-w-3xl">
              <Link href="/tours" className="flex w-max items-center gap-2 text-[10px] font-black text-slate-300 uppercase tracking-widest mb-6 cursor-pointer hover:text-white transition-colors"><ChevronLeft className="w-3 h-3" /> Back to Tours</Link>
-             <span className="bg-[#F8A41E] text-[#0C3136] text-[10px] font-black px-4 py-2 rounded-lg uppercase tracking-[0.2em] mb-4 inline-block shadow-lg">{tour.tag}</span>
+             <span className="bg-[#F8A41E] text-[#0C3136] text-[10px] font-black px-4 py-2 rounded-lg uppercase tracking-[0.2em] mb-4 inline-block shadow-lg">{tour.tag || 'NEW'}</span>
              <h1 className="text-4xl lg:text-7xl font-black leading-tight tracking-tighter mb-4">{tour.title}</h1>
-             <p className="text-xl text-slate-200 font-medium mb-8 leading-relaxed max-w-2xl border-l-4 border-[#F8A41E] pl-4">{tour.tagline}</p>
+             <p className="text-xl text-slate-200 font-medium mb-8 leading-relaxed max-w-2xl border-l-4 border-[#F8A41E] pl-4">{tour.tagline || tour.overview?.substring(0, 100) + '...'}</p>
              <div className="flex flex-wrap items-center gap-6">
                <div className="flex flex-col">
                  <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">From</span>
@@ -95,7 +76,7 @@ export default function TourClient({ tourId }) {
            <div className="flex flex-wrap justify-between items-center py-6 gap-6">
               <div className="flex items-center gap-4">
                  <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-[#125D66]"><Clock className="w-5 h-5" /></div>
-                 <div><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Duration</p><p className="font-bold text-[#0C3136] text-sm">{tour.duration}</p></div>
+                 <div><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Duration</p><p className="font-bold text-[#0C3136] text-sm">{tour.duration || "Flexible"}</p></div>
               </div>
               <div className="hidden md:block w-px h-10 bg-slate-100"></div>
               <div className="flex items-center gap-4">
@@ -129,7 +110,8 @@ export default function TourClient({ tourId }) {
               <div className="bg-emerald-50/50 p-8 rounded-[2rem] border border-emerald-100 h-full">
                  <h3 className="text-xl font-black text-[#0C3136] mb-6 flex items-center gap-3"><CheckCircle2 className="text-emerald-500" /> What's Included</h3>
                  <ul className="space-y-4">
-                    {tour.inclusions.map((item, i) => (
+                    {/* Safeguard: (tour.inclusions || []) prevents crash if empty */}
+                    {(tour.inclusions || []).map((item, i) => (
                       <li key={i} className="flex gap-3 text-sm text-slate-700 font-bold items-start"><CheckCircle className="w-5 h-5 text-emerald-500 shrink-0" /> {item}</li>
                     ))}
                  </ul>
@@ -144,18 +126,24 @@ export default function TourClient({ tourId }) {
               </div>
            </section>
 
-           <section>
-              <h3 className="text-3xl font-black text-[#0C3136] mb-8">Tour Highlights</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                 {tour.highlights.map((h, i) => (
-                   <div key={i} className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center text-center hover:border-[#F8A41E] transition-all">
-                     <div className="bg-[#0C3136]/5 text-[#125D66] p-4 rounded-2xl mb-5"><h.i className="w-6 h-6" /></div>
-                     <h4 className="font-black text-sm text-[#0C3136] mb-2">{h.t}</h4>
-                     <p className="text-xs text-slate-500 font-medium leading-relaxed">{h.d}</p>
-                   </div>
-                 ))}
-              </div>
-           </section>
+           {/* Only render highlights if the tour actually has them */}
+           {tour.highlights && tour.highlights.length > 0 && (
+             <section>
+                <h3 className="text-3xl font-black text-[#0C3136] mb-8">Tour Highlights</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                   {tour.highlights.map((h, i) => {
+                     const Icon = h.i || Star; // Fallback to Star icon if missing
+                     return (
+                       <div key={i} className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center text-center hover:border-[#F8A41E] transition-all">
+                         <div className="bg-[#0C3136]/5 text-[#125D66] p-4 rounded-2xl mb-5"><Icon className="w-6 h-6" /></div>
+                         <h4 className="font-black text-sm text-[#0C3136] mb-2">{h.t}</h4>
+                         <p className="text-xs text-slate-500 font-medium leading-relaxed">{h.d}</p>
+                       </div>
+                     );
+                   })}
+                </div>
+             </section>
+           )}
 
            <section className="bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-sm">
               <h3 className="text-3xl font-black text-[#0C3136] mb-10 flex items-center gap-3"><Navigation className="text-[#F8A41E]" /> Step-by-Step Itinerary</h3>
@@ -179,7 +167,7 @@ export default function TourClient({ tourId }) {
                  <div className="grid grid-cols-1 md:grid-cols-2">
                     <div className="p-8 space-y-4">
                        <p className="text-sm text-slate-500 font-bold mb-6">We offer complimentary pickup from the following central locations. Please arrive 10 minutes early.</p>
-                       {PICKUP_POINTS.slice(0, 4).map((point, i) => (
+                       {PICKUP_POINTS && PICKUP_POINTS.slice(0, 4).map((point, i) => (
                          <div key={i} className="flex flex-col justify-between p-4 bg-slate-50 rounded-2xl">
                             <h4 className="font-black text-[#0C3136] text-sm">{point.name}</h4>
                             <div className="flex justify-between items-center mt-2">
@@ -190,7 +178,7 @@ export default function TourClient({ tourId }) {
                        ))}
                     </div>
                     <div className="bg-slate-200 min-h-[300px] h-full relative z-0">
-                       <StaticPointsMap points={PICKUP_POINTS} />
+                       {PICKUP_POINTS && <StaticPointsMap points={PICKUP_POINTS} />}
                     </div>
                  </div>
               </div>
@@ -216,7 +204,8 @@ export default function TourClient({ tourId }) {
                        <tr className="hover:bg-slate-50/50 transition-colors">
                           <td className="p-6 flex items-center gap-3"><Users className="w-5 h-5 text-slate-400 scale-75" /> Child</td>
                           <td className="p-6 text-slate-500">2 - 12 Years</td>
-                          <td className="p-6 text-right text-lg">${tour.price - 10}.00</td>
+                          {/* Safeguard price math */}
+                          <td className="p-6 text-right text-lg">${Math.max((tour.price || 0) - 10, 0)}.00</td>
                        </tr>
                        <tr className="hover:bg-slate-50/50 transition-colors">
                           <td className="p-6 flex items-center gap-3"><Baby className="w-5 h-5 text-slate-400" /> Infant (Lap Child)</td>

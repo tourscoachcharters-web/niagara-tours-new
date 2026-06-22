@@ -29,8 +29,9 @@ export default async function TourPage({ params }) {
   const tours = await getLiveTours();
   const tour = tours.find((t) => t.id === id);
 
-  if (!tour) return <div className="p-20 text-center font-black text-2xl">Tour not found.</div>;
+  // Add a little top margin so the header doesn't cover this message
+  if (!tour) return <div className="p-20 text-center font-black text-2xl mt-20">Tour not found.</div>;
 
-  // Passing the actual tour object allows the client to access details immediately
-  return <TourClient tourId={id} />;
+  // PASS THE FULL TOUR OBJECT
+  return <TourClient tour={tour} />; 
 }

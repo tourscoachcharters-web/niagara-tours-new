@@ -1,13 +1,19 @@
 import React from 'react';
-import { TOURS_DATA } from "@/data/tours";
+import { getLiveTours } from '@/lib/firebase-utils'; // Fetch from Firebase
 import TourCard from "@/components/TourCard";
+
 export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: "All Tour Packages | Niagara Travels",
   description: "From classic day escapes to private VIP luxury, discover the perfect way to experience the world's most famous waterfall.",
 };
 
-export default function ToursPage() {
+// Make sure to add 'async' here!
+export default async function ToursPage() {
+  // Fetch your live tours right here on the server
+  const tours = await getLiveTours();
+
   return (
     <div className="animate-in fade-in duration-700 bg-white">
       <section className="relative h-[450px] flex items-center text-white overflow-hidden">
@@ -24,8 +30,9 @@ export default function ToursPage() {
 
       <main className="container mx-auto px-4 py-24">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
-          {TOURS_DATA.map((tour, i) => (
-            <TourCard key={i} tour={tour} />
+          {/* Map through the dynamic 'tours' array instead of TOURS_DATA */}
+          {tours.map((tour) => (
+            <TourCard key={tour.firebaseId || tour.id} tour={tour} />
           ))}
         </div>
       </main>
