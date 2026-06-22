@@ -1,10 +1,11 @@
-import { TOURS_DATA } from "@/data/tours";
+import { getLiveTours } from "@/lib/firebase-utils";
 import TourClient from "./TourClient";
 
-// 1. GENERATE PERFECT SEO
+// 1. DYNAMIC SEO
 export async function generateMetadata({ params }) {
   const { id } = await params;
-  const tour = TOURS_DATA.find((t) => t.id === id);
+  const tours = await getLiveTours();
+  const tour = tours.find((t) => t.id === id);
 
   if (!tour) return { title: "Tour Not Found | Niagara Travels" };
 
@@ -20,19 +21,22 @@ export async function generateMetadata({ params }) {
   };
 }
 
-// 2. PRE-BUILD ALL ROUTES FOR MAXIMUM SPEED
-export function generateStaticParams() {
-  return TOURS_DATA.map((tour) => ({
+// 2. DYNAMIC ROUTE GENERATION
+export async function generateStaticParams() {
+  const tours = await getLiveTours();
+  return tours.map((tour) => ({
     id: tour.id,
   }));
 }
 
-// 3. PASS ONLY THE ID STRING TO THE CLIENT
+// 3. FETCH DATA FROM FIRESTORE
 export default async function TourPage({ params }) {
   const { id } = await params;
-  const tour = TOURS_DATA.find((t) => t.id === id);
+  const tours = await getLiveTours();
+  const tour = tours.find((t) => t.id === id);
 
   if (!tour) return <div className="p-20 text-center font-black text-2xl">Tour not found.</div>;
 
+  // Passing the actual tour object allows the client to access details immediately
   return <TourClient tourId={id} />;
 }

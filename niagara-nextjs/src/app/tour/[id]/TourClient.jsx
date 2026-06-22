@@ -4,12 +4,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import { TOURS_DATA, PICKUP_POINTS, REVIEWS_DATA } from "@/data/tours"; // <-- ADDED TOURS_DATA
+import { db } from '@/lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 import CalendarDropdown from "@/components/CalendarDropdown";
 import { 
   ChevronLeft, Clock, Sun, MapPin, ShieldCheck, Compass, CheckCircle2, 
-  CheckCircle, XCircle, Ban, Navigation, Ticket, Users, Baby, AlertCircle, 
-  FileText, Wind, Phone, Calendar, Star, Zap, Loader2 
+  CheckCircle, XCircle, Ban, Navigation, Ticket, Users, Baby, Calendar, Star, Zap 
 } from 'lucide-react';
 
 const StaticPointsMap = dynamic(
@@ -17,13 +17,36 @@ const StaticPointsMap = dynamic(
   { ssr: false, loading: () => <div className="w-full h-full bg-slate-100 animate-pulse flex items-center justify-center font-bold text-slate-400">Loading Map...</div> }
 );
 
-// <-- CHANGED TO EXPECT tourId INSTEAD OF tour
-export default function TourClient({ tourId }) { 
-  const tour = TOURS_DATA.find(t => t.id === tourId); // <-- GRAB THE DATA HERE
-  
+export default function TourClient({ tourId }) {
+  const [tour, setTour] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // 1. Fetch tour data directly from Firebase using the tourId
+  useEffect(() => {
+    const fetchTour = async () => {
+      try {
+        const tourRef = doc(db, 'tours', tourId); // Ensure your Firestore docs use tourId as the document ID, or use a query
+        const docSnap = await getDoc(tourRef);
+        
+        if (docSnap.exists()) {
+          setTour(docSnap.data());
+        }
+      } catch (error) {
+        console.error("Error fetching tour:", error);
+      }
+      setLoading(false);
+    };
+    fetchTour();
+  }, [tourId]);
+
+  // --- Keep your existing UI state logic here ---
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const calendarRef = useRef(null);
+  
+  if (loading) return <div className="min-h-screen flex items-center justify-center font-black text-2xl">Loading Tour...</div>;
+  if (!tour) return <div className="p-20 text-center font-black text-2xl">Tour not found.</div>;
+
   const [bookingCount] = useState(Math.floor(Math.random() * (24 - 7 + 1)) + 7);
   
   const tourReviews = REVIEWS_DATA.filter(r => r.tour === tour?.title);

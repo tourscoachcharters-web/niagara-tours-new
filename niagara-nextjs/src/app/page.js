@@ -1,12 +1,15 @@
 import React from 'react';
 import Link from 'next/link';
-import { TOURS_DATA } from "@/data/tours";
+import { getLiveTours } from '@/lib/firebase-utils'; // Ensure this utility is created
 import TourCard from "@/components/TourCard";
 import { 
-  Star, ChevronRight, Compass, Bus, Clock, Users, Camera, ShieldCheck, Globe, Zap, Settings 
+  Star, ChevronRight, Compass, Bus, Clock, Users, Camera, ShieldCheck, Globe, Settings 
 } from 'lucide-react';
 
-export default function HomePage() {
+export default async function HomePage() {
+  // Fetch live tours from Firebase
+  const tours = await getLiveTours();
+
   return (
     <div className="animate-in fade-in duration-700">
       {/* Hero Section */}
@@ -97,19 +100,27 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Signature Tours Showcase */}
+{/* Signature Tours Showcase */}
       <section className="py-24 bg-white">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-end mb-12">
-             <div><p className="text-[#F8A41E] font-black text-xs uppercase tracking-[0.4em] mb-2">OUR SIGNATURE TOURS</p><h2 className="text-4xl font-black text-[#0C3136]">Explore Niagara & Beyond</h2></div>
+             <div>
+                <p className="text-[#F8A41E] font-black text-xs uppercase tracking-[0.4em] mb-2">OUR SIGNATURE TOURS</p>
+                <h2 className="text-4xl font-black text-[#0C3136]">Explore Niagara & Beyond</h2>
+             </div>
           </div>
+          
+          {/* Use the dynamic 'tours' array instead of TOURS_DATA */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {TOURS_DATA.slice(0, 3).map((tour, i) => (
-              <TourCard key={i} tour={tour} />
+            {tours.slice(0, 3).map((tour) => (
+              <TourCard key={tour.firebaseId} tour={tour} />
             ))}
           </div>
+
           <div className="mt-16 text-center">
-            <Link href="/tours" className="inline-block bg-[#0C3136] text-white px-12 py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#125D66] transition-all shadow-xl">VIEW ALL {TOURS_DATA.length} TOURS</Link>
+            <Link href="/tours" className="inline-block bg-[#0C3136] text-white px-12 py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#125D66] transition-all shadow-xl">
+              VIEW ALL {tours.length} TOURS
+            </Link>
           </div>
         </div>
       </section>
