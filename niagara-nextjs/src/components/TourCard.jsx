@@ -16,12 +16,19 @@ export default function TourCard({ tour }) {
   else if (tour.tag === 'PRIVATE / VIP') theme = { badgeBg: 'bg-[#1E293B]', badgeIcon: ShieldCheck, footerBg: 'bg-[#F8FAFC]', textColor: 'text-[#334155]', btnBg: 'bg-[#0F172A]', features: [{ icon: Users, label: 'Private Group' }, { icon: Settings, label: 'Custom Route' }, { icon: Star, label: 'VIP Access' }] };
   else if (tour.tag === 'MULTI-CITY') theme = { badgeBg: 'bg-[#0369A1]', badgeIcon: MapIcon, footerBg: 'bg-[#F0F9FF]', textColor: 'text-[#0369A1]', btnBg: 'bg-[#0369A1]', features: [{ icon: Globe, label: 'Multi-City' }, { icon: Wind, label: 'Cruise' }, { icon: Users, label: 'Expert Guide' }] };
 
-  const formattedTag = tour.tag.replace(' ', '\n');
+  // SAFEGUARD 1: If the tour tag is missing, default to 'NEW TOUR' so .replace() doesn't crash
+  const formattedTag = (tour.tag || 'NEW TOUR').replace(' ', '\n');
 
   return (
     <div className="bg-white rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden flex flex-col h-full hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 transition-all duration-300">
        <div className="h-56 relative overflow-hidden group">
-          <Image src={tour.img} alt={tour.title} fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
+          {/* SAFEGUARD 2: Use the uploaded image, OR fallback to your default hero image if it's missing */}
+          <Image 
+            src={tour.img || '/images/hero-home.jpg'} 
+            alt={tour.title || 'Niagara Tour'} 
+            fill 
+            className="object-cover group-hover:scale-110 transition-transform duration-700" 
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           
           <div className={`absolute top-4 left-4 ${theme.badgeBg} text-white pl-3 pr-4 py-2 rounded-xl flex items-center gap-3 shadow-lg`}>
@@ -41,11 +48,11 @@ export default function TourCard({ tour }) {
 
        <div className={`${theme.footerBg} p-5 mx-6 mb-5 rounded-2xl flex justify-between items-center`}>
           <div>
-            <span className="text-slate-500 text-[9px] font-black block uppercase tracking-widest mb-0.5">From</span>
-            <span className="text-2xl font-black text-[#0C3136]">CAD ${tour.price}</span>
+             <span className="text-slate-500 text-[9px] font-black block uppercase tracking-widest mb-0.5">From</span>
+             <span className="text-2xl font-black text-[#0C3136]">CAD ${tour.price}</span>
           </div>
           <Link href={`/tour/${tour.id}`} className={`${theme.btnBg} hover:opacity-90 text-white px-5 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-md active:scale-95 flex items-center gap-1.5 group/btn`}>
-            VIEW TOUR <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
+             VIEW TOUR <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
           </Link>
        </div>
 
