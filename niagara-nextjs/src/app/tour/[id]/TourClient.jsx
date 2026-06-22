@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import { PICKUP_POINTS, REVIEWS_DATA } from "@/data/tours";
+import { TOURS_DATA, PICKUP_POINTS, REVIEWS_DATA } from "@/data/tours"; // <-- ADDED TOURS_DATA
 import CalendarDropdown from "@/components/CalendarDropdown";
 import { 
   ChevronLeft, Clock, Sun, MapPin, ShieldCheck, Compass, CheckCircle2, 
@@ -12,19 +12,23 @@ import {
   FileText, Wind, Phone, Calendar, Star, Zap, Loader2 
 } from 'lucide-react';
 
-// Safely import the map so it doesn't crash the server
 const StaticPointsMap = dynamic(
   () => import('@/components/DynamicMap').then((mod) => mod.StaticPointsMap),
   { ssr: false, loading: () => <div className="w-full h-full bg-slate-100 animate-pulse flex items-center justify-center font-bold text-slate-400">Loading Map...</div> }
 );
 
-export default function TourClient({ tour }) {
+// <-- CHANGED TO EXPECT tourId INSTEAD OF tour
+export default function TourClient({ tourId }) { 
+  const tour = TOURS_DATA.find(t => t.id === tourId); // <-- GRAB THE DATA HERE
+  
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const calendarRef = useRef(null);
   const [bookingCount] = useState(Math.floor(Math.random() * (24 - 7 + 1)) + 7);
   
   const tourReviews = REVIEWS_DATA.filter(r => r.tour === tour?.title);
+  
+  // ... Keep the rest of your file exactly the same!
   
   useEffect(() => {
     const handleClickOutside = (event) => { if (calendarRef.current && !calendarRef.current.contains(event.target)) setShowCalendar(false); };

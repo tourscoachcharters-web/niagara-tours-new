@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import { auth, db } from '@/lib/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import { signInAnonymously } from 'firebase/auth';
+import { TOURS_DATA } from "@/data/tours";
 import { 
   ChevronLeft, Calendar, Minus, Plus, MapPin, 
   Users, Loader2, ShieldCheck, Clock, CheckCircle2 
@@ -17,7 +18,10 @@ const LocationMarkerMap = dynamic(
   { ssr: false, loading: () => <div className="w-full h-full bg-slate-100 animate-pulse flex items-center justify-center font-bold text-slate-400">Loading Map...</div> }
 );
 
-export default function CheckoutClient({ tour, initialDate }) {
+export default function CheckoutClient({ tourId, initialDate }) {
+  // Grab the data locally so the server doesn't have to send React Icons over the network!
+  const tour = TOURS_DATA.find(t => t.id === tourId);
+
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [pickup, setPickup] = useState("");
@@ -26,6 +30,9 @@ export default function CheckoutClient({ tour, initialDate }) {
   const [phone, setPhone] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmedBooking, setConfirmedBooking] = useState(null);
+
+  // Fallback just in case
+  if (!tour) return <div className="p-20 text-center font-black">Tour not found.</div>;
 
   const childPrice = tour.price - 10;
   const subtotal = (adults * tour.price) + (children * childPrice);
