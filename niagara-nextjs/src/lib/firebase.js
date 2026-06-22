@@ -8,7 +8,7 @@ const firebaseConfig = {
   projectId: "new-niagara-tours",
   storageBucket: "new-niagara-tours.firebasestorage.app",
   messagingSenderId: "617199953253",
-  appAppId: "1:617199953253:web:1014a1aad3ce755da56d8c"
+  appId: "1:617199953253:web:1014a1aad3ce755da56d8c" // <-- Fixed the typo here!
 };
 
 // Prevent duplicate initialization during hot reloads
