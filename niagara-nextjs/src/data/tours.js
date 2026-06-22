@@ -1,6 +1,6 @@
 import { 
   Users, Navigation, Camera, Clock, Zap, Bus, MapPin, Wind, Grape, Globe, 
-  ShieldCheck, Map as MapIcon, Utensils, Plane 
+  ShieldCheck, Map as MapIcon, Utensils, Plane, Star 
 } from 'lucide-react';
 
 export const TOURS_DATA = [

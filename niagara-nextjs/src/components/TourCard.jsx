@@ -1,7 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Compass, LifeBuoy, Trophy, Flame, Star, Zap, Grape, ShieldCheck, Map as MapIcon, Bus, Car, Ship, Award, Users, Camera, Clock, ArrowRight, Globe, Wind, Settings } from 'lucide-react';
+import { 
+  Compass, LifeBuoy, Trophy, Flame, Star, Zap, Grape, ShieldCheck, Map as MapIcon, 
+  Bus, Car, Ship, Award, Users, Camera, Clock, ArrowRight, Globe, Wind, Settings, Sparkles 
+} from 'lucide-react';
 
 export default function TourCard({ tour }) {
   let theme = { badgeBg: 'bg-[#125D66]', badgeIcon: Compass, footerBg: 'bg-slate-50', textColor: 'text-[#125D66]', btnBg: 'bg-[#D91E1E]', features: [{ icon: Star, label: 'Top Rated' }, { icon: Bus, label: 'Transport' }, { icon: ShieldCheck, label: 'Secure' }] };
