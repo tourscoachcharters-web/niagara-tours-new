@@ -1,14 +1,14 @@
 import React from 'react';
 import Link from 'next/link';
-import { getLiveTours } from '@/lib/firebase-utils'; // Ensure this utility is created
+import { getLiveTours } from '@/lib/firebase-utils';
 import TourCard from "@/components/TourCard";
-import { 
-  Star, ChevronRight, Compass, Bus, Clock, Users, Camera, ShieldCheck, Globe, Settings 
-} from 'lucide-react';
+import { Star, ChevronRight, Compass, Bus, Clock, Users, Camera, ShieldCheck, Globe, Settings } from 'lucide-react';
+
+export const dynamic = 'force-dynamic'; // <-- ADD THIS EXACT LINE
 
 export default async function HomePage() {
-  // Fetch live tours from Firebase
   const tours = await getLiveTours();
+  // ... rest of your code stays exactly the same
 
   return (
     <div className="animate-in fade-in duration-700">

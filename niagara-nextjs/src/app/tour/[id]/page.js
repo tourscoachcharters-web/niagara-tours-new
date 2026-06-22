@@ -1,6 +1,8 @@
 import { getLiveTours } from "@/lib/firebase-utils";
 import TourClient from "./TourClient";
 
+export const dynamic = 'force-dynamic'; // <-- ADD THIS EXACT LINE
+
 // 1. DYNAMIC SEO
 export async function generateMetadata({ params }) {
   const { id } = await params;
@@ -19,14 +21,6 @@ export async function generateMetadata({ params }) {
       images: [tour.img],
     },
   };
-}
-
-// 2. DYNAMIC ROUTE GENERATION
-export async function generateStaticParams() {
-  const tours = await getLiveTours();
-  return tours.map((tour) => ({
-    id: tour.id,
-  }));
 }
 
 // 3. FETCH DATA FROM FIRESTORE

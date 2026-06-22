@@ -1,7 +1,7 @@
 import React from 'react';
 import { TOURS_DATA } from "@/data/tours";
 import TourCard from "@/components/TourCard";
-
+export const dynamic = 'force-dynamic';
 export const metadata = {
   title: "All Tour Packages | Niagara Travels",
   description: "From classic day escapes to private VIP luxury, discover the perfect way to experience the world's most famous waterfall.",
