@@ -8,7 +8,7 @@ import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebas
 import { collection, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { 
   LayoutDashboard, Loader2, ChevronLeft, Ticket, Globe, LogOut, 
-  DollarSign, Clock, Search, CheckCircle, XCircle, Trash2, Users 
+  DollarSign, Clock, Search, CheckCircle, XCircle, Trash2, Users, Map // <-- Added Map here
 } from 'lucide-react';
 
 export default function AdminClient() {
@@ -142,9 +142,18 @@ export default function AdminClient() {
           <div className="bg-[#F8A41E] p-2 rounded-lg"><LayoutDashboard className="w-5 h-5 text-[#0C3136]" /></div>
           <div><h2 className="font-black text-sm tracking-widest uppercase text-[#F8A41E]">Admin Panel</h2><p className="text-[10px] text-slate-400">Niagara Travels</p></div>
         </div>
-        <nav className="p-4 flex-1">
+<nav className="p-4 flex-1">
           <ul className="space-y-2">
-            <li><div className="flex items-center gap-3 px-4 py-3 bg-white/10 rounded-xl text-sm font-bold text-white transition-all"><Ticket className="w-4 h-4" /> Bookings</div></li>
+            <li>
+              <Link href="/admin" className="flex items-center gap-3 px-4 py-3 bg-white/10 rounded-xl text-sm font-bold text-white transition-all">
+                <Ticket className="w-4 h-4" /> Bookings
+              </Link>
+            </li>
+            <li>
+              <Link href="/admin/tours" className="flex items-center gap-3 px-4 py-3 hover:bg-white/10 rounded-xl text-sm font-bold text-slate-400 hover:text-white transition-all">
+                <Map className="w-4 h-4" /> Tours
+              </Link>
+            </li>
           </ul>
         </nav>
         <div className="p-4 border-t border-white/10 space-y-2">
