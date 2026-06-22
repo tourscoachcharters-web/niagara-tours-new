@@ -6,22 +6,19 @@ import dynamic from 'next/dynamic';
 import { auth, db } from '@/lib/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import { signInAnonymously } from 'firebase/auth';
-import { TOURS_DATA } from "@/data/tours";
+// REMOVED TOURS_DATA IMPORT
 import { 
   ChevronLeft, Calendar, Minus, Plus, MapPin, 
   Users, Loader2, ShieldCheck, Clock, CheckCircle2 
 } from 'lucide-react';
 
-// Safely import the interactive map so it doesn't crash the server!
 const LocationMarkerMap = dynamic(
   () => import('@/components/DynamicMap').then((mod) => mod.LocationMarkerMap),
   { ssr: false, loading: () => <div className="w-full h-full bg-slate-100 animate-pulse flex items-center justify-center font-bold text-slate-400">Loading Map...</div> }
 );
 
-export default function CheckoutClient({ tourId, initialDate }) {
-  // Grab the data locally so the server doesn't have to send React Icons over the network!
-  const tour = TOURS_DATA.find(t => t.id === tourId);
-
+// Accept 'tour' directly instead of 'tourId'
+export default function CheckoutClient({ tour, initialDate }) {
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [pickup, setPickup] = useState("");
@@ -34,7 +31,7 @@ export default function CheckoutClient({ tourId, initialDate }) {
   // Fallback just in case
   if (!tour) return <div className="p-20 text-center font-black">Tour not found.</div>;
 
-  const childPrice = tour.price - 10;
+  const childPrice = Math.max((tour.price || 0) - 10, 0); // Safety check on price
   const subtotal = (adults * tour.price) + (children * childPrice);
   const taxes = subtotal * 0.13;
   const total = subtotal + taxes;
@@ -64,15 +61,12 @@ export default function CheckoutClient({ tourId, initialDate }) {
     };
 
     try {
-      // 1. Ensure user has a valid Firebase session to write to the DB securely
       if (!auth.currentUser) {
         await signInAnonymously(auth);
       }
       
-      // 2. Save the booking to Firestore
       await setDoc(doc(db, 'bookings', newBooking.id), newBooking);
 
-      // 3. (Optional) Trigger your Resend API for the email if you set up the backend route
       try {
         await fetch('/api/send-email', {
           method: 'POST',
