@@ -62,7 +62,7 @@ export default async function HomePage() {
         {/* ========================================================================= */}
         <section
           aria-labelledby="hero-heading"
-          className="relative pt-12 pb-24 lg:pt-20 lg:pb-36 flex items-center min-h-[660px]"
+          className="relative z-40 pt-12 pb-24 lg:pt-20 lg:pb-36 flex items-center min-h-[660px]"
         >
           {/* Background Image with Cinematic Gradient Mask */}
           <div className="absolute inset-0 z-0 overflow-hidden">

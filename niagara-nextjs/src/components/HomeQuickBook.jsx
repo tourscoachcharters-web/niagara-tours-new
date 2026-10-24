@@ -2,40 +2,45 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { MapPin, Compass, Calendar, ChevronDown, ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
+import { 
+  MapPin, Compass, Calendar, ChevronDown, ChevronLeft, ChevronRight, 
+  Search, X, Check, Sparkles, Moon, ShieldCheck, Clock
+} from 'lucide-react';
 
 const DEPARTURE_OPTIONS = [
-  { value: 'all', label: 'Toronto & GTA Pickup (All Hubs)' },
-  { value: 'downtown', label: 'Downtown Toronto (Central Hotel Hubs)' },
-  { value: 'airport', label: 'Toronto Pearson Airport (YYZ)' },
-  { value: 'mississauga', label: 'Mississauga / Brampton / Oakville' },
-  { value: 'markham', label: 'Markham / Richmond Hill / Scarborough' },
+  { value: 'all', label: 'Toronto & GTA Pickup (All Hubs)', desc: '5 Downtown Hubs + Hotel Loading Zones' },
+  { value: 'downtown', label: 'Downtown Toronto (Central Hotel Hubs)', desc: 'ROM, Chelsea, Sheraton, Union' },
+  { value: 'airport', label: 'Toronto Pearson Airport (YYZ)', desc: 'Airport Hotels & Terminal Area' },
+  { value: 'mississauga', label: 'Mississauga / Brampton / Oakville', desc: 'West GTA Hotel & Transit Pickups' },
+  { value: 'markham', label: 'Markham / Richmond Hill / Scarborough', desc: 'East & North GTA Locations' },
 ];
 
-const TOUR_OPTIONS = [
-  { value: 'all', label: 'All Niagara Tours (Browse 7 Packages)' },
+const TOUR_GROUPS = [
   {
-    group: 'Curated Day Experiences',
+    title: 'Popular Day Experiences',
+    icon: Sparkles,
     options: [
-      { value: 'classic-day-escape', label: 'Classic Day Escape ($99) • Most Popular' },
-      { value: 'ultimate-adventure', label: 'Ultimate Adventure ($149) • Boat & Tunnels' },
-      { value: 'day', label: 'All Day Tours (View Category)' },
+      { value: 'classic-day-escape', title: 'Classic Day Escape', price: '$99', badge: 'Most Popular', desc: 'Boat cruise, Niagara Parkway & free time' },
+      { value: 'ultimate-adventure', title: 'Ultimate Adventure', price: '$149', badge: 'Best Value', desc: 'Boat cruise, Behind the Falls tunnels & Skylon' },
+      { value: 'day', title: 'All Day Tours', price: 'From $99', badge: 'Category', desc: 'Browse full day tour collection' },
     ],
   },
   {
-    group: 'Evening & Wine Adventures',
+    title: 'Evening & Wine Adventures',
+    icon: Moon,
     options: [
-      { value: 'evening-illumination', label: 'Evening & Fireworks ($139) • Night Falls' },
-      { value: 'wine-country', label: 'Wine Country & Falls ($169) • Tastings' },
-      { value: 'evening', label: 'All Evening & Wine Tours' },
+      { value: 'evening-illumination', title: 'Evening & Fireworks', price: '$139', badge: 'Romantic', desc: 'Falls illumination & seasonal fireworks' },
+      { value: 'wine-country', title: 'Wine Country & Falls', price: '$169', badge: 'Wine Lovers', desc: 'Niagara-on-the-Lake & boutique tastings' },
+      { value: 'evening', title: 'All Evening & Wine Tours', price: 'From $139', badge: 'Category', desc: 'Browse twilight & winery packages' },
     ],
   },
   {
-    group: 'Private VIP Charters',
+    title: 'Private VIP Charters',
+    icon: ShieldCheck,
     options: [
-      { value: 'half-day-private', label: 'Half Day Private Tour ($795) • Up to 6' },
-      { value: 'vip-experience', label: 'Custom VIP Charter ($995) • Executive' },
-      { value: 'private', label: 'All Private Charters' },
+      { value: 'half-day-private', title: 'Half Day Private Tour', price: '$795', badge: 'Private Group', desc: 'Up to 6 guests in private Mercedes sprinter' },
+      { value: 'vip-experience', title: 'Custom VIP Charter', price: '$995', badge: 'Full Day VIP', desc: 'Bespoke itinerary with personal chauffeur' },
+      { value: 'private', title: 'All Private Charters', price: 'From $795', badge: 'Category', desc: 'Browse all private group charters' },
     ],
   },
 ];
@@ -89,19 +94,31 @@ export default function HomeQuickBook() {
   const [selectedDeparture, setSelectedDeparture] = useState('all');
   const [selectedTour, setSelectedTour] = useState('all');
   const [selectedDate, setSelectedDate] = useState('');
-  const [showCalendar, setShowCalendar] = useState(false);
-  const [calendarMonth, setCalendarMonth] = useState(new Date());
-  const calendarRef = useRef(null);
+  
+  // Single dropdown state: 'departure' | 'experience' | 'calendar' | null
+  const [openDropdown, setOpenDropdown] = useState(null);
 
-  // Close calendar when clicking outside
+  const [calendarMonth, setCalendarMonth] = useState(new Date());
+  const wrapperRef = useRef(null);
+
+  // Close when clicking outside or pressing Escape
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (calendarRef.current && !calendarRef.current.contains(e.target)) {
-        setShowCalendar(false);
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setOpenDropdown(null);
+      }
+    };
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setOpenDropdown(null);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   // Calendar calculations
@@ -138,6 +155,7 @@ export default function HomeQuickBook() {
 
   const handleSearch = (e) => {
     e.preventDefault();
+    setOpenDropdown(null);
 
     // 1. Direct match for single tour package
     const individualTourIds = [
@@ -180,15 +198,13 @@ export default function HomeQuickBook() {
 
   // Find readable labels for display
   const selectedDepartureObj = DEPARTURE_OPTIONS.find((o) => o.value === selectedDeparture);
-  let selectedTourLabel = 'All Niagara Tours';
+  let selectedTourTitle = 'All Niagara Tours';
   if (selectedTour !== 'all') {
-    for (const group of TOUR_OPTIONS) {
-      if (group.options) {
-        const found = group.options.find((o) => o.value === selectedTour);
-        if (found) {
-          selectedTourLabel = found.label.split('•')[0].trim();
-          break;
-        }
+    for (const group of TOUR_GROUPS) {
+      const found = group.options.find((o) => o.value === selectedTour);
+      if (found) {
+        selectedTourTitle = found.title;
+        break;
       }
     }
   }
@@ -196,145 +212,306 @@ export default function HomeQuickBook() {
   const displayDate = formatDateDisplay(selectedDate);
 
   return (
-    <div className="w-full max-w-5xl mx-auto">
+    <div ref={wrapperRef} className="w-full max-w-5xl mx-auto">
       <form
         onSubmit={handleSearch}
-        className="bg-white/95 backdrop-blur-md rounded-3xl lg:rounded-full p-3 sm:p-4 lg:p-2.5 shadow-2xl shadow-slate-950/20 border border-white/60 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-2 sm:gap-3 items-center relative z-40"
+        className="bg-white/95 backdrop-blur-md rounded-3xl lg:rounded-full p-3 sm:p-4 lg:p-2.5 shadow-2xl shadow-slate-950/20 border border-white/60 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-2 sm:gap-3 items-center relative z-50 text-slate-800"
       >
-        {/* 1. DEPARTURE POINT */}
-        <div className="lg:col-span-3 relative flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-slate-50 transition-colors group cursor-pointer border border-transparent hover:border-slate-200">
-          <div
-            className="w-10 h-10 rounded-full bg-[#0C3136]/5 flex items-center justify-center text-[#125D66] shrink-0 group-hover:scale-105 transition-transform"
-            aria-hidden="true"
+        {/* ========================================================================= */}
+        {/* 1. DEPARTURE POINT                                                        */}
+        {/* ========================================================================= */}
+        <div className="lg:col-span-3 relative">
+          <button
+            type="button"
+            onClick={() => setOpenDropdown(openDropdown === 'departure' ? null : 'departure')}
+            aria-expanded={openDropdown === 'departure'}
+            aria-label={`Selected departure point: ${selectedDepartureObj?.label || 'Toronto & GTA Pickup'}`}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition-all text-left border ${
+              openDropdown === 'departure'
+                ? 'bg-slate-50 border-[#F8A41E] shadow-sm'
+                : 'hover:bg-slate-50 border-transparent hover:border-slate-200'
+            }`}
           >
-            <MapPin className="w-5 h-5 text-[#F8A41E]" />
-          </div>
-          <div className="text-left min-w-0 flex-1">
-            <label
-              htmlFor="hero-departure-select"
-              className="text-[9px] font-black uppercase text-slate-400 tracking-widest block cursor-pointer"
+            <div
+              className="w-10 h-10 rounded-full bg-[#0C3136]/5 flex items-center justify-center text-[#125D66] shrink-0"
+              aria-hidden="true"
             >
-              Departure Point
-            </label>
-            <p className="font-bold text-xs text-[#0C3136] truncate">
-              {selectedDepartureObj ? selectedDepartureObj.label.split('(')[0].trim() : 'Toronto & GTA Pickup'}
-            </p>
-          </div>
-          <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0 pointer-events-none" aria-hidden="true" />
+              <MapPin className="w-5 h-5 text-[#F8A41E]" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <span className="text-[9px] font-black uppercase text-slate-400 tracking-widest block">
+                Departure Point
+              </span>
+              <p className="font-bold text-xs text-[#0C3136] truncate">
+                {selectedDepartureObj ? selectedDepartureObj.label.split('(')[0].trim() : 'Toronto & GTA Pickup'}
+              </p>
+            </div>
+            <ChevronDown
+              className={`w-3.5 h-3.5 text-slate-400 shrink-0 transition-transform duration-200 ${
+                openDropdown === 'departure' ? 'rotate-180 text-[#F8A41E]' : ''
+              }`}
+              aria-hidden="true"
+            />
+          </button>
 
-          {/* Full overlay interactive select */}
-          <select
-            id="hero-departure-select"
-            aria-label="Select departure point"
-            value={selectedDeparture}
-            onChange={(e) => setSelectedDeparture(e.target.value)}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer text-base"
-          >
-            {DEPARTURE_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* 2. EXPERIENCE */}
-        <div className="lg:col-span-4 relative flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-slate-50 transition-colors group cursor-pointer border border-transparent hover:border-slate-200">
-          <div
-            className="w-10 h-10 rounded-full bg-[#0C3136]/5 flex items-center justify-center text-[#125D66] shrink-0 group-hover:scale-105 transition-transform"
-            aria-hidden="true"
-          >
-            <Compass className="w-5 h-5 text-[#125D66]" />
-          </div>
-          <div className="text-left min-w-0 flex-1">
-            <label
-              htmlFor="hero-tour-select"
-              className="text-[9px] font-black uppercase text-slate-400 tracking-widest block cursor-pointer"
+          {/* Custom Departure Menu (100% styled, dark text on white bg) */}
+          {openDropdown === 'departure' && (
+            <div
+              role="listbox"
+              aria-label="Available departure points"
+              className="absolute top-full left-0 mt-3 w-72 sm:w-80 bg-white rounded-3xl shadow-2xl border border-slate-200 z-[200] p-2.5 text-[#0C3136] animate-in fade-in zoom-in-95 duration-200"
             >
-              Experience
-            </label>
-            <p className="font-bold text-xs text-[#0C3136] truncate">
-              {selectedTourLabel}
-            </p>
-          </div>
-          <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0 pointer-events-none" aria-hidden="true" />
-
-          {/* Full overlay interactive select */}
-          <select
-            id="hero-tour-select"
-            aria-label="Select experience or tour package"
-            value={selectedTour}
-            onChange={(e) => setSelectedTour(e.target.value)}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer text-base"
-          >
-            <option value="all">All Niagara Tours (Browse 7 Packages)</option>
-            <optgroup label="Popular Day Experiences">
-              <option value="classic-day-escape">Classic Day Escape ($99) • Most Popular</option>
-              <option value="ultimate-adventure">Ultimate Adventure ($149) • Boat & Tunnels</option>
-              <option value="day">View All Day Tours Category</option>
-            </optgroup>
-            <optgroup label="Evening & Wine Adventures">
-              <option value="evening-illumination">Evening & Fireworks ($139) • Night Falls</option>
-              <option value="wine-country">Wine Country & Falls ($169) • Tastings</option>
-              <option value="evening">View All Evening & Wine Tours</option>
-            </optgroup>
-            <optgroup label="Private VIP Charters">
-              <option value="half-day-private">Half Day Private Tour ($795) • Up to 6</option>
-              <option value="vip-experience">Custom VIP Charter ($995) • Executive</option>
-              <option value="private">View All Private Charters</option>
-            </optgroup>
-          </select>
-        </div>
-
-        {/* 3. TRAVEL DATE */}
-        <div
-          ref={calendarRef}
-          className="lg:col-span-3 relative flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-slate-50 transition-colors group cursor-pointer border border-transparent hover:border-slate-200"
-        >
-          <div
-            className="w-10 h-10 rounded-full bg-[#0C3136]/5 flex items-center justify-center text-[#125D66] shrink-0 group-hover:scale-105 transition-transform"
-            aria-hidden="true"
-          >
-            <Calendar className="w-5 h-5 text-[#F8A41E]" />
-          </div>
-          <div className="text-left min-w-0 flex-1">
-            <span className="text-[9px] font-black uppercase text-slate-400 tracking-widest block">
-              Travel Date
-            </span>
-            <button
-              type="button"
-              onClick={() => setShowCalendar(!showCalendar)}
-              aria-label={`Selected travel date: ${displayDate}`}
-              aria-expanded={showCalendar}
-              className="font-bold text-xs text-[#0C3136] text-left w-full truncate focus:outline-none"
-            >
-              {displayDate}
-            </button>
-          </div>
-
-          {selectedDate ? (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setSelectedDate('');
-                setShowCalendar(false);
-              }}
-              aria-label="Clear selected date"
-              className="text-slate-400 hover:text-red-500 p-1 rounded-full transition-colors shrink-0"
-            >
-              <X className="w-3.5 h-3.5" aria-hidden="true" />
-            </button>
-          ) : (
-            <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0 pointer-events-none" aria-hidden="true" />
+              <div className="px-3 py-2 border-b border-slate-100 mb-1">
+                <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+                  Select Boarding Region
+                </span>
+              </div>
+              <div className="space-y-1">
+                {DEPARTURE_OPTIONS.map((opt) => {
+                  const isSelected = selectedDeparture === opt.value;
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      role="option"
+                      aria-selected={isSelected}
+                      onClick={() => {
+                        setSelectedDeparture(opt.value);
+                        setOpenDropdown(null);
+                      }}
+                      className={`w-full text-left p-3 rounded-2xl text-xs font-bold transition-all flex items-start justify-between gap-3 ${
+                        isSelected
+                          ? 'bg-[#0C3136] text-white shadow-sm'
+                          : 'text-[#0C3136] hover:bg-slate-100'
+                      }`}
+                    >
+                      <div>
+                        <p className={`font-black ${isSelected ? 'text-[#F8A41E]' : 'text-[#0C3136]'}`}>
+                          {opt.label}
+                        </p>
+                        <p className={`text-[11px] font-medium mt-0.5 ${isSelected ? 'text-slate-300' : 'text-slate-500'}`}>
+                          {opt.desc}
+                        </p>
+                      </div>
+                      {isSelected && (
+                        <Check className="w-4 h-4 text-[#F8A41E] shrink-0 mt-0.5" aria-hidden="true" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           )}
+        </div>
 
-          {/* Self-contained Dropdown Calendar */}
-          {showCalendar && (
+        {/* ========================================================================= */}
+        {/* 2. EXPERIENCE                                                             */}
+        {/* ========================================================================= */}
+        <div className="lg:col-span-4 relative">
+          <button
+            type="button"
+            onClick={() => setOpenDropdown(openDropdown === 'experience' ? null : 'experience')}
+            aria-expanded={openDropdown === 'experience'}
+            aria-label={`Selected tour experience: ${selectedTourTitle}`}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition-all text-left border ${
+              openDropdown === 'experience'
+                ? 'bg-slate-50 border-[#F8A41E] shadow-sm'
+                : 'hover:bg-slate-50 border-transparent hover:border-slate-200'
+            }`}
+          >
+            <div
+              className="w-10 h-10 rounded-full bg-[#0C3136]/5 flex items-center justify-center text-[#125D66] shrink-0"
+              aria-hidden="true"
+            >
+              <Compass className="w-5 h-5 text-[#125D66]" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <span className="text-[9px] font-black uppercase text-slate-400 tracking-widest block">
+                Experience
+              </span>
+              <p className="font-bold text-xs text-[#0C3136] truncate">
+                {selectedTourTitle}
+              </p>
+            </div>
+            <ChevronDown
+              className={`w-3.5 h-3.5 text-slate-400 shrink-0 transition-transform duration-200 ${
+                openDropdown === 'experience' ? 'rotate-180 text-[#F8A41E]' : ''
+              }`}
+              aria-hidden="true"
+            />
+          </button>
+
+          {/* Custom Experience Menu (100% styled, dark text on white bg) */}
+          {openDropdown === 'experience' && (
+            <div
+              role="listbox"
+              aria-label="Available Niagara tour packages"
+              className="absolute top-full left-0 sm:left-auto lg:left-0 mt-3 w-80 sm:w-96 bg-white rounded-3xl shadow-2xl border border-slate-200 z-[200] p-3 text-[#0C3136] max-h-[440px] overflow-y-auto no-scrollbar animate-in fade-in zoom-in-95 duration-200"
+            >
+              {/* All Niagara Tours Option */}
+              <button
+                type="button"
+                role="option"
+                aria-selected={selectedTour === 'all'}
+                onClick={() => {
+                  setSelectedTour('all');
+                  setOpenDropdown(null);
+                }}
+                className={`w-full text-left p-3 rounded-2xl text-xs font-bold transition-all flex items-center justify-between mb-2 ${
+                  selectedTour === 'all'
+                    ? 'bg-[#0C3136] text-white shadow-sm'
+                    : 'bg-slate-50 text-[#0C3136] hover:bg-slate-100'
+                }`}
+              >
+                <div>
+                  <p className={`font-black ${selectedTour === 'all' ? 'text-[#F8A41E]' : 'text-[#0C3136]'}`}>
+                    All Niagara Tours
+                  </p>
+                  <p className={`text-[11px] font-medium ${selectedTour === 'all' ? 'text-slate-300' : 'text-slate-500'}`}>
+                    Browse all 7 tour packages &amp; charters
+                  </p>
+                </div>
+                {selectedTour === 'all' && (
+                  <Check className="w-4 h-4 text-[#F8A41E] shrink-0" aria-hidden="true" />
+                )}
+              </button>
+
+              {/* Grouped Tour Sections */}
+              {TOUR_GROUPS.map((group, gIdx) => {
+                const GroupIcon = group.icon;
+                return (
+                  <div key={gIdx} className="pt-2 border-t border-slate-100 first:border-0 first:pt-0">
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-slate-400">
+                      <GroupIcon className="w-3.5 h-3.5 text-[#F8A41E]" aria-hidden="true" />
+                      <span>{group.title}</span>
+                    </div>
+
+                    <div className="space-y-1 mt-1">
+                      {group.options.map((opt) => {
+                        const isSelected = selectedTour === opt.value;
+                        return (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            role="option"
+                            aria-selected={isSelected}
+                            onClick={() => {
+                              setSelectedTour(opt.value);
+                              setOpenDropdown(null);
+                            }}
+                            className={`w-full text-left p-2.5 rounded-2xl text-xs font-bold transition-all flex items-start justify-between gap-3 ${
+                              isSelected
+                                ? 'bg-[#0C3136] text-white shadow-sm'
+                                : 'text-[#0C3136] hover:bg-slate-100'
+                            }`}
+                          >
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className={`font-black ${isSelected ? 'text-white' : 'text-[#0C3136]'}`}>
+                                  {opt.title}
+                                </span>
+                                <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${
+                                  isSelected
+                                    ? 'bg-[#F8A41E] text-[#0C3136]'
+                                    : 'bg-slate-100 text-slate-600'
+                                }`}>
+                                  {opt.badge}
+                                </span>
+                              </div>
+                              <p className={`text-[11px] font-medium mt-0.5 truncate ${
+                                isSelected ? 'text-slate-300' : 'text-slate-500'
+                              }`}>
+                                {opt.desc}
+                              </p>
+                            </div>
+
+                            <div className="text-right shrink-0">
+                              <span className={`text-xs font-black ${
+                                isSelected ? 'text-[#F8A41E]' : 'text-[#0C3136]'
+                              }`}>
+                                {opt.price}
+                              </span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* ========================================================================= */}
+        {/* 3. TRAVEL DATE                                                            */}
+        {/* ========================================================================= */}
+        <div className="lg:col-span-3 relative">
+          <div
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition-all border ${
+              openDropdown === 'calendar'
+                ? 'bg-slate-50 border-[#F8A41E] shadow-sm'
+                : 'hover:bg-slate-50 border-transparent hover:border-slate-200'
+            }`}
+          >
+            <button
+              type="button"
+              onClick={() => setOpenDropdown(openDropdown === 'calendar' ? null : 'calendar')}
+              aria-expanded={openDropdown === 'calendar'}
+              aria-label={`Selected travel date: ${displayDate}`}
+              className="flex items-center gap-3 min-w-0 flex-1 text-left focus:outline-none"
+            >
+              <div
+                className="w-10 h-10 rounded-full bg-[#0C3136]/5 flex items-center justify-center text-[#125D66] shrink-0"
+                aria-hidden="true"
+              >
+                <Calendar className="w-5 h-5 text-[#F8A41E]" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <span className="text-[9px] font-black uppercase text-slate-400 tracking-widest block">
+                  Travel Date
+                </span>
+                <p className="font-bold text-xs text-[#0C3136] truncate">
+                  {displayDate}
+                </p>
+              </div>
+            </button>
+
+            {selectedDate ? (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedDate('');
+                  setOpenDropdown(null);
+                }}
+                aria-label="Clear selected date"
+                className="text-slate-400 hover:text-red-500 p-1 rounded-full transition-colors shrink-0"
+              >
+                <X className="w-3.5 h-3.5" aria-hidden="true" />
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setOpenDropdown(openDropdown === 'calendar' ? null : 'calendar')}
+                className="focus:outline-none"
+              >
+                <ChevronDown
+                  className={`w-3.5 h-3.5 text-slate-400 shrink-0 transition-transform duration-200 ${
+                    openDropdown === 'calendar' ? 'rotate-180 text-[#F8A41E]' : ''
+                  }`}
+                  aria-hidden="true"
+                />
+              </button>
+            )}
+          </div>
+
+          {/* Custom Date Popover (100% styled, dark text on white bg) */}
+          {openDropdown === 'calendar' && (
             <div
               role="dialog"
               aria-label="Choose travel date"
-              className="absolute top-full right-0 sm:right-auto sm:left-0 mt-3 w-80 bg-white rounded-3xl shadow-2xl border border-slate-200 z-[200] p-5 animate-in fade-in zoom-in-95 duration-200 text-[#0C3136]"
+              className="absolute top-full right-0 sm:right-auto sm:left-0 lg:right-0 lg:left-auto mt-3 w-80 bg-white rounded-3xl shadow-2xl border border-slate-200 z-[200] p-5 text-[#0C3136] animate-in fade-in zoom-in-95 duration-200"
             >
               {/* Quick Presets */}
               <div className="flex items-center gap-1.5 pb-3 mb-3 border-b border-slate-100 overflow-x-auto no-scrollbar">
@@ -344,7 +521,7 @@ export default function HomeQuickBook() {
                     const tmrw = new Date();
                     tmrw.setDate(tmrw.getDate() + 1);
                     setSelectedDate(formatDateISO(tmrw));
-                    setShowCalendar(false);
+                    setOpenDropdown(null);
                   }}
                   className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-[#F8A41E]/20 text-[10px] font-black text-slate-700 whitespace-nowrap transition-colors"
                 >
@@ -355,7 +532,7 @@ export default function HomeQuickBook() {
                   onClick={() => {
                     const sat = getUpcomingSaturday();
                     setSelectedDate(formatDateISO(sat));
-                    setShowCalendar(false);
+                    setOpenDropdown(null);
                   }}
                   className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-[#F8A41E]/20 text-[10px] font-black text-slate-700 whitespace-nowrap transition-colors"
                 >
@@ -365,7 +542,7 @@ export default function HomeQuickBook() {
                   type="button"
                   onClick={() => {
                     setSelectedDate('');
-                    setShowCalendar(false);
+                    setOpenDropdown(null);
                   }}
                   className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-[10px] font-black text-slate-500 whitespace-nowrap transition-colors"
                 >
@@ -379,7 +556,7 @@ export default function HomeQuickBook() {
                   type="button"
                   aria-label="Previous month"
                   onClick={handlePrevMonth}
-                  className="p-1.5 hover:bg-slate-100 rounded-full text-slate-500 transition-colors"
+                  className="p-1.5 hover:bg-slate-100 rounded-full text-slate-600 transition-colors"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
@@ -390,7 +567,7 @@ export default function HomeQuickBook() {
                   type="button"
                   aria-label="Next month"
                   onClick={handleNextMonth}
-                  className="p-1.5 hover:bg-slate-100 rounded-full text-slate-500 transition-colors"
+                  className="p-1.5 hover:bg-slate-100 rounded-full text-slate-600 transition-colors"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
@@ -420,7 +597,7 @@ export default function HomeQuickBook() {
                       disabled={isPast}
                       onClick={() => {
                         setSelectedDate(cell.iso);
-                        setShowCalendar(false);
+                        setOpenDropdown(null);
                       }}
                       className={`h-8 w-full rounded-xl text-xs font-bold transition-all flex items-center justify-center ${
                         isSelected
@@ -429,7 +606,7 @@ export default function HomeQuickBook() {
                           ? 'border border-[#F8A41E] text-[#0C3136] font-black hover:bg-amber-50'
                           : isPast
                           ? 'text-slate-300 cursor-not-allowed'
-                          : 'text-slate-700 hover:bg-slate-100'
+                          : 'text-[#0C3136] hover:bg-slate-100'
                       }`}
                     >
                       {cell.day}
@@ -441,7 +618,9 @@ export default function HomeQuickBook() {
           )}
         </div>
 
-        {/* 4. FIND TOURS CTA */}
+        {/* ========================================================================= */}
+        {/* 4. FIND TOURS CTA                                                         */}
+        {/* ========================================================================= */}
         <div className="lg:col-span-2 p-1">
           <button
             type="submit"
