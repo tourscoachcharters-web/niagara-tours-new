@@ -70,6 +70,9 @@ export default async function TourPage({ params }) {
     notFound();
   }
 
+  const allTours = await getLiveTours();
+  const relatedTours = allTours.filter((t) => t.id !== id).slice(0, 3);
+
   const breadcrumbs = [
     { name: 'Home', url: '/' },
     { name: 'Tours', url: '/tours' },
@@ -83,7 +86,7 @@ export default async function TourPage({ params }) {
     <>
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={tourProductSchema} />
-      <TourClient tour={tour} />
+      <TourClient tour={tour} relatedTours={relatedTours} />
     </>
   );
 }

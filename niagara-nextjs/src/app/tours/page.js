@@ -2,9 +2,9 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getLiveTours } from '@/lib/firebase-utils';
-import TourCard from '@/components/TourCard';
+import HomeToursFilter from '@/components/HomeToursFilter';
 import { getBreadcrumbSchema, JsonLd } from '@/lib/schema';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, ShieldCheck, Bus, Ship, Star, Award } from 'lucide-react';
 
 export const revalidate = 3600;
 
@@ -58,11 +58,11 @@ export default async function ToursPage() {
       <JsonLd data={getBreadcrumbSchema(breadcrumbs)} />
       <JsonLd data={toursItemListSchema} />
 
-      <div className="animate-in fade-in duration-700 bg-white">
+      <div className="animate-in fade-in duration-700 bg-[#F8FAFC]">
         {/* Banner Section */}
-        <section
+        <header
           aria-labelledby="tours-page-heading"
-          className="relative h-[420px] sm:h-[460px] flex items-center text-white overflow-hidden"
+          className="relative h-[440px] sm:h-[480px] flex items-center text-white overflow-hidden"
         >
           <div className="absolute inset-0 z-0">
             <Image
@@ -73,7 +73,7 @@ export default async function ToursPage() {
               sizes="100vw"
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0C3136]/95 via-[#0C3136]/75 to-[#0C3136]/40" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0C3136]/95 via-[#0C3136]/80 to-[#0C3136]/50" />
           </div>
 
           <div className="container mx-auto px-4 z-10">
@@ -93,7 +93,7 @@ export default async function ToursPage() {
               </ol>
             </nav>
 
-            <span className="bg-[#F8A41E] text-[#0C3136] text-[10px] font-black px-4 py-2 rounded-lg uppercase tracking-[0.2em] mb-4 inline-block shadow-lg">
+            <span className="bg-[#F8A41E] text-[#0C3136] text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-[0.2em] mb-4 inline-block shadow-lg">
               Curated Collections
             </span>
             <h1
@@ -103,28 +103,42 @@ export default async function ToursPage() {
               Niagara Falls <br />
               Tour Packages
             </h1>
-            <p className="text-slate-200 text-base sm:text-lg max-w-xl font-medium opacity-90 leading-relaxed">
+            <p className="text-slate-200 text-base sm:text-lg max-w-xl font-medium opacity-90 leading-relaxed mb-6">
               From classic day escapes to private VIP luxury, discover the perfect way to experience the world&apos;s most famous waterfall.
             </p>
-          </div>
-        </section>
 
-        {/* Tours Grid Section */}
+            <div className="flex flex-wrap items-center gap-6 text-xs font-bold text-slate-300">
+              <div className="flex items-center gap-2">
+                <Bus className="w-4 h-4 text-[#F8A41E]" aria-hidden="true" />
+                <span>Downtown Toronto Pickups</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Ship className="w-4 h-4 text-[#F8A41E]" aria-hidden="true" />
+                <span>Boat Cruise Access</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-400" aria-hidden="true" />
+                <span>Free 24h Cancellation</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Tours Showcase Section */}
         <section aria-labelledby="tours-grid-heading" className="container mx-auto px-4 py-20 lg:py-24">
-          <header className="mb-12">
-            <h2 id="tours-grid-heading" className="text-2xl sm:text-3xl font-black text-[#0C3136] mb-2">
+          <header className="text-center max-w-2xl mx-auto mb-12">
+            <span className="text-[#125D66] font-black text-[10px] uppercase tracking-[0.3em] mb-2 block">
+              FIND YOUR ADVENTURE
+            </span>
+            <h2 id="tours-grid-heading" className="text-3xl sm:text-4xl font-black text-[#0C3136] tracking-tight mb-3">
               Available Itineraries &amp; Charters
             </h2>
             <p className="text-slate-500 text-sm font-medium">
-              Showing {tours.length} verified packages with daily hotel pickup across Toronto and GTA.
+              Filter by experience style or browse our full lineup below. All packages include licensed local guides and central Toronto transport.
             </p>
           </header>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
-            {tours.map((tour) => (
-              <TourCard key={tour.firebaseId || tour.id} tour={tour} />
-            ))}
-          </div>
+          <HomeToursFilter tours={tours} />
         </section>
       </div>
     </>
