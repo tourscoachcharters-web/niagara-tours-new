@@ -1,5 +1,0 @@
-{
-  "buildCommand": "cd niagara-nextjs && npm install && npm run build",
-  "outputDirectory": "niagara-nextjs/.next",
-  "framework": "nextjs"
-}
