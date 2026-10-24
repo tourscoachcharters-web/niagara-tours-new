@@ -836,10 +836,16 @@ export default function TourClient({ tour, relatedTours = [] }) {
                   })()}
                 </div>
 
-                {/* Right Column: Dynamic Leaflet Map & Navigation (5 cols) */}
+                {/* Right Column: Dynamic Google Map & Navigation (5 cols) */}
                 <div className="lg:col-span-5 flex flex-col gap-4 h-full">
                   <div className="bg-slate-100 rounded-3xl border border-slate-200 overflow-hidden h-[420px] lg:h-[460px] relative shadow-inner z-0">
-                    {PICKUP_POINTS && <StaticPointsMap points={PICKUP_POINTS} />}
+                    {PICKUP_POINTS && (
+                      <StaticPointsMap 
+                        points={PICKUP_POINTS} 
+                        activeIndex={selectedHub} 
+                        onSelectPoint={setSelectedHub} 
+                      />
+                    )}
                     
                     <div className="absolute top-4 left-4 right-4 z-[400] bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-md border border-slate-200/80 text-xs font-bold text-slate-700 flex items-center justify-between">
                       <span className="flex items-center gap-2">
