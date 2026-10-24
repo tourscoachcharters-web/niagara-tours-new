@@ -467,3 +467,226 @@ export const LocationMarkerMap = ({ onLocationSelect, initialLocation = '' }) =>
     </div>
   );
 };
+
+// ----------------------------------------------------------------------
+// 3. ContactLocationMap: Headquarters & Downtown Hubs on Contact Page
+// ----------------------------------------------------------------------
+export const ContactLocationMap = ({ defaultView = 'office' }) => {
+  const mapContainerRef = useRef(null);
+  const mapInstanceRef = useRef(null);
+  const markersRef = useRef([]);
+  const infoWindowRef = useRef(null);
+  const [activeTab, setActiveTab] = useState(defaultView);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  const officeLocation = {
+    name: "Niagara Travels Operations & Dispatch",
+    address: "1315 Pickering Parkway, Suite 300, Pickering, ON L1V 7G5",
+    lat: 43.8344,
+    lng: -79.0888,
+    phone: "(416) 444-3000",
+    hours: "24/7 Dispatch & Support"
+  };
+
+  const downtownHubs = [
+    { name: "Royal Ontario Museum", sub: "100 Queens Park", time: "7:55 AM", lat: 43.6677, lng: -79.3948 },
+    { name: "Holiday Inn Downtown Centre", sub: "30 Carlton St", time: "8:00 AM", lat: 43.6624, lng: -79.3831 },
+    { name: "Chelsea Hotel Toronto", sub: "33 Gerrard St W", time: "8:15 AM", lat: 43.6580, lng: -79.3828 },
+    { name: "Sheraton Centre Toronto", sub: "123 Queen St W", time: "8:15 AM", lat: 43.6515, lng: -79.3836 },
+    { name: "Union Station / Maple Leaf Square", sub: "15 York St", time: "8:30 AM", lat: 43.6431, lng: -79.3802 },
+  ];
+
+  useEffect(() => {
+    let isMounted = true;
+
+    loadGoogleMaps()
+      .then((googleMaps) => {
+        if (!isMounted || !mapContainerRef.current) return;
+
+        const map = new googleMaps.Map(mapContainerRef.current, {
+          center: { lat: officeLocation.lat, lng: officeLocation.lng },
+          zoom: 14,
+          mapTypeId: 'roadmap',
+          styles: LUXURY_MAP_STYLES,
+          disableDefaultUI: false,
+          zoomControl: true,
+          streetViewControl: false,
+          mapTypeControl: false,
+          fullscreenControl: true,
+        });
+
+        mapInstanceRef.current = map;
+        infoWindowRef.current = new googleMaps.InfoWindow();
+
+        renderMarkers(activeTab);
+        setIsLoaded(true);
+      })
+      .catch((err) => {
+        console.error('Contact Map Error:', err);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const renderMarkers = (tab) => {
+    if (!window.google || !mapInstanceRef.current) return;
+    const googleMaps = window.google.maps;
+    const map = mapInstanceRef.current;
+
+    // Clear existing
+    markersRef.current.forEach((m) => m.setMap(null));
+    markersRef.current = [];
+
+    if (tab === 'office') {
+      const officePos = { lat: officeLocation.lat, lng: officeLocation.lng };
+      const marker = new googleMaps.Marker({
+        position: officePos,
+        map: map,
+        title: officeLocation.name,
+        icon: {
+          url: getSvgPinUrl('★', true),
+          scaledSize: new googleMaps.Size(42, 52),
+          anchor: new googleMaps.Point(21, 52),
+        },
+        animation: googleMaps.Animation.DROP,
+      });
+
+      const content = `
+        <div style="font-family: system-ui, -apple-system, sans-serif; padding: 10px 12px; max-width: 270px; color: #0C3136;">
+          <div style="font-size: 10px; font-weight: 900; letter-spacing: 0.1em; color: #D91E1E; text-transform: uppercase; margin-bottom: 3px;">
+            Main Office & Dispatch
+          </div>
+          <div style="font-size: 14px; font-weight: 800; color: #0C3136; line-height: 1.25; margin-bottom: 4px;">
+            ${officeLocation.name}
+          </div>
+          <div style="font-size: 11px; color: #64748b; margin-bottom: 8px;">
+            ${officeLocation.address}
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 6px; border-top: 1px solid #e2e8f0;">
+            <span style="font-size: 11px; font-weight: 800; color: #0C3136;">
+              📞 ${officeLocation.phone}
+            </span>
+            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(officeLocation.address)}" 
+               target="_blank" 
+               rel="noopener noreferrer" 
+               style="font-size: 11px; font-weight: 700; color: #125D66; text-decoration: underline;">
+              Get Directions ↗
+            </a>
+          </div>
+        </div>
+      `;
+
+      marker.addListener('click', () => {
+        infoWindowRef.current.setContent(content);
+        infoWindowRef.current.open(map, marker);
+      });
+
+      markersRef.current.push(marker);
+      map.panTo(officePos);
+      map.setZoom(14);
+
+      // Open automatically on initial render
+      infoWindowRef.current.setContent(content);
+      infoWindowRef.current.open(map, marker);
+
+    } else {
+      const bounds = new googleMaps.LatLngBounds();
+
+      downtownHubs.forEach((hub, i) => {
+        const pos = { lat: hub.lat, lng: hub.lng };
+        bounds.extend(pos);
+
+        const marker = new googleMaps.Marker({
+          position: pos,
+          map: map,
+          title: hub.name,
+          icon: {
+            url: getSvgPinUrl(i + 1, false),
+            scaledSize: new googleMaps.Size(38, 46),
+            anchor: new googleMaps.Point(19, 46),
+          },
+        });
+
+        const content = `
+          <div style="font-family: system-ui, -apple-system, sans-serif; padding: 10px 12px; max-width: 260px; color: #0C3136;">
+            <div style="font-size: 10px; font-weight: 900; letter-spacing: 0.1em; color: #F8A41E; text-transform: uppercase; margin-bottom: 3px;">
+              Downtown Pickup Hub #${i + 1}
+            </div>
+            <div style="font-size: 13px; font-weight: 800; color: #0C3136; line-height: 1.25; margin-bottom: 4px;">
+              ${hub.name}
+            </div>
+            <div style="font-size: 11px; color: #64748b; margin-bottom: 6px;">
+              ${hub.sub}
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 6px; border-top: 1px solid #e2e8f0;">
+              <span style="font-size: 11px; font-weight: 800; background: #0C3136; color: #fff; padding: 2px 6px; border-radius: 4px;">
+                ⏰ ${hub.time}
+              </span>
+              <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(hub.name + ', Toronto')}" 
+                 target="_blank" 
+                 rel="noopener noreferrer" 
+                 style="font-size: 11px; font-weight: 700; color: #125D66; text-decoration: underline;">
+                Directions ↗
+              </a>
+            </div>
+          </div>
+        `;
+
+        marker.addListener('click', () => {
+          infoWindowRef.current.setContent(content);
+          infoWindowRef.current.open(map, marker);
+        });
+
+        markersRef.current.push(marker);
+      });
+
+      map.fitBounds(bounds, { top: 40, bottom: 40, left: 40, right: 40 });
+    }
+  };
+
+  const handleTabChange = (newTab) => {
+    setActiveTab(newTab);
+    renderMarkers(newTab);
+  };
+
+  return (
+    <div className="w-full h-full relative rounded-3xl overflow-hidden border border-slate-200 shadow-md">
+      {!isLoaded && (
+        <div className="absolute inset-0 z-10 bg-slate-100 flex flex-col items-center justify-center gap-2">
+          <Loader2 className="w-6 h-6 animate-spin text-[#0C3136]" />
+          <span className="text-xs font-black uppercase tracking-widest text-slate-400">Loading Map...</span>
+        </div>
+      )}
+
+      {/* Switcher overlay */}
+      <div className="absolute top-4 left-4 z-[10] flex items-center gap-1.5 p-1 bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200">
+        <button
+          type="button"
+          onClick={() => handleTabChange('office')}
+          className={`px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${
+            activeTab === 'office'
+              ? 'bg-[#0C3136] text-white shadow-sm'
+              : 'text-slate-600 hover:text-[#0C3136]'
+          }`}
+        >
+          ★ Head Office
+        </button>
+        <button
+          type="button"
+          onClick={() => handleTabChange('hubs')}
+          className={`px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${
+            activeTab === 'hubs'
+              ? 'bg-[#0C3136] text-white shadow-sm'
+              : 'text-slate-600 hover:text-[#0C3136]'
+          }`}
+        >
+          Downtown Hubs (5)
+        </button>
+      </div>
+
+      <div ref={mapContainerRef} className="w-full h-full min-h-[380px] z-0" />
+    </div>
+  );
+};
