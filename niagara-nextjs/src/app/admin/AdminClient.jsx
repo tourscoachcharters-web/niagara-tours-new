@@ -4,11 +4,17 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { auth, db } from '@/lib/firebase';
-import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
+import { 
+  signInWithEmailAndPassword, 
+  signOut, 
+  onAuthStateChanged,
+  sendPasswordResetEmail
+} from 'firebase/auth';
 import { collection, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { 
   LayoutDashboard, Loader2, ChevronLeft, Ticket, Globe, LogOut, 
-  DollarSign, Clock, Search, CheckCircle, XCircle, Trash2, Users, Map // <-- Added Map here
+  DollarSign, Clock, Search, CheckCircle, XCircle, Trash2, Users, Map,
+  CheckCircle2, KeyRound
 } from 'lucide-react';
 
 export default function AdminClient() {
@@ -18,10 +24,12 @@ export default function AdminClient() {
   const [bookings, setBookings] = useState([]);
   
   // Login State
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('tourscoachcharters@gmail.com');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [resetSuccess, setResetSuccess] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
 
   // Dashboard State
   const [searchTerm, setSearchTerm] = useState('');
@@ -62,12 +70,42 @@ export default function AdminClient() {
     e.preventDefault();
     setIsLoggingIn(true);
     setError('');
+    setResetSuccess('');
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (err) {
-      setError('Invalid admin credentials.');
+      console.error("Login error:", err);
+      if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') {
+        setError('Incorrect password. Click "Forgot password?" below to reset it.');
+      } else if (err.code === 'auth/user-not-found') {
+        setError('No account found for this email.');
+      } else {
+        setError('Invalid admin credentials or account requires password reset.');
+      }
     }
     setIsLoggingIn(false);
+  };
+
+  const handlePasswordReset = async () => {
+    if (!email.trim()) {
+      setError('Please enter your admin email address first.');
+      return;
+    }
+    setIsResetting(true);
+    setError('');
+    setResetSuccess('');
+    try {
+      await sendPasswordResetEmail(auth, email.trim());
+      setResetSuccess(`Password reset email sent to ${email.trim()}! Please check your inbox (and spam/junk folder) to set your new password.`);
+    } catch (err) {
+      console.error("Password reset error:", err);
+      if (err.code === 'auth/user-not-found') {
+        setError('No registered user found with this email in Firebase.');
+      } else {
+        setError('Unable to dispatch reset email directly. Please reset directly via the Firebase Console: Authentication > Users > Reset Password.');
+      }
+    }
+    setIsResetting(false);
   };
 
   const handleLogout = async () => {
@@ -81,21 +119,25 @@ export default function AdminClient() {
   };
 
   const handleDeleteBooking = async (id) => {
-    if(window.confirm('Delete this booking forever?')) {
+    if (window.confirm('Delete this booking forever?')) {
       try { await deleteDoc(doc(db, 'bookings', id)); } 
       catch (e) { console.error(e); }
     }
   };
 
   if (loadingAuth) {
-    return <div className="min-h-screen flex items-center justify-center bg-slate-50"><Loader2 className="w-8 h-8 animate-spin text-[#125D66]" /></div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <Loader2 className="w-8 h-8 animate-spin text-[#125D66]" />
+      </div>
+    );
   }
 
   // --- LOGIN SCREEN ---
   if (!user) {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center p-4 animate-in fade-in duration-500">
-        <div className="max-w-md w-full bg-white rounded-[2rem] shadow-xl border border-slate-100 p-10">
+        <div className="max-w-md w-full bg-white rounded-[2rem] shadow-xl border border-slate-100 p-8 sm:p-10">
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-[#0C3136]/5 text-[#F8A41E] rounded-2xl flex items-center justify-center mx-auto mb-4">
               <LayoutDashboard className="w-8 h-8" />
@@ -103,20 +145,68 @@ export default function AdminClient() {
             <h2 className="text-2xl font-black text-[#0C3136]">Admin Access</h2>
             <p className="text-sm text-slate-500 font-medium mt-2">Enter your credentials to manage bookings.</p>
           </div>
-          {error && <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm font-bold mb-6 text-center">{error}</div>}
+
+          {error && (
+            <div className="bg-red-50 text-red-600 p-4 rounded-xl text-xs font-bold mb-6 text-center border border-red-200">
+              {error}
+            </div>
+          )}
+
+          {resetSuccess && (
+            <div className="bg-emerald-50 text-emerald-800 p-4 rounded-xl text-xs font-bold mb-6 text-center border border-emerald-200 flex items-start gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+              <span>{resetSuccess}</span>
+            </div>
+          )}
+
           <form onSubmit={handleLogin} className="space-y-5">
             <div>
-              <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">Admin Email</label>
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)} className="w-full p-4 bg-slate-50 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-[#F8A41E] transition-all" required />
+              <label htmlFor="admin-email" className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1 block mb-1">
+                Admin Email
+              </label>
+              <input 
+                id="admin-email"
+                type="email" 
+                value={email} 
+                onChange={e => setEmail(e.target.value)} 
+                className="w-full p-4 bg-slate-50 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-[#F8A41E] focus:bg-white transition-all text-[#0C3136]" 
+                required 
+              />
             </div>
+
             <div>
-              <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">Password</label>
-              <input type="password" value={password} onChange={e => setPassword(e.target.value)} className="w-full p-4 bg-slate-50 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-[#F8A41E] transition-all" required />
+              <div className="flex items-center justify-between mb-1">
+                <label htmlFor="admin-password" className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">
+                  Password
+                </label>
+                <button
+                  type="button"
+                  onClick={handlePasswordReset}
+                  disabled={isResetting}
+                  className="text-[11px] font-bold text-[#125D66] hover:text-[#0C3136] hover:underline transition-colors focus:outline-none"
+                >
+                  {isResetting ? "Sending reset email..." : "Forgot password?"}
+                </button>
+              </div>
+              <input 
+                id="admin-password"
+                type="password" 
+                value={password} 
+                onChange={e => setPassword(e.target.value)} 
+                className="w-full p-4 bg-slate-50 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-[#F8A41E] focus:bg-white transition-all text-[#0C3136]" 
+                required 
+              />
             </div>
-            <button type="submit" disabled={isLoggingIn} className="w-full bg-[#0C3136] text-white py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg hover:bg-[#125D66] transition-all flex justify-center items-center">
+
+            <button 
+              type="submit" 
+              disabled={isLoggingIn} 
+              className="w-full bg-[#0C3136] text-white py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg hover:bg-[#125D66] transition-all flex justify-center items-center gap-2 disabled:opacity-70"
+            >
               {isLoggingIn ? <Loader2 className="w-4 h-4 animate-spin" /> : 'SECURE LOGIN'}
             </button>
           </form>
+
           <div className="mt-8 text-center">
             <Link href="/" className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-[#F8A41E] flex items-center justify-center gap-1">
               <ChevronLeft className="w-3 h-3" /> Return to Website
@@ -142,7 +232,7 @@ export default function AdminClient() {
           <div className="bg-[#F8A41E] p-2 rounded-lg"><LayoutDashboard className="w-5 h-5 text-[#0C3136]" /></div>
           <div><h2 className="font-black text-sm tracking-widest uppercase text-[#F8A41E]">Admin Panel</h2><p className="text-[10px] text-slate-400">Niagara Travels</p></div>
         </div>
-<nav className="p-4 flex-1">
+        <nav className="p-4 flex-1">
           <ul className="space-y-2">
             <li>
               <Link href="/admin" className="flex items-center gap-3 px-4 py-3 bg-white/10 rounded-xl text-sm font-bold text-white transition-all">
