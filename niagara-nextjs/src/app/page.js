@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getLiveTours } from '@/lib/firebase-utils';
@@ -62,10 +62,10 @@ export default async function HomePage() {
         {/* ========================================================================= */}
         <section
           aria-labelledby="hero-heading"
-          className="relative pt-12 pb-24 lg:pt-20 lg:pb-36 flex items-center overflow-hidden min-h-[660px]"
+          className="relative pt-12 pb-24 lg:pt-20 lg:pb-36 flex items-center min-h-[660px]"
         >
           {/* Background Image with Cinematic Gradient Mask */}
-          <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 z-0 overflow-hidden">
             <Image
               src="/images/hero-home.jpg"
               alt="Majestic view of Niagara Falls with tour boat passing through mist"
@@ -382,7 +382,7 @@ export default async function HomePage() {
         {/* ========================================================================= */}
         {/* 4. CURATED TOURS SHOWCASE WITH INTERACTIVE FILTER PILLS                   */}
         {/* ========================================================================= */}
-        <section aria-labelledby="all-tours-heading" className="py-20 bg-[#F8FAFC]">
+        <section id="tours-catalog" aria-labelledby="all-tours-heading" className="py-20 bg-[#F8FAFC]">
           <div className="container mx-auto px-4">
             
             <header className="text-center max-w-2xl mx-auto mb-14">
@@ -398,7 +398,9 @@ export default async function HomePage() {
             </header>
 
             {/* Interactive Client-Side Filter + Grid */}
-            <HomeToursFilter tours={tours} />
+            <Suspense fallback={<div className="h-96 animate-pulse bg-slate-100 rounded-3xl" />}>
+              <HomeToursFilter tours={tours} />
+            </Suspense>
 
           </div>
         </section>

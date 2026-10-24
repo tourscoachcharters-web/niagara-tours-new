@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getLiveTours } from '@/lib/firebase-utils';
@@ -138,7 +138,9 @@ export default async function ToursPage() {
             </p>
           </header>
 
-          <HomeToursFilter tours={tours} />
+          <Suspense fallback={<div className="h-96 animate-pulse bg-slate-100 rounded-3xl" />}>
+            <HomeToursFilter tours={tours} />
+          </Suspense>
         </section>
       </div>
     </>

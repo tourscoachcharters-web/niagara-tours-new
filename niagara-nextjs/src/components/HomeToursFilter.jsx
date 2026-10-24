@@ -1,12 +1,24 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import TourCard from '@/components/TourCard';
-import { Compass, Sparkles, ShieldCheck, Moon, ArrowRight } from 'lucide-react';
+import { Compass, Sparkles, ShieldCheck, Moon, ArrowRight, X, Calendar, MapPin } from 'lucide-react';
 
 export default function HomeToursFilter({ tours }) {
-  const [activeCategory, setActiveCategory] = useState('all');
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams?.get('category');
+  const dateParam = searchParams?.get('date');
+  const departureParam = searchParams?.get('departure');
+
+  const [activeCategory, setActiveCategory] = useState(categoryParam || 'all');
+
+  useEffect(() => {
+    if (categoryParam && ['all', 'day', 'private', 'evening'].includes(categoryParam)) {
+      setActiveCategory(categoryParam);
+    }
+  }, [categoryParam]);
 
   const categories = [
     { id: 'all', label: 'All Experiences', icon: Compass },
@@ -29,8 +41,46 @@ export default function HomeToursFilter({ tours }) {
     return true;
   });
 
+  const hasFilterParams = Boolean(dateParam || (departureParam && departureParam !== 'all') || (categoryParam && categoryParam !== 'all'));
+
   return (
     <div className="space-y-10">
+      {/* Active Search Filter Banner */}
+      {hasFilterParams && (
+        <div className="bg-[#0C3136] text-white p-4 sm:p-5 rounded-3xl flex items-center justify-between flex-wrap gap-4 shadow-lg border border-white/10 animate-in fade-in duration-300">
+          <div className="flex items-center gap-3 flex-wrap">
+            <span className="text-[#F8A41E] uppercase tracking-wider text-[10px] font-black">
+              Active Search Filters:
+            </span>
+            {categoryParam && categoryParam !== 'all' && (
+              <span className="bg-white/10 px-3 py-1 rounded-full text-xs font-bold capitalize">
+                Category: {categoryParam}
+              </span>
+            )}
+            {dateParam && (
+              <span className="bg-white/10 px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5 text-[#F8A41E]" />
+                Date: {dateParam}
+              </span>
+            )}
+            {departureParam && departureParam !== 'all' && (
+              <span className="bg-white/10 px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5 capitalize">
+                <MapPin className="w-3.5 h-3.5 text-[#F8A41E]" />
+                Pickup: {departureParam}
+              </span>
+            )}
+          </div>
+
+          <Link
+            href="/tours"
+            className="text-xs font-black text-[#F8A41E] hover:text-white flex items-center gap-1.5 bg-white/10 hover:bg-white/20 px-3.5 py-1.5 rounded-xl transition-colors"
+          >
+            <X className="w-3.5 h-3.5" />
+            <span>Reset Search</span>
+          </Link>
+        </div>
+      )}
+
       {/* Category Pills Navigation */}
       <div className="flex flex-wrap items-center justify-center gap-3" role="tablist" aria-label="Tour categories">
         {categories.map((cat) => {
