@@ -11,7 +11,8 @@ import {
   ChevronLeft, Clock, Sun, MapPin, ShieldCheck, Compass, CheckCircle2, 
   CheckCircle, XCircle, Ban, Navigation, Ticket, Users, Baby, Calendar, Star,
   Wind, Camera, Grape, Globe, Map as MapIcon, Zap, Utensils, Plane,
-  Ship, Info, Phone, ArrowRight, Sparkles, Award, Check, Bus
+  Ship, Info, Phone, ArrowRight, Sparkles, Award, Check, Bus,
+  ExternalLink, ChevronRight, Train, AlertCircle
 } from 'lucide-react';
 
 const ICON_MAP = {
@@ -42,12 +43,97 @@ const StaticPointsMap = dynamic(
   { ssr: false, loading: () => <div className="w-full h-full bg-slate-100 animate-pulse flex items-center justify-center font-bold text-slate-400">Loading Map...</div> }
 );
 
+const ENRICHED_PICKUP_METADATA = {
+  0: {
+    station: "Museum Station (TTC Line 1)",
+    landmark: "Queen's Park Crystal Entrance",
+    boardingNote: "Wait curbside at the main glass crystal entrance doors facing Queen's Park.",
+    mapQuery: "Royal Ontario Museum, 100 Queens Park, Toronto"
+  },
+  1: {
+    station: "College Station (TTC Line 1 - 2 min walk)",
+    landmark: "Yonge & Carlton Street",
+    boardingNote: "Wait at the main hotel driveway loading zone on Carlton Street.",
+    mapQuery: "Holiday Inn Toronto Downtown Centre, 30 Carlton St, Toronto"
+  },
+  2: {
+    station: "Dundas or College Station (TTC Line 1)",
+    landmark: "Gerrard & Bay Street",
+    boardingNote: "Wait directly outside the main Gerrard Street hotel entrance and revolving doors.",
+    mapQuery: "Chelsea Hotel Toronto, 33 Gerrard St W, Toronto"
+  },
+  3: {
+    station: "Osgoode or Queen Station (TTC Line 1)",
+    landmark: "Opposite Nathan Phillips Square / City Hall",
+    boardingNote: "Meet at the dedicated motorcoach bay and valet entrance along Queen Street West.",
+    mapQuery: "Sheraton Centre Toronto Hotel, 123 Queen St W, Toronto"
+  },
+  4: {
+    station: "Union Station (Subway Line 1, GO Transit, UP Express)",
+    landmark: "South Bremner Blvd / Scotiabank Arena",
+    boardingNote: "Meet outside the South Concourse glass doors on Bremner Blvd near Longo's.",
+    mapQuery: "Maple Leaf Square, 15 York St, Toronto"
+  }
+};
+
+const parseItineraryStep = (stepText, index, totalSteps) => {
+  let title = '';
+  let description = '';
+
+  if (stepText.includes(':')) {
+    const colonIndex = stepText.indexOf(':');
+    title = stepText.slice(0, colonIndex).trim();
+    description = stepText.slice(colonIndex + 1).trim();
+  } else {
+    title = stepText;
+    description = '';
+  }
+
+  const lower = (title + ' ' + description).toLowerCase();
+  let icon = Navigation;
+  let categoryBadge = 'Scenic Stop';
+  let badgeColor = 'bg-slate-100 text-slate-700';
+
+  if (index === 0 || lower.includes('pickup') || lower.includes('departure')) {
+    icon = Bus;
+    categoryBadge = 'Departure & Boarding';
+    badgeColor = 'bg-amber-100 text-amber-800';
+  } else if (index === totalSteps - 1 || lower.includes('return') || lower.includes('drop-off')) {
+    icon = CheckCircle2;
+    categoryBadge = 'Safe Return';
+    badgeColor = 'bg-emerald-100 text-emerald-800';
+  } else if (lower.includes('boat') || lower.includes('cruise') || lower.includes('voyage') || lower.includes('mist')) {
+    icon = Ship;
+    categoryBadge = 'Featured Highlight';
+    badgeColor = 'bg-cyan-100 text-cyan-800';
+  } else if (lower.includes('skylon') || lower.includes('tower') || lower.includes('behind the falls') || lower.includes('journey')) {
+    icon = Sparkles;
+    categoryBadge = 'Included Admission';
+    badgeColor = 'bg-purple-100 text-purple-800';
+  } else if (lower.includes('wine') || lower.includes('tasting') || lower.includes('lunch') || lower.includes('syrup')) {
+    icon = Utensils;
+    categoryBadge = 'Culinary & Tasting';
+    badgeColor = 'bg-rose-100 text-rose-800';
+  } else if (lower.includes('clifton') || lower.includes('niagara-on-the-lake') || lower.includes('free time') || lower.includes('independent')) {
+    icon = Compass;
+    categoryBadge = 'Free Exploration';
+    badgeColor = 'bg-blue-100 text-blue-800';
+  } else if (lower.includes('whirlpool') || lower.includes('rapids') || lower.includes('clock') || lower.includes('photo') || lower.includes('gorge')) {
+    icon = Camera;
+    categoryBadge = 'Scenic Photo Stop';
+    badgeColor = 'bg-teal-100 text-teal-800';
+  }
+
+  return { title, description, icon, categoryBadge, badgeColor };
+};
+
 export default function TourClient({ tour, relatedTours = [] }) {
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
   const [activeTab, setActiveTab] = useState('overview');
+  const [selectedHub, setSelectedHub] = useState(0);
   const calendarRef = useRef(null);
 
   const tourReviews = REVIEWS_DATA ? REVIEWS_DATA.filter((r) => r.tour === tour?.title) : [];
@@ -477,68 +563,311 @@ export default function TourClient({ tour, relatedTours = [] }) {
 
           {/* SECTION: Step-by-Step Itinerary */}
           <section id="itinerary" aria-labelledby="itinerary-heading" className="space-y-6">
-            <h2 id="itinerary-heading" className="text-2xl sm:text-3xl font-black text-[#0C3136] flex items-center gap-3">
-              <Navigation className="text-[#F8A41E] w-7 h-7" aria-hidden="true" />
-              <span>Full Day Itinerary</span>
-            </h2>
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-[0.25em] text-[#F8A41E] bg-[#0C3136] px-3.5 py-1.5 rounded-full inline-block mb-3">
+                  CURATED TIMELINE
+                </span>
+                <h2 id="itinerary-heading" className="text-2xl sm:text-3xl font-black text-[#0C3136] flex items-center gap-3">
+                  <Navigation className="text-[#F8A41E] w-7 h-7" aria-hidden="true" />
+                  <span>Full Day Itinerary</span>
+                </h2>
+                <p className="text-sm text-slate-500 font-medium mt-1 max-w-xl">
+                  Designed for maximum scenic immersion with priority admission, zero rush, and balanced free exploration time.
+                </p>
+              </div>
 
-            <div className="bg-white p-8 sm:p-12 rounded-[2.5rem] border border-slate-100 shadow-sm">
-              <ol className="space-y-10 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:ml-6 before:h-full before:w-1 before:bg-slate-100 list-none p-0">
-                {(tour.itinerary || []).map((step, i) => (
-                  <li key={i} className="relative flex items-start gap-6 group">
-                    <div
-                      className="flex items-center justify-center w-11 h-11 rounded-full border-4 border-white bg-[#0C3136] text-[#F8A41E] shadow-md shrink-0 z-10 font-black text-sm"
-                      aria-hidden="true"
-                    >
-                      {i + 1}
-                    </div>
-                    <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 text-sm font-bold text-slate-700 flex-1 hover:border-[#F8A41E] transition-colors">
-                      <p className="font-black text-[#0C3136] text-base mb-1">
-                        Stop {i + 1}
-                      </p>
-                      <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
-                        {step}
-                      </p>
-                    </div>
-                  </li>
-                ))}
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="inline-flex items-center gap-1.5 bg-slate-100 text-slate-700 px-3.5 py-1.5 rounded-xl text-xs font-bold border border-slate-200">
+                  <Clock className="w-3.5 h-3.5 text-[#F8A41E]" aria-hidden="true" />
+                  <span>{tour.itinerary?.length || 6} Curated Stops</span>
+                </span>
+                <span className="inline-flex items-center gap-1.5 bg-slate-100 text-slate-700 px-3.5 py-1.5 rounded-xl text-xs font-bold border border-slate-200">
+                  <Sparkles className="w-3.5 h-3.5 text-[#F8A41E]" aria-hidden="true" />
+                  <span>Skip-the-Line Entry</span>
+                </span>
+              </div>
+            </div>
+
+            <div className="bg-white p-6 sm:p-10 md:p-12 rounded-[2.5rem] border border-slate-200/80 shadow-md">
+              <ol className="relative border-l-2 border-slate-100 ml-4 sm:ml-6 pl-6 sm:pl-8 space-y-8 list-none m-0 p-0">
+                {(tour.itinerary || []).map((step, i) => {
+                  const stepData = parseItineraryStep(step, i, (tour.itinerary || []).length);
+                  const StepIcon = stepData.icon;
+
+                  return (
+                    <li key={i} className="relative group">
+                      <div
+                        className="absolute -left-[35px] sm:-left-[43px] top-1.5 flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-2xl bg-[#0C3136] text-[#F8A41E] border-4 border-white shadow-md font-black text-xs sm:text-sm group-hover:scale-110 group-hover:bg-[#F8A41E] group-hover:text-[#0C3136] transition-all duration-300 z-10"
+                        aria-hidden="true"
+                      >
+                        {i + 1}
+                      </div>
+
+                      <div className="bg-slate-50/80 hover:bg-white p-5 sm:p-7 rounded-3xl border border-slate-200/70 hover:border-[#F8A41E]/40 hover:shadow-lg transition-all duration-300">
+                        <div className="flex items-center justify-between flex-wrap gap-2 mb-2.5">
+                          <div className="flex items-center gap-2">
+                            <span className={`text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full ${stepData.badgeColor}`}>
+                              {stepData.categoryBadge}
+                            </span>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                              Stage 0{i + 1}
+                            </span>
+                          </div>
+
+                          <div className="w-8 h-8 rounded-xl bg-white text-[#0C3136] flex items-center justify-center shadow-xs border border-slate-200/60 group-hover:text-[#F8A41E] transition-colors">
+                            <StepIcon className="w-4 h-4" aria-hidden="true" />
+                          </div>
+                        </div>
+
+                        <h3 className="font-black text-base sm:text-lg text-[#0C3136] tracking-tight group-hover:text-[#F8A41E] transition-colors">
+                          {stepData.title}
+                        </h3>
+
+                        {stepData.description && (
+                          <p className="mt-2 text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
+                            {stepData.description}
+                          </p>
+                        )}
+                      </div>
+                    </li>
+                  );
+                })}
               </ol>
+
+              {/* Day Preparation Highlights */}
+              <div className="mt-10 p-6 rounded-3xl bg-slate-50 border border-slate-200/80 space-y-4">
+                <div className="flex items-center gap-2.5 text-[#0C3136] font-black text-xs sm:text-sm uppercase tracking-wider">
+                  <Sparkles className="w-4 h-4 text-[#F8A41E]" aria-hidden="true" />
+                  <span>What to Expect on Tour Day</span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                  <div className="bg-white p-4 rounded-2xl border border-slate-200/60 shadow-xs">
+                    <p className="font-black text-[#0C3136] mb-1">Comfortable Footwear</p>
+                    <p className="text-slate-500 font-medium leading-relaxed">
+                      Paved walking trails with elevators at all attractions. Flat walking shoes recommended.
+                    </p>
+                  </div>
+                  <div className="bg-white p-4 rounded-2xl border border-slate-200/60 shadow-xs">
+                    <p className="font-black text-[#0C3136] mb-1">Complimentary Poncho</p>
+                    <p className="text-slate-500 font-medium leading-relaxed">
+                      Provided free of charge for the Voyage to the Falls Boat Cruise and Journey Behind the Falls.
+                    </p>
+                  </div>
+                  <div className="bg-white p-4 rounded-2xl border border-slate-200/60 shadow-xs">
+                    <p className="font-black text-[#0C3136] mb-1">Onboard Power &amp; Wi-Fi</p>
+                    <p className="text-slate-500 font-medium leading-relaxed">
+                      USB charging outlets available at every seat on our executive touring coaches.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
 
           {/* SECTION: Meeting & Pickup Points */}
           <section id="pickups" aria-labelledby="pickups-heading" className="space-y-6">
-            <h2 id="pickups-heading" className="text-2xl sm:text-3xl font-black text-[#0C3136] flex items-center gap-3">
-              <MapPin className="text-[#F8A41E] w-7 h-7" aria-hidden="true" />
-              <span>Downtown Toronto Pickup Hubs</span>
-            </h2>
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-[0.25em] text-[#F8A41E] bg-[#0C3136] px-3.5 py-1.5 rounded-full inline-block mb-3">
+                  DEPARTURE HUBS &amp; TRANSIT
+                </span>
+                <h2 id="pickups-heading" className="text-2xl sm:text-3xl font-black text-[#0C3136] flex items-center gap-3">
+                  <MapPin className="text-[#F8A41E] w-7 h-7" aria-hidden="true" />
+                  <span>Downtown Toronto Pickup Hubs</span>
+                </h2>
+                <p className="text-sm text-slate-500 font-medium mt-1 max-w-xl">
+                  Board at any of our 5 central Toronto hotel &amp; transit hubs. Private door-to-door pickup is also available across the Greater Toronto Area.
+                </p>
+              </div>
 
-            <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
-              <div className="grid grid-cols-1 md:grid-cols-2">
-                <div className="p-8 space-y-4">
-                  <p className="text-xs text-slate-500 font-bold mb-4">
-                    Complimentary pickup is provided from the following central downtown hotels. Please arrive 10 minutes prior to departure.
-                  </p>
+              <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-800 border border-emerald-200/80 px-4 py-2 rounded-2xl text-xs font-bold shrink-0">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" aria-hidden="true" />
+                <span>Complimentary Round-Trip Transit</span>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-[2.5rem] border border-slate-200/80 shadow-md overflow-hidden p-6 sm:p-8">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                {/* Left Column: Interactive Hub List (7 cols) */}
+                <div className="lg:col-span-7 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-black uppercase tracking-wider text-slate-400">
+                      Select a Hub for Directions &amp; Boarding Details:
+                    </p>
+                    <span className="text-xs font-bold text-slate-500">
+                      5 Central Stops
+                    </span>
+                  </div>
 
                   <div className="space-y-3">
-                    {PICKUP_POINTS &&
-                      PICKUP_POINTS.map((point, i) => (
-                        <div key={i} className="flex justify-between items-center p-3.5 bg-slate-50 rounded-2xl hover:bg-slate-100 transition-colors">
-                          <div>
-                            <h3 className="font-black text-[#0C3136] text-xs sm:text-sm">{point.name}</h3>
-                            <span className="text-[11px] text-slate-400 font-medium">{point.sub}</span>
+                    {(PICKUP_POINTS || []).map((point, i) => {
+                      const isSelected = selectedHub === i;
+                      const meta = ENRICHED_PICKUP_METADATA[i] || {};
+                      return (
+                        <div
+                          key={i}
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => setSelectedHub(i)}
+                          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSelectedHub(i); }}
+                          className={`w-full text-left p-4 sm:p-5 rounded-2xl sm:rounded-3xl transition-all cursor-pointer border flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
+                            isSelected
+                              ? 'bg-[#0C3136] text-white border-[#0C3136] shadow-lg ring-2 ring-[#F8A41E]/40 scale-[1.01]'
+                              : 'bg-slate-50 hover:bg-slate-100 text-slate-800 border-slate-200/80'
+                          }`}
+                        >
+                          <div className="flex items-start gap-3.5">
+                            <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 font-black text-xs ${
+                              isSelected ? 'bg-[#F8A41E] text-[#0C3136]' : 'bg-white text-[#0C3136] shadow-sm'
+                            }`}>
+                              {i + 1}
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <h3 className={`font-black text-sm sm:text-base ${isSelected ? 'text-white' : 'text-[#0C3136]'}`}>
+                                  {point.name}
+                                </h3>
+                                {isSelected && (
+                                  <span className="bg-[#F8A41E] text-[#0C3136] text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full">
+                                    Active Hub
+                                  </span>
+                                )}
+                              </div>
+                              <p className={`text-xs mt-0.5 ${isSelected ? 'text-slate-300' : 'text-slate-500'}`}>
+                                {point.sub}
+                              </p>
+                              <div className="flex items-center gap-3 mt-2 text-[11px] font-medium">
+                                <span className={`inline-flex items-center gap-1.5 ${isSelected ? 'text-[#F8A41E]' : 'text-[#0C3136]'}`}>
+                                  <Train className="w-3.5 h-3.5" aria-hidden="true" />
+                                  {meta.station || 'TTC Subway Station'}
+                                </span>
+                              </div>
+                            </div>
                           </div>
-                          <span className="bg-[#0C3136] text-[#F8A41E] px-2.5 py-1 rounded-md text-[10px] font-black shrink-0">
-                            {point.time}
+
+                          <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-white/10">
+                            <span className={`text-[10px] font-bold uppercase tracking-wider block ${isSelected ? 'text-slate-300' : 'text-slate-400'}`}>
+                              Departure
+                            </span>
+                            <span className={`text-sm sm:text-base font-black px-3 py-1 rounded-xl ${
+                              isSelected ? 'bg-[#F8A41E] text-[#0C3136]' : 'bg-white text-[#0C3136] shadow-sm border border-slate-200/60'
+                            }`}>
+                              {point.time}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Selected Hub Spotlight Box */}
+                  {(() => {
+                    const activePoint = (PICKUP_POINTS || [])[selectedHub] || (PICKUP_POINTS || [])[0];
+                    const activeMeta = ENRICHED_PICKUP_METADATA[selectedHub] || ENRICHED_PICKUP_METADATA[0] || {};
+                    if (!activePoint) return null;
+
+                    return (
+                      <div className="p-5 sm:p-6 rounded-3xl bg-amber-50/70 border border-amber-200/80 space-y-3 mt-4">
+                        <div className="flex items-center justify-between flex-wrap gap-2">
+                          <div className="flex items-center gap-2 text-[#0C3136] font-black text-xs uppercase tracking-wider">
+                            <Info className="w-4 h-4 text-[#F8A41E]" aria-hidden="true" />
+                            <span>Boarding Details for {activePoint.name}</span>
+                          </div>
+                          <a
+                            href={activeMeta.mapQuery ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(activeMeta.mapQuery)}` : `https://maps.google.com/?q=${encodeURIComponent(activePoint.name + ' Toronto')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-xs font-black text-[#0C3136] hover:text-[#D91E1E] bg-white px-3 py-1.5 rounded-xl border border-amber-200 shadow-sm transition-colors"
+                          >
+                            <span>Open in Google Maps</span>
+                            <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
+                          </a>
+                        </div>
+                        <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
+                          {activeMeta.boardingNote || "Please arrive 10 minutes prior to scheduled departure. Look for our executive motorcoach with the Niagara Travels logo in the passenger loading zone."}
+                        </p>
+                        <div className="pt-2 border-t border-amber-200/60 flex items-center justify-between flex-wrap gap-2 text-[11px] text-slate-600 font-semibold">
+                          <span className="flex items-center gap-1">
+                            <Clock className="w-3.5 h-3.5 text-[#F8A41E]" aria-hidden="true" />
+                            Arrive 10 minutes prior to {activePoint.time}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Train className="w-3.5 h-3.5 text-[#0C3136]" aria-hidden="true" />
+                            {activeMeta.landmark || "Downtown Toronto"}
                           </span>
                         </div>
-                      ))}
+                      </div>
+                    );
+                  })()}
+                </div>
+
+                {/* Right Column: Dynamic Leaflet Map & Navigation (5 cols) */}
+                <div className="lg:col-span-5 flex flex-col gap-4 h-full">
+                  <div className="bg-slate-100 rounded-3xl border border-slate-200 overflow-hidden h-[420px] lg:h-[460px] relative shadow-inner z-0">
+                    {PICKUP_POINTS && <StaticPointsMap points={PICKUP_POINTS} />}
+                    
+                    <div className="absolute top-4 left-4 right-4 z-[400] bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-md border border-slate-200/80 text-xs font-bold text-slate-700 flex items-center justify-between">
+                      <span className="flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
+                        <span>Interactive Pickup Map</span>
+                      </span>
+                      <span className="text-[10px] uppercase tracking-wider text-slate-400 font-black">
+                        5 Downtown Pins
+                      </span>
+                    </div>
+
+                    {(() => {
+                      const activePoint = (PICKUP_POINTS || [])[selectedHub] || (PICKUP_POINTS || [])[0];
+                      if (!activePoint) return null;
+                      return (
+                        <div className="absolute bottom-4 left-4 right-4 z-[400] bg-[#0C3136]/95 backdrop-blur-md text-white p-3.5 rounded-2xl shadow-lg border border-white/10 text-xs flex items-center justify-between">
+                          <div>
+                            <p className="text-[10px] text-[#F8A41E] uppercase font-black tracking-wider">Selected Boarding Hub</p>
+                            <p className="font-bold truncate max-w-[180px] sm:max-w-[220px]">{activePoint.name}</p>
+                          </div>
+                          <span className="bg-[#F8A41E] text-[#0C3136] px-2.5 py-1 rounded-lg font-black text-xs shrink-0">
+                            {activePoint.time}
+                          </span>
+                        </div>
+                      );
+                    })()}
+                  </div>
+
+                  {/* Airport & Custom Pickup Guarantee Card */}
+                  <div className="bg-gradient-to-r from-[#0C3136] to-[#125D66] text-white p-6 rounded-3xl space-y-2.5 border border-slate-700 shadow-md">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-[#F8A41E]">
+                        Custom Location?
+                      </span>
+                      <Plane className="w-4 h-4 text-[#F8A41E]" aria-hidden="true" />
+                    </div>
+                    <h4 className="font-black text-sm text-white">
+                      Staying Outside Downtown Toronto?
+                    </h4>
+                    <p className="text-xs text-slate-200 leading-relaxed">
+                      Door-to-door private pickup is available for Pearson Airport (YYZ), Mississauga, Oakville, and Markham.
+                    </p>
+                    <div className="pt-2 flex items-center justify-between flex-wrap gap-2">
+                      <a
+                        href="tel:14164443000"
+                        className="text-xs font-black text-[#F8A41E] hover:underline flex items-center gap-1.5"
+                      >
+                        <Phone className="w-3.5 h-3.5" aria-hidden="true" />
+                        <span>(416) 444-3000</span>
+                      </a>
+                      <Link
+                        href="/custom-itinerary"
+                        className="text-[10px] font-black uppercase tracking-wider bg-white text-[#0C3136] hover:bg-[#F8A41E] px-3.5 py-1.5 rounded-xl transition-all"
+                      >
+                        Request Custom Pickup &rarr;
+                      </Link>
+                    </div>
                   </div>
                 </div>
 
-                <div className="bg-slate-200 min-h-[350px] h-full relative z-0">
-                  {PICKUP_POINTS && <StaticPointsMap points={PICKUP_POINTS} />}
-                </div>
               </div>
             </div>
           </section>
