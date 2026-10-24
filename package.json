@@ -1,13 +1,13 @@
 {
   "name": "niagara-tours-new",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "dev": "npm --prefix niagara-nextjs run dev",
+    "build": "npm --prefix niagara-nextjs run build",
+    "start": "npm --prefix niagara-nextjs run start",
+    "lint": "npm --prefix niagara-nextjs run lint"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.2.4",
@@ -15,6 +15,7 @@
     "firebase": "^12.13.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^1.14.0",
+    "next": "16.2.9",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-leaflet": "^5.0.0",
@@ -24,14 +25,10 @@
     "@eslint/js": "^10.0.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.1",
     "autoprefixer": "^10.5.0",
-    "eslint": "^10.2.1",
-    "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.2",
+    "eslint": "^9.0.0",
     "globals": "^17.5.0",
     "postcss": "^8.5.14",
-    "tailwindcss": "^4.2.4",
-    "vite": "^8.0.10"
+    "tailwindcss": "^4.2.4"
   }
 }

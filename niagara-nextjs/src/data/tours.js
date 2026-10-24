@@ -36,17 +36,17 @@ export const TOURS_DATA = [
       "Return to Toronto: Relax on your comfortable drive back after an unforgettable experience."
     ],
     highlights: [
-      { t: 'Personalized Experience', d: 'Enjoy a stress-free tour with private luxury transportation and a professional local guide.', i: Users },
-      { t: 'Flexible Itinerary', d: 'Explore at your own pace, customize your stops, and balance sightseeing with free time.', i: Navigation },
-      { t: 'Breathtaking Stops', d: 'Visit the breathtaking Horseshoe Falls, Whirlpool Rapids, and the Floral Clock.', i: Camera }
+      { t: 'Personalized Experience', d: 'Enjoy a stress-free tour with private luxury transportation and a professional local guide.', i: 'Users' },
+      { t: 'Flexible Itinerary', d: 'Explore at your own pace, customize your stops, and balance sightseeing with free time.', i: 'Navigation' },
+      { t: 'Breathtaking Stops', d: 'Visit the breathtaking Horseshoe Falls, Whirlpool Rapids, and the Floral Clock.', i: 'Camera' }
     ],
     idealFor: 'Couples, families, small groups, corporate travelers, and visitors with limited time in Toronto.',
     facts: [
-      { l: 'Duration', v: '5 - 6 Hours', i: Clock },
-      { l: 'Group Size', v: 'Private', i: Users },
-      { l: 'Pace', v: 'Flexible', i: Zap },
-      { l: 'Transport', v: 'Luxury Vehicle', i: Bus },
-      { l: 'Pickup', v: 'Toronto / GTA', i: MapPin }
+      { l: 'Duration', v: '5 - 6 Hours', i: 'Clock' },
+      { l: 'Group Size', v: 'Private', i: 'Users' },
+      { l: 'Pace', v: 'Flexible', i: 'Zap' },
+      { l: 'Transport', v: 'Luxury Vehicle', i: 'Bus' },
+      { l: 'Pickup', v: 'Toronto / GTA', i: 'MapPin' }
     ]
   },
   {
@@ -69,17 +69,17 @@ export const TOURS_DATA = [
       "Return to Toronto in the late afternoon/evening"
     ],
     highlights: [
-      { t: 'Niagara Falls Boat Ride', d: 'Get up close to the falls with an unforgettable boat ride during the summer season.', i: Wind },
-      { t: 'Picturesque Views', d: 'Stop at the best viewing spots, including Table Rock and Queen Victoria Park.', i: Camera },
-      { t: 'Cultural Experience', d: 'Visit a local maple syrup farm for a sweet taste of Canadian culture.', i: Grape }
+      { t: 'Niagara Falls Boat Ride', d: 'Get up close to the falls with an unforgettable boat ride during the summer season.', i: 'Wind' },
+      { t: 'Picturesque Views', d: 'Stop at the best viewing spots, including Table Rock and Queen Victoria Park.', i: 'Camera' },
+      { t: 'Cultural Experience', d: 'Visit a local maple syrup farm for a sweet taste of Canadian culture.', i: 'Grape' }
     ],
     idealFor: 'First-time visitors, budget-conscious travelers, families',
     facts: [
-      { l: 'Duration', v: '9 - 10 Hours', i: Clock },
-      { l: 'Group Size', v: 'Max 50 Guests', i: Users },
-      { l: 'Languages', v: 'English', i: Globe },
-      { l: 'Transport', v: 'Luxury Coach', i: Bus },
-      { l: 'Pickup', v: 'Toronto Downtown', i: MapPin }
+      { l: 'Duration', v: '9 - 10 Hours', i: 'Clock' },
+      { l: 'Group Size', v: 'Max 50 Guests', i: 'Users' },
+      { l: 'Languages', v: 'English', i: 'Globe' },
+      { l: 'Transport', v: 'Luxury Coach', i: 'Bus' },
+      { l: 'Pickup', v: 'Toronto Downtown', i: 'MapPin' }
     ]
   },
   {
@@ -103,17 +103,17 @@ export const TOURS_DATA = [
       "Return to Toronto with door-to-door drop-off"
     ],
     highlights: [
-      { t: 'Journey Behind the Falls', d: 'Discover Niagara\'s natural wonder from a unique perspective inside the rock behind the falls.', i: MapIcon },
-      { t: 'Skylon Tower', d: 'Enjoy bird’s-eye views of the falls and the surrounding landscape.', i: Navigation },
-      { t: 'Niagara City Cruises', d: 'Get close to the cascading waters for a truly memorable experience.', i: Wind }
+      { t: 'Journey Behind the Falls', d: 'Discover Niagara\'s natural wonder from a unique perspective inside the rock behind the falls.', i: 'MapIcon' },
+      { t: 'Skylon Tower', d: 'Enjoy bird’s-eye views of the falls and the surrounding landscape.', i: 'Navigation' },
+      { t: 'Niagara City Cruises', d: 'Get close to the cascading waters for a truly memorable experience.', i: 'Wind' }
     ],
     idealFor: 'Tourists who want the full Niagara experience, adventure seekers, families, couples',
     facts: [
-      { l: 'Duration', v: '9 Hours', i: Clock },
-      { l: 'Group Size', v: 'Max 25 Guests', i: Users },
-      { l: 'Languages', v: 'English / French', i: Globe },
-      { l: 'Inclusions', v: 'All Entrance Fees', i: ShieldCheck },
-      { l: 'Pickup', v: 'Hotel Included', i: MapPin }
+      { l: 'Duration', v: '9 Hours', i: 'Clock' },
+      { l: 'Group Size', v: 'Max 25 Guests', i: 'Users' },
+      { l: 'Languages', v: 'English / French', i: 'Globe' },
+      { l: 'Inclusions', v: 'All Entrance Fees', i: 'ShieldCheck' },
+      { l: 'Pickup', v: 'Hotel Included', i: 'MapPin' }
     ]
   },
   {
@@ -137,17 +137,17 @@ export const TOURS_DATA = [
       "Late night arrival back in Toronto (approx. midnight)"
     ],
     highlights: [
-      { t: 'Falls Illumination', d: 'See the falls lit up in vibrant colors against the night sky.', i: Zap },
-      { t: 'Fireworks Display', d: 'During peak seasons, enjoy a spectacular fireworks show over the falls.', i: Star },
-      { t: 'Evening Serenity', d: 'The falls look magical at night, a perfect way to wrap up your day.', i: Clock }
+      { t: 'Falls Illumination', d: 'See the falls lit up in vibrant colors against the night sky.', i: 'Zap' },
+      { t: 'Fireworks Display', d: 'During peak seasons, enjoy a spectacular fireworks show over the falls.', i: 'Star' },
+      { t: 'Evening Serenity', d: 'The falls look magical at night, a perfect way to wrap up your day.', i: 'Clock' }
     ],
     idealFor: 'Couples, photographers, anyone wanting to experience Niagara Falls at night',
     facts: [
-      { l: 'Duration', v: '10 Hours', i: Clock },
-      { l: 'Atmosphere', v: 'Romantic / Scenic', i: Star },
-      { l: 'Best For', v: 'Couples', i: Users },
-      { l: 'Timing', v: '2 PM Departure', i: Clock },
-      { l: 'Pickup', v: 'Toronto & Niagara', i: MapPin }
+      { l: 'Duration', v: '10 Hours', i: 'Clock' },
+      { l: 'Atmosphere', v: 'Romantic / Scenic', i: 'Star' },
+      { l: 'Best For', v: 'Couples', i: 'Users' },
+      { l: 'Timing', v: '2 PM Departure', i: 'Clock' },
+      { l: 'Pickup', v: 'Toronto & Niagara', i: 'MapPin' }
     ]
   },
   {
@@ -171,17 +171,17 @@ export const TOURS_DATA = [
       "Evening return to Toronto through the rolling countryside"
     ],
     highlights: [
-      { t: 'Niagara-on-the-Lake', d: 'A charming town known for its wineries, heritage, and views of Lake Ontario.', i: MapPin },
-      { t: 'Wine Tastings', d: 'Sample world-class wines at two of Niagara’s premier wineries.', i: Grape },
-      { t: 'Vineyard Walk', d: 'Stroll through scenic vineyards while soaking in the sights and fresh air.', i: Camera },
+      { t: 'Niagara-on-the-Lake', d: 'A charming town known for its wineries, heritage, and views of Lake Ontario.', i: 'MapPin' },
+      { t: 'Wine Tastings', d: 'Sample world-class wines at two of Niagara’s premier wineries.', i: 'Grape' },
+      { t: 'Vineyard Walk', d: 'Stroll through scenic vineyards while soaking in the sights and fresh air.', i: 'Camera' },
     ],
     idealFor: 'Wine enthusiasts, couples, small groups',
     facts: [
-      { l: 'Duration', v: '8 - 9 Hours', i: Clock },
-      { l: 'Tastings', v: '2 Wineries Incl.', i: Grape },
-      { l: 'Group Size', v: 'Small Group (14)', i: Users },
-      { l: 'Age', v: '19+ for Wine', i: ShieldCheck },
-      { l: 'Pickup', v: 'Toronto/Niagara', i: MapPin }
+      { l: 'Duration', v: '8 - 9 Hours', i: 'Clock' },
+      { l: 'Tastings', v: '2 Wineries Incl.', i: 'Grape' },
+      { l: 'Group Size', v: 'Small Group (14)', i: 'Users' },
+      { l: 'Age', v: '19+ for Wine', i: 'ShieldCheck' },
+      { l: 'Pickup', v: 'Toronto/Niagara', i: 'MapPin' }
     ]
   },
   {
@@ -205,17 +205,17 @@ export const TOURS_DATA = [
       "Flexible return time with door-to-door drop-off"
     ],
     highlights: [
-      { t: 'VIP Experience', d: 'Private vehicle with a personal driver, offering a completely tailored experience.', i: Users },
-      { t: 'Personalized Itinerary', d: 'Pick and choose your own attractions to create the perfect day.', i: Navigation },
-      { t: 'Exclusive Stops', d: 'Visit off-the-beaten-path spots like local wineries and unique attractions.', i: ShieldCheck }
+      { t: 'VIP Experience', d: 'Private vehicle with a personal driver, offering a completely tailored experience.', i: 'Users' },
+      { t: 'Personalized Itinerary', d: 'Pick and choose your own attractions to create the perfect day.', i: 'Navigation' },
+      { t: 'Exclusive Stops', d: 'Visit off-the-beaten-path spots like local wineries and unique attractions.', i: 'ShieldCheck' }
     ],
     idealFor: 'VIP guests, families, corporate groups, special occasions',
     facts: [
-      { l: 'Duration', v: 'Completely Flexible', i: Clock },
-      { l: 'Transport', v: 'Private SUV/Limo', i: Bus },
-      { l: 'Group Size', v: 'Up to 6 Guests', i: Users },
-      { l: 'Pace', v: 'Your Choice', i: Zap },
-      { l: 'Pickup', v: 'Door-to-Door', i: MapPin }
+      { l: 'Duration', v: 'Completely Flexible', i: 'Clock' },
+      { l: 'Transport', v: 'Private SUV/Limo', i: 'Bus' },
+      { l: 'Group Size', v: 'Up to 6 Guests', i: 'Users' },
+      { l: 'Pace', v: 'Your Choice', i: 'Zap' },
+      { l: 'Pickup', v: 'Door-to-Door', i: 'MapPin' }
     ]
   },
   {
@@ -238,17 +238,17 @@ export const TOURS_DATA = [
       "Day 3: Afternoon at Niagara-on-the-Lake and return to Toronto"
     ],
     highlights: [
-      { t: 'Thousand Islands Cruise', d: 'A stunning cruise through one of the most beautiful spots in Canada.', i: Wind },
-      { t: 'Niagara Falls', d: 'Visit the world’s most famous waterfall with multiple attractions.', i: MapIcon },
-      { t: 'Toronto & Kingston', d: 'Discover two major Canadian cities filled with history, culture, and architecture.', i: Globe }
+      { t: 'Thousand Islands Cruise', d: 'A stunning cruise through one of the most beautiful spots in Canada.', i: 'Wind' },
+      { t: 'Niagara Falls', d: 'Visit the world’s most famous waterfall with multiple attractions.', i: 'MapIcon' },
+      { t: 'Toronto & Kingston', d: 'Discover two major Canadian cities filled with history, culture, and architecture.', i: 'Globe' }
     ],
     idealFor: 'International tourists, those wanting to explore multiple destinations in one tour',
     facts: [
-      { l: 'Duration', v: '3 Days / 2 Nights', i: Clock },
-      { l: 'Stay', v: 'Hotel Included', i: MapPin },
-      { l: 'Meals', v: 'Breakfast Incl.', i: Utensils },
-      { l: 'Guide', v: 'Licensed Expert', i: Users },
-      { l: 'Destinations', v: '3 Major Hubs', i: Globe }
+      { l: 'Duration', v: '3 Days / 2 Nights', i: 'Clock' },
+      { l: 'Stay', v: 'Hotel Included', i: 'MapPin' },
+      { l: 'Meals', v: 'Breakfast Incl.', i: 'Utensils' },
+      { l: 'Guide', v: 'Licensed Expert', i: 'Users' },
+      { l: 'Destinations', v: '3 Major Hubs', i: 'Globe' }
     ]
   }
 ];
@@ -273,5 +273,3 @@ export const PICKUP_POINTS = [
   { name: "Maple Leaf Square", sub: "@ the South Entrance of Union Station", area: "Downtown Toronto", time: "8:30 AM", lat: 43.6431, lng: -79.3802 }
 ];
 
-// Combine the exports at the bottom explicitly if desired, but adding 'export' before 'const' as done above handles this securely in modern JS/Next.js!
-export { TOURS_DATA, REVIEWS_DATA, PICKUP_POINTS };
