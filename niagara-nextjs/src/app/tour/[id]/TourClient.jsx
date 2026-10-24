@@ -66,7 +66,7 @@ export default function TourClient({ tour, relatedTours = [] }) {
     setActiveTab(id);
     const element = document.getElementById(id);
     if (element) {
-      const yOffset = -120;
+      const yOffset = -70;
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
@@ -253,7 +253,7 @@ export default function TourClient({ tour, relatedTours = [] }) {
       {/* ========================================================================= */}
       <nav
         aria-label="Tour Details Sections"
-        className="sticky top-16 z-30 bg-white/95 backdrop-blur-md border-y border-slate-200 shadow-sm transition-all"
+        className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-y border-slate-200 shadow-sm transition-all"
       >
         <div className="container mx-auto px-4 flex justify-between items-center py-2">
           
@@ -681,7 +681,7 @@ export default function TourClient({ tour, relatedTours = [] }) {
         {/* RIGHT COLUMN: STICKY BOOKING CARD WIDGET                                 */}
         {/* ========================================================================= */}
         <aside aria-labelledby="booking-aside-heading" className="xl:col-span-4" id="booking-card">
-          <div className="sticky top-28 space-y-6">
+          <div className="sticky top-20 space-y-6">
             
             <div className="bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden">
               
