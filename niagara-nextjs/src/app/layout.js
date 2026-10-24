@@ -2,7 +2,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ChatWidget from "@/components/ChatWidget";
 import { ORGANIZATION_SCHEMA, JsonLd } from "@/lib/schema";
 
 const geistSans = Geist({
@@ -125,9 +124,6 @@ export default function RootLayout({ children }) {
 
         {/* Semantic Global Footer Hub */}
         <Footer />
-
-        {/* Interactive Chat Widget */}
-        <ChatWidget />
       </body>
     </html>
   );

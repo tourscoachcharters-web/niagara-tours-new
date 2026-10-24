@@ -2183,8 +2183,7 @@ export default function App() {
         </div>
       </footer>
       
-      {/* --- DYNAMIC CHAT WIDGET --- */}
-      <ChatWidget />
+      
 
     </div>
   );
