@@ -8,11 +8,11 @@ import CalendarDropdown from "@/components/CalendarDropdown";
 import TourCard from "@/components/TourCard";
 import { PICKUP_POINTS, REVIEWS_DATA } from "@/data/tours"; 
 import { 
-  ChevronLeft, Clock, Sun, MapPin, ShieldCheck, Compass, CheckCircle2, 
+  ChevronLeft, ChevronRight, ChevronDown, Clock, Sun, MapPin, ShieldCheck, Compass, CheckCircle2, 
   CheckCircle, XCircle, Ban, Navigation, Ticket, Users, Baby, Calendar, Star,
   Wind, Camera, Grape, Globe, Map as MapIcon, Zap, Utensils, Plane,
   Ship, Info, Phone, ArrowRight, Sparkles, Award, Check, Bus,
-  ExternalLink, ChevronRight, Train, AlertCircle
+  ExternalLink, Train, AlertCircle
 } from 'lucide-react';
 
 const ICON_MAP = {
@@ -126,6 +126,38 @@ const parseItineraryStep = (stepText, index, totalSteps) => {
 
   return { title, description, icon, categoryBadge, badgeColor };
 };
+
+function formatDateDisplay(isoStr) {
+  if (!isoStr) return "Select Date on Calendar";
+  try {
+    const [year, month, day] = isoStr.split('-').map(Number);
+    const dateObj = new Date(year, month - 1, day);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const checkDate = new Date(year, month - 1, day);
+    checkDate.setHours(0, 0, 0, 0);
+
+    const diffDays = Math.round((checkDate - today) / (1000 * 60 * 60 * 24));
+    if (diffDays === 0) return "Today";
+    if (diffDays === 1) return "Tomorrow";
+
+    return dateObj.toLocaleDateString('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+  } catch {
+    return isoStr;
+  }
+}
+
+function formatDateISO(d) {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
 
 export default function TourClient({ tour, relatedTours = [] }) {
   const [showCalendar, setShowCalendar] = useState(false);
@@ -1009,60 +1041,95 @@ export default function TourClient({ tour, relatedTours = [] }) {
         {/* ========================================================================= */}
         {/* RIGHT COLUMN: STICKY BOOKING CARD WIDGET                                 */}
         {/* ========================================================================= */}
-        <aside aria-labelledby="booking-aside-heading" className="xl:col-span-4" id="booking-card">
+        <aside aria-labelledby="booking-aside-heading" className="xl:col-span-4 relative z-30" id="booking-card">
           <div className="sticky top-20 space-y-6">
             
-            <div className="bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden">
+            <div className="bg-white rounded-[2.5rem] shadow-2xl border border-slate-200/80 relative">
               
               {/* Header Gradient Bay */}
-              <div className="bg-gradient-to-br from-[#0C3136] via-[#103E44] to-[#125D66] px-8 py-8 text-white relative">
-                <span className="text-[#F8A41E] text-[10px] font-black uppercase tracking-[0.3em] block mb-2">
-                  BEST PRICE GUARANTEE
-                </span>
-                
-                <h2 id="booking-aside-heading" className="text-xl font-black mb-4">
-                  Select Date &amp; Passengers
-                </h2>
+              <div className="bg-gradient-to-br from-[#0C3136] via-[#103E44] to-[#125D66] px-7 py-7 text-white relative rounded-t-[2.5rem] overflow-hidden">
+                <div className="absolute top-0 right-0 w-36 h-36 bg-[#F8A41E]/10 rounded-full blur-2xl pointer-events-none" />
 
-                <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-black text-[#F8A41E]">
-                    CAD ${tour.price}
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <span className="inline-flex items-center gap-1.5 bg-[#F8A41E]/20 text-[#F8A41E] border border-[#F8A41E]/30 text-[9px] font-black uppercase tracking-[0.25em] px-3 py-1 rounded-full">
+                    <Sparkles className="w-3 h-3" /> BEST PRICE GUARANTEE
                   </span>
-                  <span className="text-xs text-slate-200 font-bold uppercase tracking-wider">
-                    / person
+                  <div className="flex items-center gap-1 text-[11px] font-bold text-amber-300">
+                    <Star className="w-3.5 h-3.5 fill-current text-[#F8A41E]" />
+                    <span>4.9</span>
+                    <span className="text-white/60">({tourReviews.length > 0 ? tourReviews.length : '320+'})</span>
+                  </div>
+                </div>
+
+                <div className="flex items-baseline justify-between gap-3">
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300 block">Total from</span>
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+                        CAD ${tour.price}
+                      </span>
+                      <span className="text-xs text-slate-200 font-bold">
+                        / person
+                      </span>
+                    </div>
+                  </div>
+
+                  <span className="bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-xl text-[10px] font-black text-emerald-300 border border-emerald-400/30">
+                    Free Cancellation
                   </span>
                 </div>
               </div>
 
               {/* Form Controls */}
-              <div className="p-8 space-y-6">
+              <div className="p-7 space-y-6">
                 
                 {/* Date Picker Button */}
                 <div ref={calendarRef} className="relative">
-                  <label htmlFor="select-tour-date-btn" className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">
-                    1. Choose Travel Date
-                  </label>
+                  <div className="flex items-center justify-between mb-2">
+                    <label htmlFor="select-tour-date-btn" className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">
+                      1. Choose Travel Date
+                    </label>
+                    {selectedDate && (
+                      <button
+                        type="button"
+                        onClick={() => setSelectedDate(null)}
+                        className="text-[10px] font-bold text-slate-400 hover:text-red-500 transition-colors"
+                      >
+                        Reset Date
+                      </button>
+                    )}
+                  </div>
+
                   <button
                     id="select-tour-date-btn"
                     type="button"
                     aria-expanded={showCalendar}
                     aria-label={`Select tour date, currently ${selectedDate || "Choose Date"}`}
                     onClick={() => setShowCalendar(!showCalendar)}
-                    className="w-full flex items-center justify-between border-2 border-slate-100 hover:border-[#F8A41E] p-4 rounded-2xl bg-white cursor-pointer transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F8A41E]"
+                    className={`w-full flex items-center justify-between p-4 rounded-2xl bg-white border-2 transition-all cursor-pointer text-left ${
+                      showCalendar
+                        ? 'border-[#F8A41E] shadow-sm'
+                        : 'border-slate-200 hover:border-[#0C3136]'
+                    }`}
                   >
-                    <div className="flex items-center gap-3 font-bold text-slate-700 text-sm">
-                      <Calendar className="w-5 h-5 text-[#F8A41E]" aria-hidden="true" />
-                      <span>{selectedDate || "Select Date on Calendar"}</span>
+                    <div className="flex items-center gap-3 font-bold text-[#0C3136] text-sm min-w-0">
+                      <div className="w-8 h-8 rounded-xl bg-amber-50 flex items-center justify-center text-[#F8A41E] shrink-0">
+                        <Calendar className="w-4 h-4" aria-hidden="true" />
+                      </div>
+                      <span className="truncate">{selectedDate ? formatDateDisplay(selectedDate) : "Select Date on Calendar"}</span>
                     </div>
-                    <ChevronLeft
-                      className={`w-4 h-4 -rotate-90 text-slate-400 transition-transform ${showCalendar ? 'rotate-[90deg]' : ''}`}
+                    <ChevronDown
+                      className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${showCalendar ? 'rotate-180 text-[#F8A41E]' : ''}`}
                       aria-hidden="true"
                     />
                   </button>
+
+                  {/* Downward opening Calendar */}
                   {showCalendar && (
                     <CalendarDropdown
+                      direction="down"
                       onSelectDate={(d) => {
-                        setSelectedDate(d.toLocaleDateString());
+                        setSelectedDate(formatDateISO(d));
                         setShowCalendar(false);
                       }}
                     />
@@ -1070,32 +1137,32 @@ export default function TourClient({ tour, relatedTours = [] }) {
                 </div>
 
                 {/* Passenger Selector */}
-                <div className="space-y-4 pt-2 border-t border-slate-100">
+                <div className="space-y-3.5 pt-3 border-t border-slate-100">
                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">
                     2. Select Passengers
                   </label>
 
                   {/* Adults */}
-                  <div className="flex justify-between items-center py-1">
+                  <div className="flex justify-between items-center p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
                     <div>
-                      <p className="font-bold text-xs text-[#0C3136]">Adults (13+)</p>
-                      <p className="text-[10px] text-slate-400">CAD ${tour.price}.00 each</p>
+                      <p className="font-black text-xs sm:text-sm text-[#0C3136]">Adults (Ages 13+)</p>
+                      <p className="text-[11px] text-slate-400 font-medium">CAD ${tour.price}.00 per guest</p>
                     </div>
-                    <div className="flex items-center gap-3 bg-slate-50 p-1 rounded-xl border border-slate-100">
+                    <div className="flex items-center gap-3 bg-white px-2 py-1.5 rounded-xl border border-slate-200 shadow-xs">
                       <button
                         type="button"
                         aria-label="Decrease adult tickets"
                         onClick={() => setAdults(Math.max(1, adults - 1))}
-                        className="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center font-bold text-slate-600 hover:text-black"
+                        className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center font-black text-slate-700 transition-colors"
                       >
                         -
                       </button>
-                      <span className="font-black text-sm w-4 text-center">{adults}</span>
+                      <span className="font-black text-sm w-4 text-center text-[#0C3136]">{adults}</span>
                       <button
                         type="button"
                         aria-label="Increase adult tickets"
                         onClick={() => setAdults(adults + 1)}
-                        className="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center font-bold text-slate-600 hover:text-black"
+                        className="w-7 h-7 rounded-lg bg-[#0C3136] hover:bg-[#125D66] text-white flex items-center justify-center font-black transition-colors"
                       >
                         +
                       </button>
@@ -1103,42 +1170,68 @@ export default function TourClient({ tour, relatedTours = [] }) {
                   </div>
 
                   {/* Children */}
-                  <div className="flex justify-between items-center py-1">
+                  <div className="flex justify-between items-center p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
                     <div>
-                      <p className="font-bold text-xs text-[#0C3136]">Children (2-12)</p>
-                      <p className="text-[10px] text-slate-400">CAD ${childPrice}.00 each</p>
+                      <div className="flex items-center gap-2">
+                        <p className="font-black text-xs sm:text-sm text-[#0C3136]">Children (Ages 2-12)</p>
+                        <span className="text-[9px] font-black uppercase text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">Save $10</span>
+                      </div>
+                      <p className="text-[11px] text-slate-400 font-medium">CAD ${childPrice}.00 per child</p>
                     </div>
-                    <div className="flex items-center gap-3 bg-slate-50 p-1 rounded-xl border border-slate-100">
+                    <div className="flex items-center gap-3 bg-white px-2 py-1.5 rounded-xl border border-slate-200 shadow-xs">
                       <button
                         type="button"
                         aria-label="Decrease child tickets"
                         onClick={() => setChildren(Math.max(0, children - 1))}
-                        className="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center font-bold text-slate-600 hover:text-black"
+                        className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center font-black text-slate-700 transition-colors"
                       >
                         -
                       </button>
-                      <span className="font-black text-sm w-4 text-center">{children}</span>
+                      <span className="font-black text-sm w-4 text-center text-[#0C3136]">{children}</span>
                       <button
                         type="button"
                         aria-label="Increase child tickets"
                         onClick={() => setChildren(children + 1)}
-                        className="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center font-bold text-slate-600 hover:text-black"
+                        className="w-7 h-7 rounded-lg bg-[#0C3136] hover:bg-[#125D66] text-white flex items-center justify-center font-black transition-colors"
                       >
                         +
                       </button>
                     </div>
                   </div>
+
+                  <p className="text-[10px] text-slate-400 font-medium flex items-center gap-1.5 px-1">
+                    <Baby className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Infants under 3 free of charge (seated on parent&apos;s lap)</span>
+                  </p>
                 </div>
 
-                {/* Subtotal Calculation Box */}
-                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-2">
-                  <div className="flex justify-between text-xs font-bold text-slate-500">
-                    <span>{adults} Adult{adults > 1 ? 's' : ''} {children > 0 ? `+ ${children} Child` : ''}</span>
-                    <span className="text-[#0C3136] font-black">CAD ${subtotal.toFixed(2)}</span>
+                {/* Itemized Calculation Receipt */}
+                <div className="bg-slate-50 p-4.5 rounded-2xl border border-slate-200/80 space-y-2">
+                  <div className="flex justify-between text-xs font-semibold text-slate-600">
+                    <span>{adults} × Adult{adults > 1 ? 's' : ''} (CAD ${tour.price})</span>
+                    <span className="font-bold text-[#0C3136]">CAD ${(adults * tour.price).toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between text-[11px] text-slate-400">
-                    <span>Taxes calculated at checkout</span>
-                    <span className="text-emerald-600 font-bold">13% HST</span>
+
+                  {children > 0 && (
+                    <div className="flex justify-between text-xs font-semibold text-slate-600">
+                      <span>{children} × Child{children > 1 ? 'ren' : ''} (CAD ${childPrice})</span>
+                      <span className="font-bold text-[#0C3136]">CAD ${(children * childPrice).toFixed(2)}</span>
+                    </div>
+                  )}
+
+                  <div className="flex justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-200/60">
+                    <span>Estimated Taxes (13% HST)</span>
+                    <span className="font-bold text-slate-700">CAD ${(subtotal * 0.13).toFixed(2)}</span>
+                  </div>
+
+                  <div className="flex justify-between items-baseline pt-2 border-t border-slate-200 text-sm font-black text-[#0C3136]">
+                    <div className="flex items-center gap-1.5">
+                      <span>Total Quote</span>
+                      <span className="text-[10px] text-emerald-600 font-bold uppercase">(All Fees Included)</span>
+                    </div>
+                    <span className="text-xl font-black text-[#0C3136]">
+                      CAD ${(subtotal * 1.13).toFixed(2)}
+                    </span>
                   </div>
                 </div>
 
@@ -1147,30 +1240,32 @@ export default function TourClient({ tour, relatedTours = [] }) {
                   href={`/checkout/${tour.id}?date=${
                     selectedDate
                       ? encodeURIComponent(selectedDate)
-                      : encodeURIComponent(new Date().toLocaleDateString())
+                      : encodeURIComponent(new Date().toISOString().split('T')[0])
                   }&adults=${adults}&children=${children}`}
-                  className="block w-full text-center bg-[#D91E1E] hover:bg-[#b01818] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.25em] shadow-xl shadow-red-900/30 transition-all transform hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#D91E1E]"
+                  className="block w-full text-center bg-[#D91E1E] hover:bg-[#b01818] text-white py-4.5 rounded-2xl font-black text-xs uppercase tracking-[0.25em] shadow-xl shadow-red-900/30 hover:shadow-2xl transition-all transform hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#D91E1E]"
                 >
-                  RESERVE YOUR SPOTS
+                  RESERVE YOUR SPOTS &rarr;
                 </Link>
 
                 {/* Reassurance list */}
-                <div className="space-y-2.5 pt-2 text-center">
-                  <p className="text-[10px] font-bold text-slate-500 flex items-center justify-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-emerald-500" aria-hidden="true" />
-                    <span>Free cancellation up to 24h prior to departure</span>
-                  </p>
-                  <p className="text-[10px] font-bold text-slate-500 flex items-center justify-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#125D66]" aria-hidden="true" />
-                    <span>Instant confirmation &amp; mobile e-tickets</span>
-                  </p>
+                <div className="space-y-2 pt-1">
+                  <div className="flex items-center gap-2.5 text-xs text-slate-600 font-medium">
+                    <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" aria-hidden="true" />
+                    <span><strong>Free Cancellation:</strong> 100% refund up to 24h before tour</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 text-xs text-slate-600 font-medium">
+                    <CheckCircle2 className="w-4 h-4 text-[#125D66] shrink-0" aria-hidden="true" />
+                    <span><strong>Instant Confirmation:</strong> Mobile e-tickets emailed immediately</span>
+                  </div>
                 </div>
 
-                {/* Help Box */}
-                <div className="pt-4 border-t border-slate-100 flex items-center justify-center gap-3 text-slate-600">
-                  <Phone className="w-4 h-4 text-[#F8A41E]" aria-hidden="true" />
-                  <span className="text-xs font-bold">Have questions?</span>
-                  <a href="tel:14164443000" className="text-xs font-black text-[#0C3136] hover:underline">
+                {/* Help & Support */}
+                <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-slate-600 text-xs">
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-4 h-4 text-[#F8A41E]" aria-hidden="true" />
+                    <span className="font-bold">Need booking help?</span>
+                  </div>
+                  <a href="tel:14164443000" className="font-black text-[#0C3136] hover:text-[#D91E1E] transition-colors">
                     (416) 444-3000
                   </a>
                 </div>
