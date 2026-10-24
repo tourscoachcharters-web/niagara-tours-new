@@ -78,11 +78,11 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-3 mb-6 relative w-56 h-16">
               <Image
-                src="/images/logo.png"
+                src="/images/logo-white.png"
                 alt="Niagara Travels"
                 fill
                 sizes="224px"
-                className="object-contain"
+                className="object-contain object-left"
               />
             </div>
             <p className="text-slate-300 text-xs leading-relaxed mb-8 font-medium">

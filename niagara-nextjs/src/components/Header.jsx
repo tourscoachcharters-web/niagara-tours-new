@@ -76,13 +76,13 @@ export default function Header() {
             aria-label="Niagara Travels Home"
             className="flex items-center gap-3 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F8A41E] rounded-lg"
           >
-            <div className="w-48 sm:w-52 h-16 relative overflow-hidden flex items-center justify-center">
+            <div className="w-48 sm:w-56 h-14 sm:h-16 relative overflow-hidden flex items-center">
               <Image
                 src="/images/logo.png"
                 alt="Niagara Travels - Niagara Falls Tours & Charters"
                 fill
-                sizes="(max-width: 640px) 192px, 208px"
-                className="object-contain"
+                sizes="(max-width: 640px) 192px, 224px"
+                className="object-contain object-left"
                 priority
               />
             </div>
