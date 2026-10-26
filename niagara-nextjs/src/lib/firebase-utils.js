@@ -40,10 +40,14 @@ export async function getLiveTours() {
         firebaseId: doc.id,
         ...doc.data(),
       }));
-      return live.map((liveTour) => {
+      const mergedLive = live.map((liveTour) => {
         const fallback = TOURS_DATA.find((t) => t.id === liveTour.id) || {};
         return sanitizeTour({ ...fallback, ...liveTour });
       });
+      const liveIds = new Set(live.map((l) => l.id));
+      const remainingFallback = TOURS_DATA.filter((t) => !liveIds.has(t.id)).map(sanitizeTour);
+
+      return [...mergedLive, ...remainingFallback];
     }
   } catch (err) {
     console.warn('[Data Layer] Falling back to static TOURS_DATA:', err.message);

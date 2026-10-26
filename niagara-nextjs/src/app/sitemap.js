@@ -3,11 +3,17 @@ import { TOURS_DATA } from '@/data/tours';
 
 const SITE_URL = 'https://www.niagaratravels.ca';
 
+export const revalidate = 3600;
+
 export default async function sitemap() {
   let tours = [];
   try {
     tours = await getLiveTours();
   } catch (e) {
+    tours = TOURS_DATA;
+  }
+
+  if (!tours || tours.length === 0) {
     tours = TOURS_DATA;
   }
 
