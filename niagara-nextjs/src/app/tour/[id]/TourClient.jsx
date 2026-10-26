@@ -168,7 +168,9 @@ export default function TourClient({ tour, relatedTours = [] }) {
   const [selectedHub, setSelectedHub] = useState(0);
   const calendarRef = useRef(null);
 
-  const tourReviews = REVIEWS_DATA ? REVIEWS_DATA.filter((r) => r.tour === tour?.title) : [];
+  const tourReviews = REVIEWS_DATA 
+    ? REVIEWS_DATA.filter((r) => r.tour === tour?.title || (tour?.title && r.tour?.toLowerCase().includes(tour?.title.toLowerCase())) || (tour?.title && tour.title.toLowerCase().includes(r.tour?.toLowerCase())))
+    : [];
 
   useEffect(() => {
     const handleClickOutside = (event) => { 
@@ -200,7 +202,10 @@ export default function TourClient({ tour, relatedTours = [] }) {
 
   if (!tour) return null;
 
-  const childPrice = Math.max((tour.price || 0) - 10, 0);
+  const childPrice = tour.childPrice !== undefined ? tour.childPrice : Math.max((tour.price || 0) - 10, 0);
+  const currencySymbol = tour.currencySymbol || 'CAD $';
+  const currencyCode = tour.currency || 'CAD';
+  const points = (tour.pickupPoints && tour.pickupPoints.length > 0) ? tour.pickupPoints : PICKUP_POINTS;
   const subtotal = (adults * tour.price) + (children * childPrice);
 
   // Gallery secondary photos
@@ -268,7 +273,7 @@ export default function TourClient({ tour, relatedTours = [] }) {
               <div className="text-right">
                 <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Starting From</p>
                 <p className="text-2xl sm:text-3xl font-black text-[#0C3136]">
-                  CAD ${tour.price} <span className="text-xs text-slate-500 font-normal">/ person</span>
+                  {currencySymbol}{tour.price} <span className="text-xs text-slate-500 font-normal">/ {tour.pricingTiers && tour.pricingTiers[0]?.label.includes('SUV') ? 'vehicle' : 'person'}</span>
                 </p>
               </div>
               <button
@@ -289,8 +294,8 @@ export default function TourClient({ tour, relatedTours = [] }) {
                   <Star key={i} className="w-3.5 h-3.5 fill-current" aria-hidden="true" />
                 ))}
               </div>
-              <span className="font-black text-sm">4.9</span>
-              <span className="text-slate-400">(320+ Reviews)</span>
+              <span className="font-black text-sm">{tour.rating || 4.9}</span>
+              <span className="text-slate-400">({tour.reviewCount ? `${tour.reviewCount} Reviews` : '320+ Reviews'})</span>
             </div>
 
             <div className="flex items-center gap-1.5">
@@ -707,10 +712,12 @@ export default function TourClient({ tour, relatedTours = [] }) {
                 </span>
                 <h2 id="pickups-heading" className="text-2xl sm:text-3xl font-black text-[#0C3136] flex items-center gap-3">
                   <MapPin className="text-[#F8A41E] w-7 h-7" aria-hidden="true" />
-                  <span>Downtown Toronto Pickup Hubs</span>
+                  <span>{tour.pickupPoints ? 'Tour Meeting & Departure Hubs' : 'Downtown Toronto Pickup Hubs'}</span>
                 </h2>
                 <p className="text-sm text-slate-500 font-medium mt-1 max-w-xl">
-                  Board at any of our 5 central Toronto hotel &amp; transit hubs. Private door-to-door pickup is also available across the Greater Toronto Area.
+                  {tour.pickupPoints 
+                    ? 'Convenient dedicated departure locations and hotel meeting points for this tour.' 
+                    : 'Board at any of our 5 central Toronto hotel & transit hubs. Private door-to-door pickup is also available across the Greater Toronto Area.'}
                 </p>
               </div>
 
@@ -719,6 +726,17 @@ export default function TourClient({ tour, relatedTours = [] }) {
                 <span>Complimentary Round-Trip Transit</span>
               </div>
             </div>
+
+            {/* Tour-specific meeting locations alert if provided */}
+            {tour.meetingPointsText && (
+              <div className="mb-6 p-5 rounded-2xl bg-amber-50/80 border border-amber-200/80 flex items-start gap-3.5 shadow-sm">
+                <MapPin className="w-5 h-5 text-[#D91E1E] shrink-0 mt-0.5" />
+                <div>
+                  <h4 className="text-xs font-black uppercase tracking-wider text-[#0C3136]">Official Tour Meeting Locations</h4>
+                  <p className="text-xs sm:text-sm text-slate-700 mt-1 font-medium leading-relaxed">{tour.meetingPointsText}</p>
+                </div>
+              </div>
+            )}
 
             <div className="bg-white rounded-[2.5rem] border border-slate-200/80 shadow-md overflow-hidden p-6 sm:p-8">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -730,12 +748,12 @@ export default function TourClient({ tour, relatedTours = [] }) {
                       Select a Hub for Directions &amp; Boarding Details:
                     </p>
                     <span className="text-xs font-bold text-slate-500">
-                      5 Central Stops
+                      {points.length} Designated Stop{points.length > 1 ? 's' : ''}
                     </span>
                   </div>
 
                   <div className="space-y-3">
-                    {(PICKUP_POINTS || []).map((point, i) => {
+                    {(points || []).map((point, i) => {
                       const isSelected = selectedHub === i;
                       const meta = ENRICHED_PICKUP_METADATA[i] || {};
                       return (
@@ -774,7 +792,7 @@ export default function TourClient({ tour, relatedTours = [] }) {
                               <div className="flex items-center gap-3 mt-2 text-[11px] font-medium">
                                 <span className={`inline-flex items-center gap-1.5 ${isSelected ? 'text-[#F8A41E]' : 'text-[#0C3136]'}`}>
                                   <Train className="w-3.5 h-3.5" aria-hidden="true" />
-                                  {meta.station || 'TTC Subway Station'}
+                                  {meta.station || point.area || 'Transit Station'}
                                 </span>
                               </div>
                             </div>
@@ -797,7 +815,7 @@ export default function TourClient({ tour, relatedTours = [] }) {
 
                   {/* Selected Hub Spotlight Box */}
                   {(() => {
-                    const activePoint = (PICKUP_POINTS || [])[selectedHub] || (PICKUP_POINTS || [])[0];
+                    const activePoint = (points || [])[selectedHub] || (points || [])[0];
                     const activeMeta = ENRICHED_PICKUP_METADATA[selectedHub] || ENRICHED_PICKUP_METADATA[0] || {};
                     if (!activePoint) return null;
 
@@ -809,7 +827,7 @@ export default function TourClient({ tour, relatedTours = [] }) {
                             <span>Boarding Details for {activePoint.name}</span>
                           </div>
                           <a
-                            href={activeMeta.mapQuery ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(activeMeta.mapQuery)}` : `https://maps.google.com/?q=${encodeURIComponent(activePoint.name + ' Toronto')}`}
+                            href={activeMeta.mapQuery ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(activeMeta.mapQuery)}` : `https://maps.google.com/?q=${encodeURIComponent(activePoint.name + ' ' + (activePoint.area || 'Niagara'))}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-1.5 text-xs font-black text-[#0C3136] hover:text-[#D91E1E] bg-white px-3 py-1.5 rounded-xl border border-amber-200 shadow-sm transition-colors"
@@ -828,7 +846,7 @@ export default function TourClient({ tour, relatedTours = [] }) {
                           </span>
                           <span className="flex items-center gap-1">
                             <Train className="w-3.5 h-3.5 text-[#0C3136]" aria-hidden="true" />
-                            {activeMeta.landmark || "Downtown Toronto"}
+                            {activeMeta.landmark || activePoint.area || "Departure Hub"}
                           </span>
                         </div>
                       </div>
@@ -839,9 +857,9 @@ export default function TourClient({ tour, relatedTours = [] }) {
                 {/* Right Column: Dynamic Google Map & Navigation (5 cols) */}
                 <div className="lg:col-span-5 flex flex-col gap-4 h-full">
                   <div className="bg-slate-100 rounded-3xl border border-slate-200 overflow-hidden h-[420px] lg:h-[460px] relative shadow-inner z-0">
-                    {PICKUP_POINTS && (
+                    {points && (
                       <StaticPointsMap 
-                        points={PICKUP_POINTS} 
+                        points={points} 
                         activeIndex={selectedHub} 
                         onSelectPoint={setSelectedHub} 
                       />
@@ -853,12 +871,12 @@ export default function TourClient({ tour, relatedTours = [] }) {
                         <span>Interactive Pickup Map</span>
                       </span>
                       <span className="text-[10px] uppercase tracking-wider text-slate-400 font-black">
-                        5 Downtown Pins
+                        {points.length} Designated Pin{points.length > 1 ? 's' : ''}
                       </span>
                     </div>
 
                     {(() => {
-                      const activePoint = (PICKUP_POINTS || [])[selectedHub] || (PICKUP_POINTS || [])[0];
+                      const activePoint = (points || [])[selectedHub] || (points || [])[0];
                       if (!activePoint) return null;
                       return (
                         <div className="absolute bottom-4 left-4 right-4 z-[400] bg-[#0C3136]/95 backdrop-blur-md text-white p-3.5 rounded-2xl shadow-lg border border-white/10 text-xs flex items-center justify-between">
@@ -922,38 +940,59 @@ export default function TourClient({ tour, relatedTours = [] }) {
                 <caption className="sr-only">Detailed passenger ticket pricing table</caption>
                 <thead>
                   <tr className="bg-slate-50 text-[10px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-100">
-                    <th scope="col" className="p-6">Category</th>
-                    <th scope="col" className="p-6">Age Bracket</th>
-                    <th scope="col" className="p-6 text-right">Price (CAD)</th>
+                    <th scope="col" className="p-6">Category / Tier</th>
+                    <th scope="col" className="p-6">Age / Capacity Bracket</th>
+                    <th scope="col" className="p-6 text-right">Price ({currencyCode})</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-sm font-bold text-[#0C3136]">
-                  <tr className="hover:bg-slate-50/50 transition-colors">
-                    <td className="p-6 flex items-center gap-3">
-                      <Users className="w-5 h-5 text-slate-400" aria-hidden="true" />
-                      <span>Adult Ticket</span>
-                    </td>
-                    <td className="p-6 text-slate-500 font-medium">Ages 13+</td>
-                    <td className="p-6 text-right text-lg font-black">${tour.price}.00</td>
-                  </tr>
-                  <tr className="hover:bg-slate-50/50 transition-colors">
-                    <td className="p-6 flex items-center gap-3">
-                      <Users className="w-5 h-5 text-slate-400 scale-75" aria-hidden="true" />
-                      <span>Child Ticket</span>
-                    </td>
-                    <td className="p-6 text-slate-500 font-medium">Ages 2 - 12</td>
-                    <td className="p-6 text-right text-lg font-black">${childPrice}.00</td>
-                  </tr>
-                  <tr className="hover:bg-slate-50/50 transition-colors">
-                    <td className="p-6 flex items-center gap-3">
-                      <Baby className="w-5 h-5 text-slate-400" aria-hidden="true" />
-                      <span>Infant (Lap Child)</span>
-                    </td>
-                    <td className="p-6 text-slate-500 font-medium">Under 2 Years</td>
-                    <td className="p-6 text-right text-emerald-600 font-black uppercase tracking-widest text-xs">
-                      Free (CAD $0.00)
-                    </td>
-                  </tr>
+                  {tour.pricingTiers && tour.pricingTiers.length > 0 ? (
+                    tour.pricingTiers.map((tier, idx) => (
+                      <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
+                        <td className="p-6 flex items-center gap-3">
+                          <Users className="w-5 h-5 text-slate-400" aria-hidden="true" />
+                          <span>{tier.label}</span>
+                        </td>
+                        <td className="p-6 text-slate-500 font-medium">{tier.age || tier.capacity || 'Standard'}</td>
+                        <td className="p-6 text-right text-lg font-black">
+                          {tier.price === 0 ? (
+                            <span className="text-emerald-600 font-black uppercase tracking-widest text-xs">Free</span>
+                          ) : (
+                            `${currencySymbol}${tier.price}.00`
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <>
+                      <tr className="hover:bg-slate-50/50 transition-colors">
+                        <td className="p-6 flex items-center gap-3">
+                          <Users className="w-5 h-5 text-slate-400" aria-hidden="true" />
+                          <span>Adult Ticket</span>
+                        </td>
+                        <td className="p-6 text-slate-500 font-medium">Ages 12+</td>
+                        <td className="p-6 text-right text-lg font-black">{currencySymbol}{tour.price}.00</td>
+                      </tr>
+                      <tr className="hover:bg-slate-50/50 transition-colors">
+                        <td className="p-6 flex items-center gap-3">
+                          <Users className="w-5 h-5 text-slate-400 scale-75" aria-hidden="true" />
+                          <span>Child Ticket</span>
+                        </td>
+                        <td className="p-6 text-slate-500 font-medium">Ages 3 - 11</td>
+                        <td className="p-6 text-right text-lg font-black">{currencySymbol}{childPrice}.00</td>
+                      </tr>
+                      <tr className="hover:bg-slate-50/50 transition-colors">
+                        <td className="p-6 flex items-center gap-3">
+                          <Baby className="w-5 h-5 text-slate-400" aria-hidden="true" />
+                          <span>Infant (Lap Child)</span>
+                        </td>
+                        <td className="p-6 text-slate-500 font-medium">Under 2 Years</td>
+                        <td className="p-6 text-right text-emerald-600 font-black uppercase tracking-widest text-xs">
+                          Free ({currencySymbol}0.00)
+                        </td>
+                      </tr>
+                    </>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -969,14 +1008,14 @@ export default function TourClient({ tour, relatedTours = [] }) {
             {/* Scorecard Box */}
             <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
               <div className="text-center sm:text-left">
-                <div className="text-5xl font-black text-[#0C3136] mb-1">4.9 / 5</div>
+                <div className="text-5xl font-black text-[#0C3136] mb-1">{tour.rating || 4.9} / 5</div>
                 <div className="flex text-[#F8A41E] justify-center sm:justify-start mb-1">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-4 h-4 fill-current" aria-hidden="true" />
                   ))}
                 </div>
                 <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">
-                  Based on 320+ verified traveler reviews
+                  Based on {tour.reviewCount ? `${tour.reviewCount} verified traveler reviews` : '320+ verified traveler reviews'}
                 </p>
               </div>
 
@@ -1062,8 +1101,8 @@ export default function TourClient({ tour, relatedTours = [] }) {
                   </span>
                   <div className="flex items-center gap-1 text-[11px] font-bold text-amber-300">
                     <Star className="w-3.5 h-3.5 fill-current text-[#F8A41E]" />
-                    <span>4.9</span>
-                    <span className="text-white/60">({tourReviews.length > 0 ? tourReviews.length : '320+'})</span>
+                    <span>{tour.rating || 4.9}</span>
+                    <span className="text-white/60">({tour.reviewCount ? tour.reviewCount : (tourReviews.length > 0 ? tourReviews.length : '320+')})</span>
                   </div>
                 </div>
 
@@ -1072,10 +1111,10 @@ export default function TourClient({ tour, relatedTours = [] }) {
                     <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300 block">Total from</span>
                     <div className="flex items-baseline gap-1.5">
                       <span className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-                        CAD ${tour.price}
+                        {currencySymbol}{tour.price}
                       </span>
                       <span className="text-xs text-slate-200 font-bold">
-                        / person
+                        / {tour.pricingTiers && tour.pricingTiers[0]?.label.includes('SUV') ? 'vehicle' : 'person'}
                       </span>
                     </div>
                   </div>
@@ -1152,7 +1191,7 @@ export default function TourClient({ tour, relatedTours = [] }) {
                   <div className="flex justify-between items-center p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
                     <div>
                       <p className="font-black text-xs sm:text-sm text-[#0C3136]">Adults (Ages 13+)</p>
-                      <p className="text-[11px] text-slate-400 font-medium">CAD ${tour.price}.00 per guest</p>
+                      <p className="text-[11px] text-slate-400 font-medium">{currencySymbol}{tour.price}.00 per guest</p>
                     </div>
                     <div className="flex items-center gap-3 bg-white px-2 py-1.5 rounded-xl border border-slate-200 shadow-xs">
                       <button
@@ -1180,9 +1219,13 @@ export default function TourClient({ tour, relatedTours = [] }) {
                     <div>
                       <div className="flex items-center gap-2">
                         <p className="font-black text-xs sm:text-sm text-[#0C3136]">Children (Ages 2-12)</p>
-                        <span className="text-[9px] font-black uppercase text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">Save $10</span>
+                        {childPrice < tour.price && (
+                          <span className="text-[9px] font-black uppercase text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
+                            Save {currencySymbol}{tour.price - childPrice}
+                          </span>
+                        )}
                       </div>
-                      <p className="text-[11px] text-slate-400 font-medium">CAD ${childPrice}.00 per child</p>
+                      <p className="text-[11px] text-slate-400 font-medium">{currencySymbol}{childPrice}.00 per child</p>
                     </div>
                     <div className="flex items-center gap-3 bg-white px-2 py-1.5 rounded-xl border border-slate-200 shadow-xs">
                       <button
@@ -1214,20 +1257,20 @@ export default function TourClient({ tour, relatedTours = [] }) {
                 {/* Itemized Calculation Receipt */}
                 <div className="bg-slate-50 p-4.5 rounded-2xl border border-slate-200/80 space-y-2">
                   <div className="flex justify-between text-xs font-semibold text-slate-600">
-                    <span>{adults} × Adult{adults > 1 ? 's' : ''} (CAD ${tour.price})</span>
-                    <span className="font-bold text-[#0C3136]">CAD ${(adults * tour.price).toFixed(2)}</span>
+                    <span>{adults} × Adult{adults > 1 ? 's' : ''} ({currencySymbol}{tour.price})</span>
+                    <span className="font-bold text-[#0C3136]">{currencySymbol}{(adults * tour.price).toFixed(2)}</span>
                   </div>
 
                   {children > 0 && (
                     <div className="flex justify-between text-xs font-semibold text-slate-600">
-                      <span>{children} × Child{children > 1 ? 'ren' : ''} (CAD ${childPrice})</span>
-                      <span className="font-bold text-[#0C3136]">CAD ${(children * childPrice).toFixed(2)}</span>
+                      <span>{children} × Child{children > 1 ? 'ren' : ''} ({currencySymbol}{childPrice})</span>
+                      <span className="font-bold text-[#0C3136]">{currencySymbol}{(children * childPrice).toFixed(2)}</span>
                     </div>
                   )}
 
                   <div className="flex justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-200/60">
                     <span>Estimated Taxes (13% HST)</span>
-                    <span className="font-bold text-slate-700">CAD ${(subtotal * 0.13).toFixed(2)}</span>
+                    <span className="font-bold text-slate-700">{currencySymbol}{(subtotal * 0.13).toFixed(2)}</span>
                   </div>
 
                   <div className="flex justify-between items-baseline pt-2 border-t border-slate-200 text-sm font-black text-[#0C3136]">
@@ -1236,7 +1279,7 @@ export default function TourClient({ tour, relatedTours = [] }) {
                       <span className="text-[10px] text-emerald-600 font-bold uppercase">(All Fees Included)</span>
                     </div>
                     <span className="text-xl font-black text-[#0C3136]">
-                      CAD ${(subtotal * 1.13).toFixed(2)}
+                      {currencySymbol}{(subtotal * 1.13).toFixed(2)}
                     </span>
                   </div>
                 </div>

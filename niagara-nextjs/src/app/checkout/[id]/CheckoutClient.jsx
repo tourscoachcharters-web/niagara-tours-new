@@ -99,7 +99,7 @@ export default function CheckoutClient({ tour, allTours = [], initialDate }) {
 
   // Pricing calculations
   const adultPrice = selectedTour.price || 89;
-  const childPrice = Math.max((adultPrice) - 10, 0);
+  const childPrice = selectedTour.childPrice !== undefined ? selectedTour.childPrice : Math.max(adultPrice - 10, 0);
   const baseSubtotal = (adults * adultPrice) + (children * childPrice);
   
   // Promo calculation
@@ -109,8 +109,9 @@ export default function CheckoutClient({ tour, allTours = [], initialDate }) {
   const total = netSubtotal + taxes;
 
   // Active Pickup Address String
+  const tourPickupPoints = (selectedTour.pickupPoints && selectedTour.pickupPoints.length > 0) ? selectedTour.pickupPoints : PICKUP_POINTS;
   const activePickupString = pickupMode === 'hub'
-    ? `${PICKUP_POINTS[selectedHubIndex]?.name} (${PICKUP_POINTS[selectedHubIndex]?.time}) - ${PICKUP_POINTS[selectedHubIndex]?.sub}`
+    ? `${tourPickupPoints[selectedHubIndex]?.name || tourPickupPoints[0]?.name} (${tourPickupPoints[selectedHubIndex]?.time || tourPickupPoints[0]?.time}) - ${tourPickupPoints[selectedHubIndex]?.sub || tourPickupPoints[0]?.sub}`
     : (customPickup || 'Custom Hotel / Address Pickup');
 
   const handleApplyPromo = (e) => {
@@ -732,11 +733,11 @@ export default function CheckoutClient({ tour, allTours = [], initialDate }) {
               {pickupMode === 'hub' && (
                 <div className="space-y-6">
                   <p className="text-xs text-slate-500 font-bold leading-relaxed">
-                    Select your closest downtown boarding location. All 5 hubs feature guaranteed scheduled departures and direct subway/transit connectivity:
+                    Select your closest boarding location for this tour with guaranteed scheduled departures:
                   </p>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {PICKUP_POINTS.map((point, idx) => {
+                    {tourPickupPoints.map((point, idx) => {
                       const isSelected = selectedHubIndex === idx;
                       return (
                         <button
@@ -769,7 +770,7 @@ export default function CheckoutClient({ tour, allTours = [], initialDate }) {
                   {/* Google Map of Hubs */}
                   <div className="h-[280px] sm:h-[320px] rounded-2xl overflow-hidden border border-slate-200 shadow-inner relative">
                     <StaticPointsMap
-                      points={PICKUP_POINTS}
+                      points={tourPickupPoints}
                       activeIndex={selectedHubIndex}
                       onSelectPoint={setSelectedHubIndex}
                     />

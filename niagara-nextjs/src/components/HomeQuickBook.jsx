@@ -20,18 +20,18 @@ const TOUR_GROUPS = [
     title: 'Popular Day Experiences',
     icon: Sparkles,
     options: [
-      { value: 'classic-day-escape', title: 'Classic Day Escape', price: '$99', badge: 'Most Popular', desc: 'Boat cruise, Niagara Parkway & free time' },
-      { value: 'ultimate-adventure', title: 'Ultimate Adventure', price: '$149', badge: 'Best Value', desc: 'Boat cruise, Behind the Falls tunnels & Skylon' },
-      { value: 'day', title: 'All Day Tours', price: 'From $99', badge: 'Category', desc: 'Browse full day tour collection' },
+      { value: 'classic-day-escape', title: 'Classic Day Escape', price: '$129', badge: 'Signature Tour', desc: 'Hornblower cruise, Niagara Parkway & free time' },
+      { value: 'ultimate-adventure', title: 'Ultimate Adventure', price: '$209', badge: 'All-Attractions', desc: 'Boat cruise, Behind the Falls tunnels & Skylon' },
+      { value: 'day', title: 'All Day Tours', price: 'From $89', badge: 'Category', desc: 'Browse full day tour collection' },
     ],
   },
   {
     title: 'Evening & Wine Adventures',
     icon: Moon,
     options: [
-      { value: 'evening-illumination', title: 'Evening & Fireworks', price: '$139', badge: 'Romantic', desc: 'Falls illumination & seasonal fireworks' },
-      { value: 'wine-country', title: 'Wine Country & Falls', price: '$169', badge: 'Wine Lovers', desc: 'Niagara-on-the-Lake & boutique tastings' },
-      { value: 'evening', title: 'All Evening & Wine Tours', price: 'From $139', badge: 'Category', desc: 'Browse twilight & winery packages' },
+      { value: 'evening-illumination', title: 'Evening & Fireworks', price: '$135', badge: 'Night Lights', desc: 'Falls illumination & seasonal fireworks' },
+      { value: 'wine-country', title: 'Wine Country & Falls', price: '$149', badge: 'Wine Lovers', desc: '3 NOTL wineries, Icewine & free time' },
+      { value: 'evening', title: 'All Evening & Wine Tours', price: 'From $135', badge: 'Category', desc: 'Browse twilight & winery packages' },
     ],
   },
   {
@@ -39,8 +39,8 @@ const TOUR_GROUPS = [
     icon: ShieldCheck,
     options: [
       { value: 'half-day-private', title: 'Half Day Private Tour', price: '$795', badge: 'Private Group', desc: 'Up to 6 guests in private Mercedes sprinter' },
-      { value: 'vip-experience', title: 'Custom VIP Charter', price: '$995', badge: 'Full Day VIP', desc: 'Bespoke itinerary with personal chauffeur' },
-      { value: 'private', title: 'All Private Charters', price: 'From $795', badge: 'Category', desc: 'Browse all private group charters' },
+      { value: 'vip-experience', title: 'Custom VIP Charter', price: '$1,395', badge: 'Full Day VIP', desc: 'Bespoke itinerary with personal chauffeur' },
+      { value: 'private', title: 'All Private Charters', price: 'From $689', badge: 'Category', desc: 'Browse all private group charters' },
     ],
   },
 ];

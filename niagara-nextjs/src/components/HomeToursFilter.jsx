@@ -30,13 +30,13 @@ export default function HomeToursFilter({ tours }) {
   const filteredTours = tours.filter((tour) => {
     if (activeCategory === 'all') return true;
     if (activeCategory === 'day') {
-      return tour.id === 'classic-day-escape' || tour.id === 'ultimate-adventure' || tour.tag === 'BEST VALUE' || tour.tag === 'MOST POPULAR';
+      return tour.category === 'day' || tour.id === 'classic-day-escape' || tour.id === 'ultimate-adventure' || tour.tag === 'BEST VALUE' || tour.tag === 'MOST POPULAR';
     }
     if (activeCategory === 'private') {
-      return tour.id.includes('private') || tour.id.includes('vip') || tour.tag?.includes('PRIVATE') || tour.tag?.includes('VIP');
+      return tour.category === 'private' || tour.id.includes('private') || tour.id.includes('vip') || tour.tag?.includes('PRIVATE') || tour.tag?.includes('VIP');
     }
     if (activeCategory === 'evening') {
-      return tour.id === 'evening-illumination' || tour.id === 'wine-country' || tour.tag === 'ROMANTIC' || tour.tag === 'WINE LOVERS';
+      return tour.category === 'evening' || tour.id === 'evening-illumination' || tour.id === 'wine-country' || tour.tag === 'ROMANTIC' || tour.tag === 'WINE LOVERS';
     }
     return true;
   });
