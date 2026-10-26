@@ -211,7 +211,7 @@ export default async function HomePage() {
 
             {/* Overlapping Quick Search Bar */}
             <div className="mt-14 -mb-32 relative z-30">
-              <HomeQuickBook />
+              <HomeQuickBook tours={tours} />
             </div>
 
           </div>
