@@ -78,10 +78,12 @@ export default function ContactForm() {
 
     setLoading(true);
     const refId = `INQ-${Math.floor(10000 + Math.random() * 90000)}`;
+    const inquiryTypeLabel = INQUIRY_TYPES.find((t) => t.id === inquiryType)?.label || inquiryType;
 
     const inquiryData = {
       refId,
       inquiryType,
+      inquiryTypeLabel,
       fullName: fullName.trim(),
       email: email.trim(),
       phone: phone.trim() || 'N/A',
@@ -94,10 +96,24 @@ export default function ContactForm() {
     };
 
     try {
-      // Save inquiry to Firestore
+      // 1. Save inquiry to Firestore
       await addDoc(collection(db, 'inquiries'), inquiryData);
     } catch (err) {
       console.warn("Firestore inquiry save notice:", err.message);
+    }
+
+    try {
+      // 2. Dispatch instant email to tourscoachcharters@gmail.com & info@niagaratravels.ca
+      await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'contact_inquiry',
+          ...inquiryData,
+        }),
+      });
+    } catch (emailErr) {
+      console.warn("Inquiry email dispatch notice:", emailErr.message);
     }
 
     setLoading(false);
