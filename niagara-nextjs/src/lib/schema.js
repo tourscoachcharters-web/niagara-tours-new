@@ -50,8 +50,8 @@ export const ORGANIZATION_SCHEMA = {
     { '@type': 'Country', name: 'Canada' },
   ],
   sameAs: [
-    'https://www.facebook.com/niagaratravels',
-    'https://www.instagram.com/niagaratravels',
+    'https://www.facebook.com/profile.php?id=61596253191095',
+    'https://www.instagram.com/niagaratravels.ca/',
     'https://www.youtube.com/@niagaratravels',
   ],
   aggregateRating: {

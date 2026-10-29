@@ -363,6 +363,58 @@ export default function ContactPage() {
                 </ul>
               </section>
 
+              {/* SOCIAL MEDIA CHANNELS */}
+              <section className="bg-white rounded-[2.5rem] p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+                <div>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-[#F8A41E] block mb-1">
+                    Official Social Channels
+                  </span>
+                  <h3 className="text-base font-black text-[#0C3136] uppercase tracking-wider">
+                    Follow Our Adventures
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-500 font-medium leading-relaxed">
+                  Join our online community for daily photos from the falls, guest reels, seasonal fireworks schedules, and special offers.
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                  <a
+                    href="https://www.facebook.com/profile.php?id=61596253191095"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 p-3.5 rounded-2xl border border-slate-200 hover:border-[#1877F2] hover:bg-blue-50/50 transition-all group"
+                  >
+                    <div className="w-9 h-9 rounded-xl bg-[#1877F2] text-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                      </svg>
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-black text-[#0C3136] group-hover:text-[#1877F2] transition-colors truncate">Facebook</p>
+                      <p className="text-[10px] text-slate-400 font-bold truncate">Niagara Travels</p>
+                    </div>
+                  </a>
+
+                  <a
+                    href="https://www.instagram.com/niagaratravels.ca/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 p-3.5 rounded-2xl border border-slate-200 hover:border-pink-500 hover:bg-pink-50/50 transition-all group"
+                  >
+                    <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                      <svg className="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24" aria-hidden="true">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                      </svg>
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-black text-[#0C3136] group-hover:text-pink-600 transition-colors truncate">Instagram</p>
+                      <p className="text-[10px] text-slate-400 font-bold truncate">@niagaratravels.ca</p>
+                    </div>
+                  </a>
+                </div>
+              </section>
+
             </aside>
 
           </div>

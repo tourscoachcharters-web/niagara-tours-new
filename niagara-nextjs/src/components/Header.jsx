@@ -6,6 +6,20 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { MapPin, Phone, Menu, X } from 'lucide-react';
 
+const FacebookIcon = (props) => (
+  <svg {...props} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+  </svg>
+);
+
+const InstagramIcon = (props) => (
+  <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+  </svg>
+);
+
 const NavItem = ({ label, href, active, onClick }) => (
   <Link
     href={href}
@@ -50,7 +64,30 @@ export default function Header() {
             <span>(416) 444-3000</span>
           </a>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-6">
+          {/* Social Links */}
+          <div className="flex items-center gap-3 pr-4 border-r border-white/20">
+            <span className="text-[9px] text-slate-300 font-bold lowercase tracking-wider">Follow:</span>
+            <a
+              href="https://www.facebook.com/profile.php?id=61596253191095"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Niagara Travels on Facebook"
+              className="text-white hover:text-[#F8A41E] transition-colors"
+            >
+              <FacebookIcon className="w-3.5 h-3.5" />
+            </a>
+            <a
+              href="https://www.instagram.com/niagaratravels.ca/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Niagara Travels on Instagram"
+              className="text-white hover:text-[#F8A41E] transition-colors"
+            >
+              <InstagramIcon className="w-3.5 h-3.5" />
+            </a>
+          </div>
+
           <span className="text-[10px] font-bold text-[#F8A41E] animate-pulse">
             (Open 24/7)
           </span>
@@ -145,6 +182,29 @@ export default function Header() {
               >
                 BOOK NOW
               </Link>
+              
+              {/* Mobile Social Links */}
+              <div className="flex items-center justify-center gap-4 pt-2">
+                <span className="text-[11px] font-black uppercase tracking-wider text-slate-400">Follow Us:</span>
+                <a
+                  href="https://www.facebook.com/profile.php?id=61596253191095"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Niagara Travels on Facebook"
+                  className="w-9 h-9 rounded-full bg-[#1877F2] text-white flex items-center justify-center hover:scale-110 transition-transform shadow-sm"
+                >
+                  <FacebookIcon className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://www.instagram.com/niagaratravels.ca/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Niagara Travels on Instagram"
+                  className="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white flex items-center justify-center hover:scale-110 transition-transform shadow-sm"
+                >
+                  <InstagramIcon className="w-4 h-4" />
+                </a>
+              </div>
             </nav>
           )}
         </div>

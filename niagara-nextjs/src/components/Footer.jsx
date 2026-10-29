@@ -90,20 +90,20 @@ export default function Footer() {
             </p>
             <div className="flex gap-3" aria-label="Social media channels">
               <a
-                href="https://facebook.com/niagaratravels"
+                href="https://www.facebook.com/profile.php?id=61596253191095"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Niagara Travels on Facebook"
-                className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center hover:scale-110 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F8A41E]"
+                className="w-8 h-8 rounded-full bg-[#1877F2] flex items-center justify-center hover:scale-110 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F8A41E]"
               >
                 <FacebookIcon className="w-4 h-4 text-white" />
               </a>
               <a
-                href="https://instagram.com/niagaratravels"
+                href="https://www.instagram.com/niagaratravels.ca/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Niagara Travels on Instagram"
-                className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center hover:scale-110 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F8A41E]"
+                className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center hover:scale-110 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F8A41E]"
               >
                 <InstagramIcon className="w-4 h-4 text-white" />
               </a>
