@@ -31,7 +31,7 @@ function loadGoogleMaps(apiKey = GOOGLE_MAPS_API_KEY) {
 
       const script = document.createElement('script');
       script.id = 'google-maps-js-sdk';
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,geometry&loading=async`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,geometry`;
       script.async = true;
       script.defer = true;
       script.onload = () => {

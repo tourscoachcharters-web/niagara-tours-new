@@ -96,28 +96,32 @@ export default function ContactForm() {
     };
 
     try {
-      // 1. Save inquiry to Firestore
-      await addDoc(collection(db, 'inquiries'), inquiryData);
-    } catch (err) {
-      console.warn("Firestore inquiry save notice:", err.message);
-    }
-
-    try {
-      // 2. Dispatch instant email to tourscoachcharters@gmail.com & info@niagaratravels.ca
-      await fetch('/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'contact_inquiry',
-          ...inquiryData,
-        }),
+      // 1. Non-blocking Firestore save
+      addDoc(collection(db, 'inquiries'), inquiryData).catch((err) => {
+        console.warn("Firestore inquiry save notice:", err.message);
       });
-    } catch (emailErr) {
-      console.warn("Inquiry email dispatch notice:", emailErr.message);
-    }
 
-    setLoading(false);
-    setSubmittedInquiry(inquiryData);
+      // 2. Dispatch instant email to tourscoachcharters@gmail.com & info@niagaratravels.ca
+      try {
+        await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'contact_inquiry',
+            ...inquiryData,
+          }),
+        });
+      } catch (emailErr) {
+        console.warn("Inquiry email dispatch notice:", emailErr.message);
+      }
+
+      setSubmittedInquiry(inquiryData);
+    } catch (err) {
+      console.error("Inquiry error:", err);
+      setSubmittedInquiry(inquiryData);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleReset = () => {

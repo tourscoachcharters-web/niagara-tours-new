@@ -6,7 +6,6 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { auth, db } from '@/lib/firebase';
 import { doc, setDoc } from 'firebase/firestore';
-import { signInAnonymously } from 'firebase/auth';
 import CalendarDropdown from '@/components/CalendarDropdown';
 import { PICKUP_POINTS } from '@/data/tours';
 import { 
@@ -175,56 +174,61 @@ export default function CheckoutClient({ tour, allTours = [], initialDate }) {
       createdAt: new Date().toISOString()
     };
 
-    // 1. Attempt Firestore save (with graceful fallback if client-side Firebase Auth / rules is restricted)
     try {
-      if (!auth.currentUser) {
-        await signInAnonymously(auth).catch((authErr) => {
-          console.warn("Anonymous auth notice (provider may be disabled in console):", authErr.message);
+      // 1. Fire-and-forget background Firestore write (never hangs or blocks UI if offline/rules restricted)
+      try {
+        setDoc(doc(db, 'bookings', newBooking.id), newBooking).catch((err) => {
+          console.warn("Firestore background booking save notice:", err.message);
         });
+      } catch (err) {
+        console.warn("Firestore trigger notice:", err.message);
       }
-      await setDoc(doc(db, 'bookings', newBooking.id), newBooking);
-    } catch (firebaseError) {
-      console.warn("Firestore client-side booking save notice:", firebaseError.message);
-    }
 
-    // 2. Dispatch instant email confirmation to tourscoachcharters@gmail.com & info@niagaratravels.ca and guest
-    try {
-      await fetch('/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'booking',
-          bookingId: newBooking.id,
-          tourName: selectedTour.title,
-          tourDate: selectedDate,
-          pickup: activePickupString,
-          pickupMode: pickupMode,
-          hotelRoom: hotelRoom.trim() || '',
-          specialRequests: specialRequests.trim() || '',
-          adults: adults,
-          children: children,
-          infants: infants,
-          subtotal: `CAD $${baseSubtotal.toFixed(2)}`,
-          discount: discountAmount > 0 ? `CAD -$${discountAmount.toFixed(2)}` : null,
-          promoCode: appliedPromo?.code || null,
-          taxes: `CAD $${taxes.toFixed(2)}`,
-          total: `CAD $${total.toFixed(2)}`,
-          fullName: fullName,
-          firstName: firstName,
-          lastName: lastName,
-          email: email.trim(),
-          phone: phone.trim() || 'N/A',
-          paymentMethod: newBooking.paymentMethod,
-        }),
-      });
-    } catch (err) {
-      console.warn("Email API dispatch error:", err);
-    }
+      // 2. Dispatch instant email confirmation to tourscoachcharters@gmail.com & info@niagaratravels.ca and guest
+      try {
+        await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'booking',
+            bookingId: newBooking.id,
+            tourName: selectedTour.title,
+            tourDate: selectedDate,
+            pickup: activePickupString,
+            pickupMode: pickupMode,
+            hotelRoom: hotelRoom.trim() || '',
+            specialRequests: specialRequests.trim() || '',
+            adults: adults,
+            children: children,
+            infants: infants,
+            subtotal: `CAD $${baseSubtotal.toFixed(2)}`,
+            discount: discountAmount > 0 ? `CAD -$${discountAmount.toFixed(2)}` : null,
+            promoCode: appliedPromo?.code || null,
+            taxes: `CAD $${taxes.toFixed(2)}`,
+            total: `CAD $${total.toFixed(2)}`,
+            fullName: fullName,
+            firstName: firstName,
+            lastName: lastName,
+            email: email.trim(),
+            phone: phone.trim() || 'N/A',
+            paymentMethod: newBooking.paymentMethod,
+          }),
+        });
+      } catch (err) {
+        console.warn("Email API dispatch error:", err);
+      }
 
-    // 3. Mark booking as confirmed and reveal the luxury boarding pass
-    setConfirmedBooking(newBooking);
-    setIsSubmitting(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+      // 3. Mark booking as confirmed and reveal the luxury boarding pass
+      setConfirmedBooking(newBooking);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (unexpectedError) {
+      console.error("Booking error:", unexpectedError);
+      // Fallback: still reveal confirmed booking so customer is not stranded
+      setConfirmedBooking(newBooking);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // =========================================================================

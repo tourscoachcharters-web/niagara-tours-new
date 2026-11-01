@@ -79,29 +79,34 @@ export default function CustomItineraryBuilder() {
     };
 
     try {
-      // 1. Save proposal to Firestore inquiries
-      await addDoc(collection(db, 'inquiries'), proposalData);
-    } catch (err) {
-      console.warn("Firestore custom itinerary save notice:", err.message);
-    }
-
-    try {
-      // 2. Dispatch instant email notification to tourscoachcharters@gmail.com & info@niagaratravels.ca
-      await fetch('/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'custom_itinerary',
-          ...proposalData,
-        }),
+      // 1. Non-blocking Firestore save
+      addDoc(collection(db, 'inquiries'), proposalData).catch((err) => {
+        console.warn("Firestore custom itinerary save notice:", err.message);
       });
-    } catch (emailErr) {
-      console.warn("Custom proposal email dispatch notice:", emailErr.message);
-    }
 
-    setIsSubmitting(false);
-    setSubmittedProposal(proposalData);
-    setSubmitted(true);
+      // 2. Dispatch instant email notification to tourscoachcharters@gmail.com & info@niagaratravels.ca
+      try {
+        await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'custom_itinerary',
+            ...proposalData,
+          }),
+        });
+      } catch (emailErr) {
+        console.warn("Custom proposal email dispatch notice:", emailErr.message);
+      }
+
+      setSubmittedProposal(proposalData);
+      setSubmitted(true);
+    } catch (err) {
+      console.error("Proposal request error:", err);
+      setSubmittedProposal(proposalData);
+      setSubmitted(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleReset = () => {
