@@ -441,47 +441,181 @@ export async function POST(request) {
     // =========================================================================
     // CASE 3: STANDARD BOOKING CONFIRMATION (CheckoutClient.jsx)
     // =========================================================================
-    const { email, fullName = 'Guest', bookingId = 'BK-PENDING', tourName = 'Niagara Tour', tourDate = 'Upcoming', pickup = 'Standard Hub', total = 'CAD $0.00' } = body;
+    const {
+      email,
+      fullName = 'Guest',
+      phone = 'N/A',
+      bookingId = `NVT-${Math.floor(1000 + Math.random() * 9000)}`,
+      tourName = 'Niagara Experience Tour',
+      tourDate = 'Upcoming',
+      pickup = 'Standard Downtown Boarding Hub',
+      hotelRoom = '',
+      specialRequests = '',
+      adults = 1,
+      children = 0,
+      infants = 0,
+      subtotal = '',
+      discount = null,
+      promoCode = null,
+      taxes = '',
+      total = 'CAD $0.00',
+      paymentMethod = 'Card Guarantee / Reservation'
+    } = body;
 
     if (!email) {
       return NextResponse.json({ error: 'Missing customer email' }, { status: 400 });
     }
 
-    const bookingHtml = `
-      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 14px; background: #ffffff;">
-        <h1 style="color: #0C3136; margin-bottom: 5px; font-size: 24px;">Your Booking is Confirmed!</h1>
-        <p style="color: #64748b; font-size: 14px; margin-top: 0;">Thank you for choosing Niagara Travels, ${fullName}.</p>
-        
-        <div style="background-color: #f8fafc; padding: 20px; border-radius: 10px; margin: 20px 0; border: 1px solid #e2e8f0;">
-          <h3 style="color: #0C3136; margin-top: 0; font-size: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">Itinerary Details</h3>
-          <p style="margin: 6px 0; font-size: 14px;"><strong>Booking ID:</strong> <span style="color: #0284c7;">${bookingId}</span></p>
-          <p style="margin: 6px 0; font-size: 14px;"><strong>Tour:</strong> ${tourName}</p>
-          <p style="margin: 6px 0; font-size: 14px;"><strong>Date:</strong> ${tourDate}</p>
-          <p style="margin: 6px 0; font-size: 14px;"><strong>Pickup Location:</strong> ${pickup}</p>
-          <p style="margin: 6px 0; font-size: 14px;"><strong>Total Paid:</strong> ${total}</p>
+    const guestsBreakdown = [
+      `${adults} Adult${adults > 1 ? 's' : ''}`,
+      children > 0 ? `${children} Child${children > 1 ? 'ren' : ''}` : null,
+      infants > 0 ? `${infants} Infant${infants > 1 ? 's' : ''}` : null
+    ].filter(Boolean).join(', ');
+
+    // 1. Admin Alert Email HTML
+    const adminBookingHtml = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f1f5f9; margin: 0; padding: 24px; color: #1e293b; }
+          .card { max-width: 620px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
+          .header { background: #0C3136; padding: 28px 32px; color: #ffffff; border-bottom: 4px solid #16a34a; }
+          .badge { display: inline-block; background: #16a34a; color: #ffffff; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; padding: 4px 10px; border-radius: 6px; margin-bottom: 8px; }
+          .title { margin: 0; font-size: 22px; font-weight: 800; color: #ffffff; }
+          .body { padding: 32px; }
+          .info-grid { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px 20px; margin-bottom: 24px; }
+          .row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px dashed #e2e8f0; font-size: 14px; }
+          .row:last-child { border-bottom: none; }
+          .label { color: #64748b; font-weight: 600; }
+          .value { color: #0C3136; font-weight: 700; text-align: right; }
+          .total-row { background: #ecfdf5; border: 1px solid #a7f3d0; padding: 14px 18px; border-radius: 10px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: 800; color: #065f46; }
+          .btn-group { display: flex; gap: 12px; margin-top: 24px; }
+          .btn { display: inline-block; background: #0C3136; color: #ffffff !important; text-decoration: none; padding: 12px 22px; border-radius: 8px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; }
+          .btn-phone { background: #16a34a; }
+          .footer { padding: 20px 32px; background: #f8fafc; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8; text-align: center; }
+        </style>
+      </head>
+      <body>
+        <div class="card">
+          <div class="header">
+            <span class="badge">Confirmed Reservation • ${bookingId}</span>
+            <h1 class="title">New Tour Booking Received!</h1>
+          </div>
+          <div class="body">
+            <div class="total-row">
+              <span>Total Amount:</span>
+              <span style="font-size: 20px;">${total}</span>
+            </div>
+
+            <div class="info-grid">
+              <div class="row"><span class="label">Customer Name:</span><span class="value">${fullName}</span></div>
+              <div class="row"><span class="label">Email:</span><span class="value"><a href="mailto:${email}" style="color: #0284c7; text-decoration: none;">${email}</a></span></div>
+              <div class="row"><span class="label">Phone:</span><span class="value"><a href="tel:${phone}" style="color: #0284c7; text-decoration: none;">${phone}</a></span></div>
+              <div class="row"><span class="label">Tour:</span><span class="value">${tourName}</span></div>
+              <div class="row"><span class="label">Tour Date:</span><span class="value" style="color: #d97706;">${tourDate}</span></div>
+              <div class="row"><span class="label">Party / Guests:</span><span class="value">${guestsBreakdown}</span></div>
+              <div class="row"><span class="label">Pickup Location:</span><span class="value">${pickup}</span></div>
+              ${hotelRoom ? `<div class="row"><span class="label">Hotel Room #:</span><span class="value">${hotelRoom}</span></div>` : ''}
+              ${promoCode ? `<div class="row"><span class="label">Promo Code Applied:</span><span class="value">${promoCode} (${discount})</span></div>` : ''}
+              <div class="row"><span class="label">Payment Type:</span><span class="value">${paymentMethod}</span></div>
+            </div>
+
+            ${specialRequests ? `
+              <div style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: #64748b; letter-spacing: 0.05em; margin-bottom: 8px;">
+                Special Guest Requests:
+              </div>
+              <div style="background: #f8fafc; border-left: 4px solid #F8A41E; padding: 14px 18px; border-radius: 0 10px 10px 0; margin-bottom: 24px; font-size: 14px; color: #334155;">
+                "${specialRequests}"
+              </div>
+            ` : ''}
+
+            <div class="btn-group">
+              <a href="mailto:${email}?subject=Niagara%20Travels%20Booking%20Confirmation%20[${bookingId}]" class="btn">Email Customer</a>
+              ${phone && phone !== 'N/A' ? `<a href="tel:${phone}" class="btn btn-phone">Call Customer</a>` : ''}
+            </div>
+          </div>
+          <div class="footer">
+            Niagara Travels Booking Dispatch • Delivered to tourscoachcharters@gmail.com &amp; info@niagaratravels.ca
+          </div>
         </div>
-        
-        <p style="color: #334155; font-size: 14px; line-height: 1.6;">
-          Our local team is preparing your VIP experience. Please ensure you are at the designated pickup location 10 minutes prior to departure.
-        </p>
-        
-        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
-          <p style="color: #94a3b8; font-size: 12px; margin: 0;">Niagara Travels Support Team</p>
-          <p style="color: #94a3b8; font-size: 12px; margin: 2px 0 0 0;">(416) 444-3000 | info@niagaratravels.ca</p>
-        </div>
-      </div>
+      </body>
+      </html>
     `;
 
-    // Send customer booking confirmation with admin BCC to both operating emails
-    const bookingResult = await sendEmailMessage({
-      to: email,
-      bcc: [...ADMIN_NOTIFICATION_EMAILS, 'acmrickaaz@gmail.com'],
-      replyTo: 'info@niagaratravels.ca',
-      subject: `Booking Confirmed: ${tourName} - ${bookingId}`,
-      html: bookingHtml,
+    // 2. Customer Confirmation Email HTML
+    const customerBookingHtml = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8fafc; margin: 0; padding: 24px; color: #1e293b; }
+          .card { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 18px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
+          .header { background: #0C3136; padding: 28px 30px; color: #ffffff; }
+          .title { margin: 0; font-size: 22px; font-weight: 800; color: #ffffff; }
+          .body { padding: 30px; font-size: 14px; line-height: 1.6; color: #334155; }
+          .box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 20px 0; }
+          .badge { display: inline-block; background: #ecfdf5; color: #047857; padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 12px; margin-bottom: 12px; }
+          .footer { padding: 20px; background: #f8fafc; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8; text-align: center; }
+        </style>
+      </head>
+      <body>
+        <div class="card">
+          <div class="header">
+            <h1 class="title">Your Niagara Tour is Confirmed!</h1>
+            <p style="color: #94a3b8; font-size: 13px; margin: 6px 0 0 0;">Thank you for reserving with Niagara Travels, ${fullName}</p>
+          </div>
+          <div class="body">
+            <p>Hello <strong>${fullName}</strong>,</p>
+            <p>
+              Your reservation is locked in! Our executive motorcoach and licensed tour director are preparing your Canadian Niagara experience.
+            </p>
+            <div class="box">
+              <span class="badge">Booking ID: ${bookingId}</span>
+              <p style="margin: 6px 0;"><strong>Tour:</strong> ${tourName}</p>
+              <p style="margin: 6px 0;"><strong>Departure Date:</strong> ${tourDate}</p>
+              <p style="margin: 6px 0;"><strong>Guests:</strong> ${guestsBreakdown}</p>
+              <p style="margin: 6px 0;"><strong>Pickup Location:</strong> ${pickup}</p>
+              ${hotelRoom ? `<p style="margin: 6px 0;"><strong>Hotel Room:</strong> ${hotelRoom}</p>` : ''}
+              <p style="margin: 6px 0;"><strong>Total Paid / Reserved:</strong> <span style="color: #047857; font-weight: 800;">${total}</span></p>
+            </div>
+            
+            <p style="color: #475569; font-size: 13px;">
+              <strong>Boarding Instructions:</strong> Please arrive at your selected pickup location 10 to 15 minutes before the scheduled departure time. Your licensed guide will hold a "Niagara Travels" digital manifest.
+            </p>
+            <p style="margin-top: 24px; font-size: 13px; color: #64748b;">
+              Questions, schedule adjustments, or day-of-tour directions? Contact our 24/7 concierge anytime at <strong>(416) 444-3000</strong> or reply directly to this email.
+            </p>
+          </div>
+          <div class="footer">
+            Niagara Travels • Toronto &amp; Niagara Falls, Ontario, Canada<br/>
+            info@niagaratravels.ca | (416) 444-3000
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    // 1. Send Admin Alert to tourscoachcharters@gmail.com and info@niagaratravels.ca
+    const adminDispatch = await sendEmailMessage({
+      to: ADMIN_NOTIFICATION_EMAILS,
+      bcc: 'acmrickaaz@gmail.com',
+      replyTo: `${fullName} <${email}>`,
+      subject: `⚡ New Confirmed Booking [${bookingId}]: ${fullName} - ${tourName} (${tourDate})`,
+      html: adminBookingHtml,
     });
 
-    return NextResponse.json({ success: true, bookingResult });
+    // 2. Send Customer Confirmation Email
+    sendEmailMessage({
+      to: email,
+      replyTo: 'info@niagaratravels.ca',
+      subject: `Booking Confirmed: ${tourName} - ${bookingId}`,
+      html: customerBookingHtml,
+    }).catch((e) => console.warn('Customer booking confirmation copy notice:', e.message));
+
+    return NextResponse.json({ success: true, bookingId, adminDispatch });
   } catch (error) {
     console.error('Error handling send-email route:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
