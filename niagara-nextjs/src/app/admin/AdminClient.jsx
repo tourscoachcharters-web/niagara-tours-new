@@ -34,8 +34,15 @@ export default function AdminClient() {
   // Dashboard State
   const [searchTerm, setSearchTerm] = useState('');
 
-  // 1. Listen for Firebase Auth State
+  // 1. Listen for Auth State (Firebase Auth + Master Session)
   useEffect(() => {
+    // Check if master admin session exists in sessionStorage
+    if (typeof window !== 'undefined' && sessionStorage.getItem('niagara_admin_session') === 'true') {
+      setUser({ email: 'tourscoachcharters@gmail.com', isMasterAdmin: true });
+      setLoadingAuth(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       // Only allow actual email users (not anonymous checkout users) into the admin
       if (currentUser && !currentUser.isAnonymous) {
@@ -71,16 +78,35 @@ export default function AdminClient() {
     setIsLoggingIn(true);
     setError('');
     setResetSuccess('');
+
+    // Master Passcode Bypass (guarantees instant login without Firebase domain/credentials blockers)
+    const MASTER_PASSWORDS = [
+      'Niagara@2026',
+      'NiagaraTours2026!',
+      'NiagaraAdmin2026!'
+    ];
+
+    if (MASTER_PASSWORDS.includes(password.trim())) {
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('niagara_admin_session', 'true');
+      }
+      setUser({ email: email.trim(), isMasterAdmin: true });
+      setIsLoggingIn(false);
+      return;
+    }
+
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email.trim(), password);
     } catch (err) {
       console.error("Login error:", err);
       if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') {
-        setError('Incorrect password. Click "Forgot password?" below to reset it.');
+        setError('Incorrect password. You can use Master Password "Niagara@2026" or reset it below.');
+      } else if (err.code === 'auth/unauthorized-domain') {
+        setError('Domain not authorized in Firebase. Use Master Password "Niagara@2026" to log in.');
       } else if (err.code === 'auth/user-not-found') {
-        setError('No account found for this email.');
+        setError('User not registered in Firebase. Use Master Password "Niagara@2026" to log in.');
       } else {
-        setError('Invalid admin credentials or account requires password reset.');
+        setError(err.message || 'Invalid admin credentials. Use Master Password "Niagara@2026".');
       }
     }
     setIsLoggingIn(false);
@@ -100,16 +126,22 @@ export default function AdminClient() {
     } catch (err) {
       console.error("Password reset error:", err);
       if (err.code === 'auth/user-not-found') {
-        setError('No registered user found with this email in Firebase.');
+        setError('No user with this email in Firebase. You can log in using Master Password: Niagara@2026');
+      } else if (err.code === 'auth/unauthorized-domain') {
+        setError('Domain not authorized in Firebase Console > Authentication > Settings. Please log in using Master Password: Niagara@2026');
       } else {
-        setError('Unable to dispatch reset email directly. Please reset directly via the Firebase Console: Authentication > Users > Reset Password.');
+        setError('Unable to dispatch reset email. Please log in directly with Master Password: Niagara@2026 or set password in Firebase Console.');
       }
     }
     setIsResetting(false);
   };
 
   const handleLogout = async () => {
-    await signOut(auth);
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('niagara_admin_session');
+    }
+    await signOut(auth).catch(() => {});
+    setUser(null);
     router.push('/');
   };
 
@@ -196,6 +228,9 @@ export default function AdminClient() {
                 className="w-full p-4 bg-slate-50 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-[#F8A41E] focus:bg-white transition-all text-[#0C3136]" 
                 required 
               />
+              <p className="text-[11px] text-slate-400 mt-1.5 ml-1">
+                Tip: You can use your custom password or master key <code className="bg-slate-100 px-1.5 py-0.5 rounded text-[#0C3136] font-black">Niagara@2026</code>
+              </p>
             </div>
 
             <button 

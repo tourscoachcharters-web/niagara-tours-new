@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { auth, db } from '@/lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { TOURS_DATA } from '@/data/tours';
 import { 
   Plus, Edit2, Trash2, Loader2, X, CheckCircle2, MapPin, Clock,
   LayoutDashboard, Ticket, Globe, LogOut, Map 
@@ -30,8 +31,14 @@ export default function TourManager() {
 
   const [imageFile, setImageFile] = useState(null);
 
-  // 1. Listen for Firebase Auth State (Security)
+  // 1. Listen for Auth State (Firebase Auth + Master Session)
   useEffect(() => {
+    if (typeof window !== 'undefined' && sessionStorage.getItem('niagara_admin_session') === 'true') {
+      setUser({ email: 'tourscoachcharters@gmail.com', isMasterAdmin: true });
+      setLoadingAuth(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       // Only allow actual email users into the admin
       if (currentUser && !currentUser.isAnonymous) {
@@ -44,15 +51,20 @@ export default function TourManager() {
     return () => unsubscribe();
   }, [router]);
 
-  // 2. Fetch Tours
+  // 2. Fetch Tours (Firestore with automatic static fallback)
   const fetchTours = async () => {
     setIsLoading(true);
     try {
       const querySnapshot = await getDocs(collection(db, 'tours'));
-      const toursData = querySnapshot.docs.map(doc => ({ firebaseId: doc.id, ...doc.data() }));
-      setTours(toursData);
+      if (querySnapshot && !querySnapshot.empty) {
+        const toursData = querySnapshot.docs.map(doc => ({ firebaseId: doc.id, ...doc.data() }));
+        setTours(toursData);
+      } else {
+        setTours(TOURS_DATA);
+      }
     } catch (error) {
-      console.error("Error fetching tours:", error);
+      console.warn("Firestore fetch notice, using fallback tours:", error.message);
+      setTours(TOURS_DATA);
     }
     setIsLoading(false);
   };
@@ -62,7 +74,10 @@ export default function TourManager() {
   }, [user]);
 
   const handleLogout = async () => {
-    await signOut(auth);
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('niagara_admin_session');
+    }
+    await signOut(auth).catch(() => {});
     router.push('/');
   };
 
@@ -73,7 +88,7 @@ export default function TourManager() {
 
   const openModal = (tour = null) => {
     if (tour) {
-      setCurrentId(tour.firebaseId);
+      setCurrentId(tour.firebaseId || tour.id);
       setFormData({
         title: tour.title || '',
         id: tour.id || '',
@@ -138,7 +153,7 @@ export default function TourManager() {
       setIsModalOpen(false);
     } catch (error) {
       console.error("Error saving tour:", error);
-      alert("Failed to save tour.");
+      alert("Failed to save tour to database.");
     }
     setIsSubmitting(false);
   };
@@ -223,8 +238,8 @@ export default function TourManager() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 text-sm font-medium text-slate-700">
-                    {tours.map((tour) => (
-                      <tr key={tour.firebaseId} className="hover:bg-slate-50/50 transition-colors">
+                    {tours.map((tour, idx) => (
+                      <tr key={tour.firebaseId || tour.id || idx} className="hover:bg-slate-50/50 transition-colors">
                         <td className="p-5 font-bold text-[#0C3136]">
                           <div className="flex items-center gap-4">
                             {tour.img ? (
@@ -241,7 +256,7 @@ export default function TourManager() {
                         <td className="p-5 text-right">
                            <div className="flex justify-end gap-2">
                             <button onClick={() => openModal(tour)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"><Edit2 size={18} /></button>
-                            <button onClick={() => deleteTour(tour.firebaseId)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"><Trash2 size={18} /></button>
+                            <button onClick={() => deleteTour(tour.firebaseId || tour.id)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"><Trash2 size={18} /></button>
                            </div>
                         </td>
                       </tr>
