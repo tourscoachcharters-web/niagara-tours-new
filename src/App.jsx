@@ -23,12 +23,12 @@ L.Icon.Default.mergeOptions({
 
 // --- FIREBASE INITIALIZATION ---
 const firebaseConfig = {
-  apiKey: "AIzaSyC5DVk0W9tBFW4sTwVZIEG6vQRiQHisIcY",
-  authDomain: "new-niagara-tours.firebaseapp.com",
-  projectId: "new-niagara-tours",
-  storageBucket: "new-niagara-tours.firebasestorage.app",
-  messagingSenderId: "617199953253",
-  appId: "1:617199953253:web:1014a1aad3ce755da56d8c"
+  apiKey: "AIzaSyDFkW-yq7fqQRIJKcsd_FoY7bzTmTlrY7E",
+  authDomain: "niagara-travels.firebaseapp.com",
+  projectId: "niagara-travels",
+  storageBucket: "niagara-travels.firebasestorage.app",
+  messagingSenderId: "636307706751",
+  appId: "1:636307706751:web:dd2da1de96e017bda8404a"
 };
 
 const app = initializeApp(firebaseConfig);

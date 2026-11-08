@@ -3,12 +3,12 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC5DVk0W9tBFW4sTwVZIEG6vQRiQHisIcY",
-  authDomain: "new-niagara-tours.firebaseapp.com",
-  projectId: "new-niagara-tours",
-  storageBucket: "new-niagara-tours.firebasestorage.app",
-  messagingSenderId: "617199953253",
-  appId: "1:617199953253:web:1014a1aad3ce755da56d8c" // <-- Fixed the typo here!
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyDFkW-yq7fqQRIJKcsd_FoY7bzTmTlrY7E",
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "niagara-travels.firebaseapp.com",
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "niagara-travels",
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "niagara-travels.firebasestorage.app",
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "636307706751",
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:636307706751:web:dd2da1de96e017bda8404a"
 };
 
 // Prevent duplicate initialization during hot reloads
